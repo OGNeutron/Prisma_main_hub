@@ -1,0 +1,7 @@
+endpoint: http://localhost:4466/prismadb/dev
+datamodel: datamodel.graphql
+
+hooks:
+  post-deploy:
+    - graphql get-schema --project db
+    - graphql codegen

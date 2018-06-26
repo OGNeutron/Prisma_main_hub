@@ -1,0 +1,128 @@
+import { Redis } from 'ioredis'
+
+import { createTransport } from 'nodemailer'
+import { createToken } from './helperFunctions'
+import { FORGOT_PASSWORD_PREFIX } from '../../constants'
+import { logger } from '../logger'
+
+// const sgTransport = require('nodemailer-sendgrid-transport')
+
+const from = 'Experimental website <scottberry91@gmail.com>'
+
+interface EmailArgs {
+	id: string
+	username: string
+	email: string
+}
+
+interface Email {
+	from: string
+	to: string
+	subject: string
+	html: string
+}
+
+const generateConfirmationUrl = async ({
+	id,
+	username,
+	email
+}: EmailArgs): Promise<string> => {
+	try {
+		const [token]: string[] = await createToken(
+			{ id, username, email },
+			'secret'
+		)
+
+		const link: string = `${process.env.CLIENT_URL ||
+			'http://localhost:1234'}/confirmation?t=${token}`
+
+		return link
+	} catch (error) {
+		logger.error({ level: '5', message: error })
+		return error
+	}
+}
+
+const generateResetPasswordLink = async ({
+	id,
+	username,
+	email
+}: EmailArgs): Promise<string> => {
+	try {
+		const [token]: string[] = await createToken(
+			{ id, username, email },
+			'secret'
+		)
+
+		const link: string = `${process.env.CLIENT_URL ||
+			'http://localhost:1234'}/reset_password?t=${token}`
+
+		return link
+	} catch (error) {
+		logger.error({ level: '5', message: error })
+		return error
+	}
+}
+
+const setup = () => {
+	return createTransport(
+		// sgTransport({
+		//   auth: {
+		//     api_key: process.env.SENDGRID_API
+		//   }
+		// })
+		{
+			host: process.env.EMAIL_HOST || 'smtp.mailtrap.io',
+			port: process.env.EMAIL_PORT || 2525,
+			auth: {
+				user: process.env.EMAIL_USER || '984c1182cd3546',
+				pass: process.env.EMAIL_PASS || 'c468fcdc66d05b'
+			}
+		} as any
+	)
+}
+
+export const sendConfirmationEmail = async (user: EmailArgs): Promise<any> => {
+	try {
+		const transport = setup()
+		const url = await generateConfirmationUrl(user)
+
+		const email: Email = {
+			from,
+			to: user.email,
+			subject: 'Thanks for signing up',
+			html: `
+            <h1>Welcome to our website</h1>
+
+            <a href="${url}">Confirmation Link</p>
+        `
+		}
+
+		transport.sendMail(email)
+	} catch (error) {
+		logger.error({ level: '5', message: error })
+		return error
+	}
+}
+
+export const sendResetPasswordEmail = async (
+	user: EmailArgs,
+	redis: Redis
+): Promise<any> => {
+	const transport = setup()
+
+	await redis.set(`${FORGOT_PASSWORD_PREFIX}${user.id}`, 'ex', 60 * 20)
+
+	const email: Email = {
+		from,
+		to: user.email,
+		subject: 'Reset Password',
+		html: `
+        To reset password follow this link
+
+        <a href="${await generateResetPasswordLink(user)}">Reset Link</a>
+        `
+	}
+
+	transport.sendMail(email)
+}

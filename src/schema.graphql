@@ -1,0 +1,16 @@
+# import User from "./generated/prisma.graphql"
+# import LoginResponse from "./modules/authentication/login/schema.graphql"
+# import RegisterResponse from "./modules/authentication/register/schema.graphql"
+
+type Query {
+	currentUser: User
+}
+
+type Mutation {
+	login(email: String!, password: String): LoginResponse!
+	register(
+		email: String!
+		username: String!
+		password: String!
+	): RegisterResponse!
+}

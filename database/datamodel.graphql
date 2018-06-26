@@ -1,0 +1,10 @@
+type User {
+	id: ID! @unique
+	username: String! @unique
+	password: String!
+	email: String! @unique
+	createdAt: DateTime!
+	updatedAt: DateTime!
+	confirmed: Boolean! @default(value: false)
+	online: Boolean! @default(value: false)
+}
