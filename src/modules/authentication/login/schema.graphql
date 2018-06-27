@@ -2,4 +2,5 @@ type LoginResponse {
 	ok: Boolean!
 	token: String
 	refreshToken: String!
+	user: User
 }

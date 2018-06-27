@@ -71,10 +71,11 @@ export const resolvers = {
 					}
 
 					return {
-						// __typename: 'LoginResponse',
+						__typename: 'LoginResponse',
 						ok: true,
 						token,
-						refreshToken
+						refreshToken,
+						user
 					}
 				} else {
 					throw new AuthenticationError(INVALID_CREDENTIALS)
