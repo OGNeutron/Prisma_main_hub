@@ -25,8 +25,8 @@ export interface Session extends Express.Session {
 export interface Context {
 	redis: Redis
 	session: Session
-	req: Express.Request
-	res: Express.Response
+	req: Request
+	res: Response
 	db: Prisma
 	s3: S3
 }

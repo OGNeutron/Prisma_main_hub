@@ -1,14 +1,53 @@
-# import User from "./generated/prisma.graphql"
+# import Message, User, Comment, UserSubscriptionPayload, Channel, Team, MessageSubscriptionPayload from "./generated/prisma.graphql"
 
 # import LoginResponse from "./modules/authentication/login/schema.graphql"
 # import RegisterResponse from "./modules/authentication/register/schema.graphql"
 # import ForgotPasswordResponse from "./modules/authentication/forgotPassword/schema.graphql"
+# import Profile from "./modules/profile/schema.graphql"
+
+type Error {
+	path: String!
+	message: String!
+}
+
+type VoidResponse {
+	ok: Boolean
+	errors: [Error!]
+}
+
+type AddFriendResponse {
+	ok: Boolean!
+	errors: [Error!]
+	user: User
+}
 
 type Query {
 	currentUser: User
+	getProfile(username: String!): User!
+	queryComment(parentId: ID!): [Comment!]
+	queryUsers: [User!]
+	showTeam(teamSlug: String!): Team!
+	showTeams(authorId: ID!): [Team!]
+	showChannel(channelId: ID!): Channel!
+}
+
+type Subscription {
+	friendRequestSubscription(id: ID!): UserSubscriptionPayload!
+	friendSubscription(id: ID!): UserSubscriptionPayload!
+	NotificationSubscription(id: ID!): NotificationSubscriptionPayload!
+	messageSubscription(channelId: ID!): MessageSubscriptionPayload!
 }
 
 type Mutation {
+	removeChannelMember(channelId: ID!, userId: ID!): Channel!
+	createMessage(body: String!, channelId: ID!): Message!
+	createChannel(name: String!, teamId: ID!): Channel!
+	createTeam(name: String!): Team!
+	addTeamMember(userId: ID!, teamId: ID!): Team!
+	addChannelMember(userId: ID!, channelId: ID!): Channel!
+	createChannelMember(userId: String!, channelId: String!): Channel!
+	deleteComment(id: ID!): Comment!
+	editComment(id: ID!, body: String!): Comment!
 	login(email: String!, password: String): LoginResponse!
 	register(
 		email: String!
@@ -16,6 +55,24 @@ type Mutation {
 		password: String!
 	): RegisterResponse!
 	forgotPassword(email: String!): ForgotPasswordResponse!
-	checkResetToken(token: String!): ForgotPasswordResponse!
+	checkToken(token: String!): ForgotPasswordResponse!
 	resetPassword(id: ID!, password: String!): ForgotPasswordResponse!
+	logout: Boolean!
+	authConfirmation(token: String!): ForgotPasswordResponse!
+	createComment(
+		pageId: ID!
+		parentId: ID!
+		body: String
+		repliedTo: ID
+	): Comment!
+	createReply(
+		pageId: ID!
+		parentId: ID!
+		body: String
+		repliedTo: ID
+	): Comment!
+	likeComment(commentId: ID!): Comment
+	friendRequest(requestedId: ID!): VoidResponse!
+	addFriend(requestedId: ID!): AddFriendResponse!
+	friendReject(id: ID!): VoidResponse!
 }

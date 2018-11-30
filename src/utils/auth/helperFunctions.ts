@@ -1,27 +1,27 @@
 import { sign } from 'jsonwebtoken'
-import { pick } from 'ramda'
+// import { pick } from 'ramda'
 import { hash, compare } from 'bcryptjs'
 import { Redis } from 'ioredis'
 import { USER_SESSION_ID_PREFIX, REDIS_PREFIX } from '../../constants'
 import { logger } from '../logger'
 
 export const createToken = async (
-	user: any,
+	{ username, id }: any,
 	refreshSecret: string
 ): Promise<Array<string>> => {
 	try {
 		const secret = process.env.JWT_SECRET as string
 
-		const createToken: string = sign(
-			{ user: pick(user, ['id', 'username']) },
-			secret,
-			{ expiresIn: '24h' }
-		)
+		const createToken: string = sign({ user: { username, id } }, secret, {
+			expiresIn: '24h'
+		})
+
+		console.log('CREATETOKEN', createToken)
 
 		if (refreshSecret) {
 			const refreshToken: string = sign(
 				{
-					user: pick(user, 'id')
+					user: { id }
 				},
 				refreshSecret,
 				{
@@ -59,7 +59,7 @@ export const removeAllUsersSessions = async (
 		-1
 	)
 
-	const promises: Array<Promise<string>> = []
+	const promises: Array<Promise<any>> = []
 
 	for (let i = 0; i < sessionIds.length; i++) {
 		promises.push(redis.del(`${REDIS_PREFIX}${sessionIds[i]}`))

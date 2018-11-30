@@ -8,6 +8,8 @@ import {
 	createToken
 } from '../../../utils/auth/helperFunctions'
 import { logger } from '../../../utils/logger'
+import { GQL } from '../../../tstypes/schema'
+import { User } from '../../../generated/prisma'
 
 const loginSchema: yup.ObjectSchema<{}> = yup.object().shape({
 	email: yup
@@ -21,7 +23,7 @@ export const resolvers = {
 	Mutation: {
 		async login(
 			_: any,
-			{ email, password }: any,
+			{ email, password }: GQL.ILoginOnMutationArguments,
 			{ db, session, redis, req }: Context
 		): Promise<any> {
 			try {
@@ -31,7 +33,9 @@ export const resolvers = {
 						{ abortEarly: false }
 					)
 				) {
-					const user = await db.query.user({ where: { email } })
+					const user: User | null = await db.query.user({
+						where: { email }
+					})
 
 					if (!user) {
 						throw new AuthenticationError(INVALID_CREDENTIALS)
@@ -61,6 +65,8 @@ export const resolvers = {
 						user,
 						'secret'
 					)
+
+					console.log('SESSION', session)
 
 					session.userId = user.id
 					if (req.sessionID) {

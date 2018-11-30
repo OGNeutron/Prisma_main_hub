@@ -1,7 +1,7 @@
-endpoint: http://localhost:4466/prismadb/dev
+endpoint: https://heroku-service-899c37b1df.herokuapp.com/Prisma_backend/dev # https://eu1.prisma.sh/scottberry91/demo/dev #http://localhost:4466/prismadb/dev
 datamodel: datamodel.graphql
 
 hooks:
-  post-deploy:
-    - graphql get-schema --project db
-    - graphql codegen
+    post-deploy:
+        - graphql get-schema --project db
+        - graphql codegen

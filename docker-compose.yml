@@ -1,26 +1,48 @@
 version: '3'
 services:
-  prisma:
-    image: prismagraphql/prisma:1.10.2
-    restart: always
-    ports:
-    - "4466:4466"
-    environment:
-      PRISMA_CONFIG: |
-        managementApiSecret: my-server-secret-123
-        port: 4466
-        databases:
-          default:
-            connector: mysql  # or `postgres`
-            active: true
-            host: db
-            port: 3306        # or `5432` for `postgres`
-            user: root
-            password: prisma
-  db:
-    container_name: prisma-db
-    image: mysql:5.7
-    restart: always
-    environment:
-      MYSQL_USER: root
-      MYSQL_ROOT_PASSWORD: prisma
+    # volumes:
+    #     - '/data:/data'
+    server:
+        environment:
+            PRISMA_DB_URL: prisma:4466
+            NODE_ENV: production
+            REDIS_URL: redis:6379
+        image: ogneutron/prismabackend
+        restart: always
+        depends_on:
+            - redis
+            - prisma
+            - db
+        ports:
+            - '2000:2000'
+    redis:
+        image: 'redis:alpine'
+        container_name: redis_cache
+        ports:
+            - '6379:6379'
+        volumes:
+            - ./redis.conf:/usr/local/etc/redis/redis.conf
+    prisma:
+        image: prismagraphql/prisma:1.19.0
+        restart: always
+        ports:
+            - '4466:4466'
+        environment:
+            PRISMA_CONFIG: |
+                managementApiSecret: my-server-secret-123
+                port: 4466
+                databases:
+                  default:
+                    connector: mysql  # or `postgres`
+                    active: true
+                    host: db
+                    port: 3306        # or `5432` for `postgres`
+                    user: root
+                    password: prisma
+    db:
+        container_name: prisma-db
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_USER: root
+            MYSQL_ROOT_PASSWORD: prisma

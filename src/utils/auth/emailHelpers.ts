@@ -22,11 +22,10 @@ interface Email {
 	html: string
 }
 
-const generateConfirmationUrl = async ({
-	id,
-	username,
-	email
-}: EmailArgs): Promise<string> => {
+const generateConfirmationUrl = async (
+	{ id, username, email }: EmailArgs,
+	url: string
+): Promise<string> => {
 	try {
 		const [token]: string[] = await createToken(
 			{ id, username, email },
@@ -34,7 +33,7 @@ const generateConfirmationUrl = async ({
 		)
 
 		const link: string = `${process.env.CLIENT_URL ||
-			'http://localhost:1234'}/confirmation?t=${token}`
+			url}/auth/confirmation?t=${token}`
 
 		return link
 	} catch (error) {
@@ -43,11 +42,10 @@ const generateConfirmationUrl = async ({
 	}
 }
 
-const generateResetPasswordLink = async ({
-	id,
-	username,
-	email
-}: EmailArgs): Promise<string> => {
+const generateResetPasswordLink = async (
+	{ id, username, email }: EmailArgs,
+	url: string
+): Promise<string> => {
 	try {
 		const [token]: string[] = await createToken(
 			{ id, username, email },
@@ -55,7 +53,7 @@ const generateResetPasswordLink = async ({
 		)
 
 		const link: string = `${process.env.CLIENT_URL ||
-			'http://localhost:1234'}/reset_password?t=${token}`
+			url}/auth/reset_password?t=${token}`
 
 		return link
 	} catch (error) {
@@ -82,10 +80,13 @@ const setup = () => {
 	)
 }
 
-export const sendConfirmationEmail = async (user: EmailArgs): Promise<any> => {
+export const sendConfirmationEmail = async (
+	user: EmailArgs,
+	url: string
+): Promise<any> => {
 	try {
 		const transport = setup()
-		const url = await generateConfirmationUrl(user)
+		const emailUrl = await generateConfirmationUrl(user, url)
 
 		const email: Email = {
 			from,
@@ -94,7 +95,7 @@ export const sendConfirmationEmail = async (user: EmailArgs): Promise<any> => {
 			html: `
             <h1>Welcome to our website</h1>
 
-            <a href="${url}">Confirmation Link</p>
+            <a href="${emailUrl}">Confirmation Link</p>
         `
 		}
 
@@ -107,22 +108,35 @@ export const sendConfirmationEmail = async (user: EmailArgs): Promise<any> => {
 
 export const sendResetPasswordEmail = async (
 	user: EmailArgs,
-	redis: Redis
+	redis: Redis,
+	url: string
 ): Promise<any> => {
-	const transport = setup()
+	try {
+		const transport = setup()
 
-	await redis.set(`${FORGOT_PASSWORD_PREFIX}${user.id}`, 'ex', 60 * 20)
+		await redis.set(
+			`${FORGOT_PASSWORD_PREFIX}${user.id}`,
+			user.id,
+			'ex',
+			60 * 20
+		)
 
-	const email: Email = {
-		from,
-		to: user.email,
-		subject: 'Reset Password',
-		html: `
-        To reset password follow this link
+		const email: Email = {
+			from,
+			to: user.email,
+			subject: 'Reset Password',
+			html: `
+				To reset password follow this link
 
-        <a href="${await generateResetPasswordLink(user)}">Reset Link</a>
-        `
+				<a href="${await generateResetPasswordLink(user, url)}">Reset Link</a>
+			`
+		}
+
+		console.log('EMAIL', email)
+
+		transport.sendMail(email)
+	} catch (error) {
+		console.log('BIG ERROR', error)
+		logger.error({ level: '5', message: error })
 	}
-
-	transport.sendMail(email)
 }

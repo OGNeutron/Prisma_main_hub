@@ -12,6 +12,8 @@ import {
 import { sendResetPasswordEmail } from '../../../utils/auth/emailHelpers'
 import { logger } from '../../../utils/logger'
 import { hashPassword } from '../../../utils/auth/helperFunctions'
+import { GQL } from '../../../tstypes/schema'
+import { User } from '../../../generated/prisma'
 
 const schema = yup.object().shape({
 	newPassword: yup.string().required()
@@ -22,15 +24,18 @@ export const resolvers = {
 		async forgotPassword(
 			_: any,
 			{ email }: GQL.IForgotPasswordOnMutationArguments,
-			{ db, redis }: Context
+			{ db, redis, req }: Context
 		): Promise<any> {
 			try {
-				const user = await db.query.user({ where: { email } })
+				const user: User | null = await db.query.user({
+					where: { email }
+				})
 
 				if (!user) {
 					return new ForbiddenError(INVALID_CREDENTIALS)
 				} else {
-					sendResetPasswordEmail(user, redis)
+					const url = req.get('origin') as string
+					await sendResetPasswordEmail(user, redis, url)
 					return {
 						ok: true,
 						result: `Email sent to ${user.email}`
@@ -44,9 +49,9 @@ export const resolvers = {
 				}
 			}
 		},
-		async checkResetToken(
+		async checkToken(
 			_: any,
-			{ token }: GQL.ICheckResetTokenOnMutationArguments,
+			{ token }: any,
 			{ db }: Context
 		): Promise<any> {
 			try {
@@ -60,13 +65,13 @@ export const resolvers = {
 				}
 
 				const user = await db.query.user({
-					where: { id: decoded.id }
+					where: { id: decoded.user.id }
 				})
 
 				if (user) {
 					return {
 						ok: true,
-						result: `${user.email}`
+						result: `${user.username}`
 					}
 				} else {
 					return {
@@ -81,7 +86,7 @@ export const resolvers = {
 		},
 		async resetPassword(
 			_: any,
-			{ id, password }: GQL.IResetPasswordOnMutationArguments,
+			{ id, password }: any,
 			{ db, redis }: Context
 		): Promise<any> {
 			try {

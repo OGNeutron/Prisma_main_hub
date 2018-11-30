@@ -1,10 +1,14 @@
 import * as yup from 'yup'
-import { AuthenticationError } from 'apollo-server'
+import { AuthenticationError, ForbiddenError } from 'apollo-server'
+import { decode } from 'jsonwebtoken'
+
 import { Context } from '../../../tstypes'
 import { hashPassword } from '../../../utils/auth/helperFunctions'
 import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers'
 import { INVALID_CREDENTIALS } from '../../../constants'
 import { logger } from '../../../utils/logger'
+import { GQL } from '../../../tstypes/schema'
+import { User } from '../../../generated/prisma'
 
 const schema: yup.ObjectSchema<{}> = yup.object().shape({
 	username: yup.string().required(),
@@ -17,13 +21,51 @@ const schema: yup.ObjectSchema<{}> = yup.object().shape({
 
 export const resolvers = {
 	Mutation: {
+		async authConfirmation(
+			_: any,
+			{ token }: GQL.IAuthConfirmationOnMutationArguments,
+			{ db }: Context
+		) {
+			try {
+				let decoded: any
+				if (token != null) {
+					decoded = decode(token)
+				}
+
+				if (decoded == null) {
+					throw new ForbiddenError(INVALID_CREDENTIALS)
+				}
+
+				const user: User | null = await db.mutation.updateUser({
+					where: { id: decoded.user.id },
+					data: {
+						confirmed: true
+					}
+				})
+
+				if (user) {
+					return {
+						ok: true,
+						result: `${user.username}`
+					}
+				} else {
+					return {
+						ok: true,
+						result: INVALID_CREDENTIALS
+					}
+				}
+			} catch (error) {
+				logger.error({ level: '0', message: error.message })
+				return error
+			}
+		},
 		async register(
 			_: any,
-			{ username, email, password }: any,
-			{ db }: Context
+			{ username, email, password }: GQL.IRegisterOnMutationArguments,
+			{ db, req }: Context
 		): Promise<any> {
 			try {
-				const isValid = await schema.validate(
+				const isValid: yup.ValidateOptions = await schema.validate(
 					{
 						username,
 						email,
@@ -37,15 +79,29 @@ export const resolvers = {
 						password as string
 					)
 
-					const user = await db.mutation.createUser({
+					const user: User = await db.mutation.createUser({
 						data: {
 							username,
 							email,
-							password: passwordHash
+							role: 'USER',
+							password: passwordHash,
+							avatar_url: {
+								create: {
+									filename: 'pillars',
+									mimetype: 'image/jpeg',
+									encoding: 'something',
+									key: '1',
+									ETag: 'tag',
+									url:
+										'http://res.cloudinary.com/dmxf3jh8t/image/upload/v1524175832/pillarsofcreation_m6prxe.jpg'
+								}
+							}
 						}
 					})
 
-					sendConfirmationEmail(user)
+					const url: string = req.get('origin') as string
+
+					sendConfirmationEmail(user, url)
 
 					return {
 						__typename: 'RegisterResponse',

@@ -1,12 +1,15 @@
 import 'dotenv/config'
-import { GraphQLServer } from 'graphql-yoga'
+import { ApolloServer } from 'apollo-server-express'
 import * as path from 'path'
 import { S3 } from 'aws-sdk'
 import { platform, arch } from 'os'
 import { makeExecutableSchema } from 'graphql-tools'
 import { importSchema } from 'graphql-import'
+import { applyMiddleware } from 'graphql-middleware'
+import * as express from 'express'
+import * as http from 'http'
 
-import { IExpressTypes } from './tstypes'
+// import { IExpressTypes } from './tstypes'
 import { redis } from './redis'
 import { PORT } from './constants'
 import { genResolvers } from './utils/genSchema'
@@ -14,6 +17,7 @@ import { Prisma } from './generated/prisma'
 import { normalisePort, consolePrint } from './utils/helperFunctions'
 import { middleware } from './middleware'
 import { logger } from './utils/logger'
+import { ShieldMiddleware } from './utils/graphqlMiddleware/shield'
 
 const s3Client: S3 = new S3({
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -24,7 +28,10 @@ const s3Client: S3 = new S3({
 })
 
 const db: Prisma = new Prisma({
-	endpoint: 'http://localhost:4466/prismadb/dev',
+	endpoint:
+		process.env.NODE_ENV !== 'production'
+			? 'http://localhost:4466/prismadb/dev'
+			: `http://${process.env.PRISMA_DB_URL}/prismadb/dev`,
 	secret: process.env.MANAGEMENT_API_SECRET || 'randomsecret',
 	debug: false
 })
@@ -36,13 +43,23 @@ const schema = makeExecutableSchema({
 	resolvers: genResolvers()
 })
 
-const server: GraphQLServer = new GraphQLServer({
+const app = express()
+
+middleware(app)
+
+applyMiddleware(schema, ShieldMiddleware)
+
+const server: ApolloServer = new ApolloServer({
+	subscriptions: {
+		path: '/graphql'
+	},
 	schema,
-	context({ request, response }: IExpressTypes): Object {
+	context: ({ req, res }: any) => {
+		// console.log(req)
 		return {
-			req: request,
-			res: response,
-			session: request.session,
+			req: req,
+			res: res,
+			session: req !== undefined ? req.session : req,
 			redis: redis,
 			db,
 			s3: s3Client
@@ -50,8 +67,8 @@ const server: GraphQLServer = new GraphQLServer({
 	}
 } as any)
 
-const options = {
-	port: normalisePort(PORT),
+server.applyMiddleware({
+	app,
 	cors: {
 		credentials: true,
 		origin: [
@@ -61,30 +78,30 @@ const options = {
 			'http://localhost:4000',
 			'http://localhost:5000',
 			'http://mainsite.surge.sh'
-		],
-		cacheControl: true
-	}
-}
-
-middleware(server.express)
-
-server
-	.start(options)
-	.then(async () => {
-		const enviroment = process.env.NODE_ENV as string
-
-		if (enviroment === 'test') {
-			redis.flushall()
-		}
-
-		const messages: string[] = [
-			`Running on: http://localhost:${options.port}`,
-			`Current development status: ${enviroment}`,
-			`Operating system: ${platform()} ${arch()}`
 		]
+	}
+})
 
-		await consolePrint(messages)
-	})
-	.catch((err: any) => {
-		logger.error({ level: '0', message: err })
-	})
+const httpServer = http.createServer(app)
+
+httpServer.listen(normalisePort(PORT))
+server.installSubscriptionHandlers(httpServer)
+
+httpServer.on('listening', async () => {
+	const enviroment = process.env.NODE_ENV as string
+
+	if (enviroment === 'test') {
+		redis.flushall()
+	}
+
+	const messages: string[] = [
+		`Running on: http://localhost:${PORT}${server.graphqlPath}`,
+		`Subscriptions on: http://localhost:${PORT}${server.subscriptionsPath}`,
+		`Current development status: ${enviroment}`,
+		`Operating system: ${platform()} ${arch()}`
+	]
+
+	await consolePrint(messages)
+})
+
+httpServer.on('error', err => logger.error({ level: '0', message: err }))
