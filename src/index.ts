@@ -31,7 +31,7 @@ const db: Prisma = new Prisma({
 	endpoint:
 		process.env.NODE_ENV !== 'production'
 			? 'http://localhost:4466/prismadb/dev'
-			: `http://${process.env.PRISMA_DB_URL}/prismadb/dev`,
+			: `${process.env.HEROKU_PRISMA_ENDPOINT}`,
 	secret: process.env.MANAGEMENT_API_SECRET || 'randomsecret',
 	debug: false
 })

@@ -1,4 +1,4 @@
-endpoint: https://heroku-service-899c37b1df.herokuapp.com/Prisma_backend/dev # https://eu1.prisma.sh/scottberry91/demo/dev #http://localhost:4466/prismadb/dev
+endpoint: https://prisma-ae8729c1b8.herokuapp.com/Prisma_backend/dev
 datamodel: datamodel.graphql
 
 hooks:
