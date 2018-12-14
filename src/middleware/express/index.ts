@@ -10,9 +10,9 @@ import * as morgan from 'morgan'
 
 // import { REDIS_PREFIX } from '../constants'
 // import { redis } from '../redis'
-import { addUser } from '../utils/auth/middleware'
-import { redis } from '../redis'
-import { REDIS_PREFIX } from '../constants'
+import { addUser } from '../../utils/auth/middleware'
+import { redis } from '../../redis'
+import { REDIS_PREFIX } from '../../constants'
 
 export const middleware = (app: any) => {
 	if (process.env.NODE_ENV !== 'production') {

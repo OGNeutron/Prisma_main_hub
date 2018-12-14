@@ -1,9 +1,21 @@
-# import Message, User, Comment, UserSubscriptionPayload, Channel, Team, MessageSubscriptionPayload from "./generated/prisma.graphql"
+# import * from "./generated/prisma.graphql"
 
-# import LoginResponse from "./modules/authentication/login/schema.graphql"
-# import RegisterResponse from "./modules/authentication/register/schema.graphql"
-# import ForgotPasswordResponse from "./modules/authentication/forgotPassword/schema.graphql"
-# import Profile from "./modules/profile/schema.graphql"
+type ForgotPasswordResponse {
+	ok: Boolean!
+	result: String!
+}
+
+type LoginResponse {
+	ok: Boolean!
+	token: String
+	refreshToken: String!
+	user: User
+}
+
+type RegisterResponse {
+	ok: Boolean!
+	result: String!
+}
 
 type Error {
 	path: String!

@@ -1,7 +1,9 @@
-endpoint: https://prisma-ae8729c1b8.herokuapp.com/Prisma_backend/dev
+endpoint: http://localhost:4466/prismadb/dev
+#https://prisma-a98f9d51ac.herokuapp.com/Prisma_backend/dev
 datamodel: datamodel.graphql
 
-hooks:
-    post-deploy:
-        - graphql get-schema --project db
-        - graphql codegen
+generate:
+  - generator: typescript-client
+    output: ../src/generated/prisma-client/
+  - generator: graphql-schema
+    output: ../src/generated/

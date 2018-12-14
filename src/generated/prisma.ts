@@ -79,7 +79,8 @@ export interface Mutation {
     deleteManyFiles: <T = BatchPayload>(args: { where?: FileWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyComments: <T = BatchPayload>(args: { where?: CommentWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
     deleteManyMessages: <T = BatchPayload>(args: { where?: MessageWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
-    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
+    deleteManyUsers: <T = BatchPayload>(args: { where?: UserWhereInput }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> ,
+    executeRaw: <T = Json>(args: { database?: PrismaDatabase, query: String }, info?: GraphQLResolveInfo | string, options?: Options) => Promise<T> 
   }
 
 export interface Subscription {
@@ -262,6 +263,185 @@ type ChannelPreviousValues {
   updatedAt: DateTime!
 }
 
+input ChannelScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [ChannelScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [ChannelScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [ChannelScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  slug: String
+
+  """All values that are not equal to given value."""
+  slug_not: String
+
+  """All values that are contained in given list."""
+  slug_in: [String!]
+
+  """All values that are not contained in given list."""
+  slug_not_in: [String!]
+
+  """All values less than the given value."""
+  slug_lt: String
+
+  """All values less than or equal the given value."""
+  slug_lte: String
+
+  """All values greater than the given value."""
+  slug_gt: String
+
+  """All values greater than or equal the given value."""
+  slug_gte: String
+
+  """All values containing the given string."""
+  slug_contains: String
+
+  """All values not containing the given string."""
+  slug_not_contains: String
+
+  """All values starting with the given string."""
+  slug_starts_with: String
+
+  """All values not starting with the given string."""
+  slug_not_starts_with: String
+
+  """All values ending with the given string."""
+  slug_ends_with: String
+
+  """All values not ending with the given string."""
+  slug_not_ends_with: String
+  public: Boolean
+
+  """All values that are not equal to given value."""
+  public_not: Boolean
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+}
+
 type ChannelSubscriptionPayload {
   mutation: MutationType!
   node: Channel
@@ -321,12 +501,20 @@ input ChannelUpdateInput {
   author: UserUpdateOneRequiredWithoutOwned_channelsInput
 }
 
+input ChannelUpdateManyDataInput {
+  name: String
+  slug: String
+  public: Boolean
+}
+
 input ChannelUpdateManyInput {
   create: [ChannelCreateInput!]
   connect: [ChannelWhereUniqueInput!]
   disconnect: [ChannelWhereUniqueInput!]
   delete: [ChannelWhereUniqueInput!]
   update: [ChannelUpdateWithWhereUniqueNestedInput!]
+  updateMany: [ChannelUpdateManyWithWhereNestedInput!]
+  deleteMany: [ChannelScalarWhereInput!]
   upsert: [ChannelUpsertWithWhereUniqueNestedInput!]
 }
 
@@ -342,6 +530,8 @@ input ChannelUpdateManyWithoutAuthorInput {
   disconnect: [ChannelWhereUniqueInput!]
   delete: [ChannelWhereUniqueInput!]
   update: [ChannelUpdateWithWhereUniqueWithoutAuthorInput!]
+  updateMany: [ChannelUpdateManyWithWhereNestedInput!]
+  deleteMany: [ChannelScalarWhereInput!]
   upsert: [ChannelUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
@@ -351,7 +541,14 @@ input ChannelUpdateManyWithoutMembersInput {
   disconnect: [ChannelWhereUniqueInput!]
   delete: [ChannelWhereUniqueInput!]
   update: [ChannelUpdateWithWhereUniqueWithoutMembersInput!]
+  updateMany: [ChannelUpdateManyWithWhereNestedInput!]
+  deleteMany: [ChannelScalarWhereInput!]
   upsert: [ChannelUpsertWithWhereUniqueWithoutMembersInput!]
+}
+
+input ChannelUpdateManyWithWhereNestedInput {
+  where: ChannelScalarWhereInput!
+  data: ChannelUpdateManyDataInput!
 }
 
 input ChannelUpdateWithoutAuthorDataInput {
@@ -669,6 +866,221 @@ type CommentPreviousValues {
   updatedAt: DateTime!
 }
 
+input CommentScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [CommentScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [CommentScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [CommentScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  body: String
+
+  """All values that are not equal to given value."""
+  body_not: String
+
+  """All values that are contained in given list."""
+  body_in: [String!]
+
+  """All values that are not contained in given list."""
+  body_not_in: [String!]
+
+  """All values less than the given value."""
+  body_lt: String
+
+  """All values less than or equal the given value."""
+  body_lte: String
+
+  """All values greater than the given value."""
+  body_gt: String
+
+  """All values greater than or equal the given value."""
+  body_gte: String
+
+  """All values containing the given string."""
+  body_contains: String
+
+  """All values not containing the given string."""
+  body_not_contains: String
+
+  """All values starting with the given string."""
+  body_starts_with: String
+
+  """All values not starting with the given string."""
+  body_not_starts_with: String
+
+  """All values ending with the given string."""
+  body_ends_with: String
+
+  """All values not ending with the given string."""
+  body_not_ends_with: String
+  parentId: ID
+
+  """All values that are not equal to given value."""
+  parentId_not: ID
+
+  """All values that are contained in given list."""
+  parentId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  parentId_not_in: [ID!]
+
+  """All values less than the given value."""
+  parentId_lt: ID
+
+  """All values less than or equal the given value."""
+  parentId_lte: ID
+
+  """All values greater than the given value."""
+  parentId_gt: ID
+
+  """All values greater than or equal the given value."""
+  parentId_gte: ID
+
+  """All values containing the given string."""
+  parentId_contains: ID
+
+  """All values not containing the given string."""
+  parentId_not_contains: ID
+
+  """All values starting with the given string."""
+  parentId_starts_with: ID
+
+  """All values not starting with the given string."""
+  parentId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  parentId_ends_with: ID
+
+  """All values not ending with the given string."""
+  parentId_not_ends_with: ID
+  pageId: ID
+
+  """All values that are not equal to given value."""
+  pageId_not: ID
+
+  """All values that are contained in given list."""
+  pageId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  pageId_not_in: [ID!]
+
+  """All values less than the given value."""
+  pageId_lt: ID
+
+  """All values less than or equal the given value."""
+  pageId_lte: ID
+
+  """All values greater than the given value."""
+  pageId_gt: ID
+
+  """All values greater than or equal the given value."""
+  pageId_gte: ID
+
+  """All values containing the given string."""
+  pageId_contains: ID
+
+  """All values not containing the given string."""
+  pageId_not_contains: ID
+
+  """All values starting with the given string."""
+  pageId_starts_with: ID
+
+  """All values not starting with the given string."""
+  pageId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  pageId_ends_with: ID
+
+  """All values not ending with the given string."""
+  pageId_not_ends_with: ID
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+}
+
 type CommentSubscriptionPayload {
   mutation: MutationType!
   node: Comment
@@ -728,12 +1140,20 @@ input CommentUpdateInput {
   author: UserUpdateOneRequiredInput
 }
 
+input CommentUpdateManyDataInput {
+  body: String
+  parentId: ID
+  pageId: ID
+}
+
 input CommentUpdateManyInput {
   create: [CommentCreateInput!]
   connect: [CommentWhereUniqueInput!]
   disconnect: [CommentWhereUniqueInput!]
   delete: [CommentWhereUniqueInput!]
   update: [CommentUpdateWithWhereUniqueNestedInput!]
+  updateMany: [CommentUpdateManyWithWhereNestedInput!]
+  deleteMany: [CommentScalarWhereInput!]
   upsert: [CommentUpsertWithWhereUniqueNestedInput!]
 }
 
@@ -741,6 +1161,11 @@ input CommentUpdateManyMutationInput {
   body: String
   parentId: ID
   pageId: ID
+}
+
+input CommentUpdateManyWithWhereNestedInput {
+  where: CommentScalarWhereInput!
+  data: CommentUpdateManyDataInput!
 }
 
 input CommentUpdateWithWhereUniqueNestedInput {
@@ -1476,6 +1901,9 @@ input FileWhereUniqueInput {
   id: ID
 }
 
+"""Raw JSON value"""
+scalar Json
+
 """
 The \`Long\` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
@@ -1552,6 +1980,261 @@ type MessagePreviousValues {
   updatedAt: DateTime!
 }
 
+input MessageScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [MessageScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [MessageScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [MessageScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  body: String
+
+  """All values that are not equal to given value."""
+  body_not: String
+
+  """All values that are contained in given list."""
+  body_in: [String!]
+
+  """All values that are not contained in given list."""
+  body_not_in: [String!]
+
+  """All values less than the given value."""
+  body_lt: String
+
+  """All values less than or equal the given value."""
+  body_lte: String
+
+  """All values greater than the given value."""
+  body_gt: String
+
+  """All values greater than or equal the given value."""
+  body_gte: String
+
+  """All values containing the given string."""
+  body_contains: String
+
+  """All values not containing the given string."""
+  body_not_contains: String
+
+  """All values starting with the given string."""
+  body_starts_with: String
+
+  """All values not starting with the given string."""
+  body_not_starts_with: String
+
+  """All values ending with the given string."""
+  body_ends_with: String
+
+  """All values not ending with the given string."""
+  body_not_ends_with: String
+  parentId: ID
+
+  """All values that are not equal to given value."""
+  parentId_not: ID
+
+  """All values that are contained in given list."""
+  parentId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  parentId_not_in: [ID!]
+
+  """All values less than the given value."""
+  parentId_lt: ID
+
+  """All values less than or equal the given value."""
+  parentId_lte: ID
+
+  """All values greater than the given value."""
+  parentId_gt: ID
+
+  """All values greater than or equal the given value."""
+  parentId_gte: ID
+
+  """All values containing the given string."""
+  parentId_contains: ID
+
+  """All values not containing the given string."""
+  parentId_not_contains: ID
+
+  """All values starting with the given string."""
+  parentId_starts_with: ID
+
+  """All values not starting with the given string."""
+  parentId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  parentId_ends_with: ID
+
+  """All values not ending with the given string."""
+  parentId_not_ends_with: ID
+  url: String
+
+  """All values that are not equal to given value."""
+  url_not: String
+
+  """All values that are contained in given list."""
+  url_in: [String!]
+
+  """All values that are not contained in given list."""
+  url_not_in: [String!]
+
+  """All values less than the given value."""
+  url_lt: String
+
+  """All values less than or equal the given value."""
+  url_lte: String
+
+  """All values greater than the given value."""
+  url_gt: String
+
+  """All values greater than or equal the given value."""
+  url_gte: String
+
+  """All values containing the given string."""
+  url_contains: String
+
+  """All values not containing the given string."""
+  url_not_contains: String
+
+  """All values starting with the given string."""
+  url_starts_with: String
+
+  """All values not starting with the given string."""
+  url_not_starts_with: String
+
+  """All values ending with the given string."""
+  url_ends_with: String
+
+  """All values not ending with the given string."""
+  url_not_ends_with: String
+  filetype: String
+
+  """All values that are not equal to given value."""
+  filetype_not: String
+
+  """All values that are contained in given list."""
+  filetype_in: [String!]
+
+  """All values that are not contained in given list."""
+  filetype_not_in: [String!]
+
+  """All values less than the given value."""
+  filetype_lt: String
+
+  """All values less than or equal the given value."""
+  filetype_lte: String
+
+  """All values greater than the given value."""
+  filetype_gt: String
+
+  """All values greater than or equal the given value."""
+  filetype_gte: String
+
+  """All values containing the given string."""
+  filetype_contains: String
+
+  """All values not containing the given string."""
+  filetype_not_contains: String
+
+  """All values starting with the given string."""
+  filetype_starts_with: String
+
+  """All values not starting with the given string."""
+  filetype_not_starts_with: String
+
+  """All values ending with the given string."""
+  filetype_ends_with: String
+
+  """All values not ending with the given string."""
+  filetype_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+}
+
 type MessageSubscriptionPayload {
   mutation: MutationType!
   node: Message
@@ -1607,12 +2290,21 @@ input MessageUpdateInput {
   author: UserUpdateOneRequiredInput
 }
 
+input MessageUpdateManyDataInput {
+  body: String
+  parentId: ID
+  url: String
+  filetype: String
+}
+
 input MessageUpdateManyInput {
   create: [MessageCreateInput!]
   connect: [MessageWhereUniqueInput!]
   disconnect: [MessageWhereUniqueInput!]
   delete: [MessageWhereUniqueInput!]
   update: [MessageUpdateWithWhereUniqueNestedInput!]
+  updateMany: [MessageUpdateManyWithWhereNestedInput!]
+  deleteMany: [MessageScalarWhereInput!]
   upsert: [MessageUpsertWithWhereUniqueNestedInput!]
 }
 
@@ -1621,6 +2313,11 @@ input MessageUpdateManyMutationInput {
   parentId: ID
   url: String
   filetype: String
+}
+
+input MessageUpdateManyWithWhereNestedInput {
+  where: MessageScalarWhereInput!
+  data: MessageUpdateManyDataInput!
 }
 
 input MessageUpdateWithWhereUniqueNestedInput {
@@ -1943,6 +2640,7 @@ type Mutation {
   deleteManyComments(where: CommentWhereInput): BatchPayload!
   deleteManyMessages(where: MessageWhereInput): BatchPayload!
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  executeRaw(database: PrismaDatabase, query: String!): Json!
 }
 
 enum MutationType {
@@ -2012,6 +2710,97 @@ type NotificationPreviousValues {
   message: String!
 }
 
+input NotificationScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [NotificationScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [NotificationScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [NotificationScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  message: String
+
+  """All values that are not equal to given value."""
+  message_not: String
+
+  """All values that are contained in given list."""
+  message_in: [String!]
+
+  """All values that are not contained in given list."""
+  message_not_in: [String!]
+
+  """All values less than the given value."""
+  message_lt: String
+
+  """All values less than or equal the given value."""
+  message_lte: String
+
+  """All values greater than the given value."""
+  message_gt: String
+
+  """All values greater than or equal the given value."""
+  message_gte: String
+
+  """All values containing the given string."""
+  message_contains: String
+
+  """All values not containing the given string."""
+  message_not_contains: String
+
+  """All values starting with the given string."""
+  message_starts_with: String
+
+  """All values not starting with the given string."""
+  message_not_starts_with: String
+
+  """All values ending with the given string."""
+  message_ends_with: String
+
+  """All values not ending with the given string."""
+  message_not_ends_with: String
+}
+
 type NotificationSubscriptionPayload {
   mutation: MutationType!
   node: Notification
@@ -2056,6 +2845,10 @@ input NotificationUpdateInput {
   author: UserUpdateOneRequiredWithoutNotificationsInput
 }
 
+input NotificationUpdateManyDataInput {
+  message: String
+}
+
 input NotificationUpdateManyMutationInput {
   message: String
 }
@@ -2066,7 +2859,14 @@ input NotificationUpdateManyWithoutAuthorInput {
   disconnect: [NotificationWhereUniqueInput!]
   delete: [NotificationWhereUniqueInput!]
   update: [NotificationUpdateWithWhereUniqueWithoutAuthorInput!]
+  updateMany: [NotificationUpdateManyWithWhereNestedInput!]
+  deleteMany: [NotificationScalarWhereInput!]
   upsert: [NotificationUpsertWithWhereUniqueWithoutAuthorInput!]
+}
+
+input NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput!
+  data: NotificationUpdateManyDataInput!
 }
 
 input NotificationUpdateWithoutAuthorDataInput {
@@ -2193,6 +2993,10 @@ type PageInfo {
 
   """When paginating forwards, the cursor to continue."""
   endCursor: String
+}
+
+enum PrismaDatabase {
+  default
 }
 
 type Query {
@@ -2536,6 +3340,189 @@ type TeamPreviousValues {
   online: Boolean!
 }
 
+input TeamScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [TeamScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [TeamScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [TeamScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  name: String
+
+  """All values that are not equal to given value."""
+  name_not: String
+
+  """All values that are contained in given list."""
+  name_in: [String!]
+
+  """All values that are not contained in given list."""
+  name_not_in: [String!]
+
+  """All values less than the given value."""
+  name_lt: String
+
+  """All values less than or equal the given value."""
+  name_lte: String
+
+  """All values greater than the given value."""
+  name_gt: String
+
+  """All values greater than or equal the given value."""
+  name_gte: String
+
+  """All values containing the given string."""
+  name_contains: String
+
+  """All values not containing the given string."""
+  name_not_contains: String
+
+  """All values starting with the given string."""
+  name_starts_with: String
+
+  """All values not starting with the given string."""
+  name_not_starts_with: String
+
+  """All values ending with the given string."""
+  name_ends_with: String
+
+  """All values not ending with the given string."""
+  name_not_ends_with: String
+  slug: String
+
+  """All values that are not equal to given value."""
+  slug_not: String
+
+  """All values that are contained in given list."""
+  slug_in: [String!]
+
+  """All values that are not contained in given list."""
+  slug_not_in: [String!]
+
+  """All values less than the given value."""
+  slug_lt: String
+
+  """All values less than or equal the given value."""
+  slug_lte: String
+
+  """All values greater than the given value."""
+  slug_gt: String
+
+  """All values greater than or equal the given value."""
+  slug_gte: String
+
+  """All values containing the given string."""
+  slug_contains: String
+
+  """All values not containing the given string."""
+  slug_not_contains: String
+
+  """All values starting with the given string."""
+  slug_starts_with: String
+
+  """All values not starting with the given string."""
+  slug_not_starts_with: String
+
+  """All values ending with the given string."""
+  slug_ends_with: String
+
+  """All values not ending with the given string."""
+  slug_not_ends_with: String
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  confirmed: Boolean
+
+  """All values that are not equal to given value."""
+  confirmed_not: Boolean
+  online: Boolean
+
+  """All values that are not equal to given value."""
+  online_not: Boolean
+}
+
 type TeamSubscriptionPayload {
   mutation: MutationType!
   node: Team
@@ -2586,6 +3573,13 @@ input TeamUpdateInput {
   channels: ChannelUpdateManyInput
 }
 
+input TeamUpdateManyDataInput {
+  name: String
+  slug: String
+  confirmed: Boolean
+  online: Boolean
+}
+
 input TeamUpdateManyMutationInput {
   name: String
   slug: String
@@ -2599,6 +3593,8 @@ input TeamUpdateManyWithoutAuthorInput {
   disconnect: [TeamWhereUniqueInput!]
   delete: [TeamWhereUniqueInput!]
   update: [TeamUpdateWithWhereUniqueWithoutAuthorInput!]
+  updateMany: [TeamUpdateManyWithWhereNestedInput!]
+  deleteMany: [TeamScalarWhereInput!]
   upsert: [TeamUpsertWithWhereUniqueWithoutAuthorInput!]
 }
 
@@ -2608,7 +3604,14 @@ input TeamUpdateManyWithoutMembersInput {
   disconnect: [TeamWhereUniqueInput!]
   delete: [TeamWhereUniqueInput!]
   update: [TeamUpdateWithWhereUniqueWithoutMembersInput!]
+  updateMany: [TeamUpdateManyWithWhereNestedInput!]
+  deleteMany: [TeamScalarWhereInput!]
   upsert: [TeamUpsertWithWhereUniqueWithoutMembersInput!]
+}
+
+input TeamUpdateManyWithWhereNestedInput {
+  where: TeamScalarWhereInput!
+  data: TeamUpdateManyDataInput!
 }
 
 input TeamUpdateWithoutAuthorDataInput {
@@ -3071,6 +4074,243 @@ enum UserRole {
   USER
 }
 
+input UserScalarWhereInput {
+  """Logical AND on all given filters."""
+  AND: [UserScalarWhereInput!]
+
+  """Logical OR on all given filters."""
+  OR: [UserScalarWhereInput!]
+
+  """Logical NOT on all given filters combined by AND."""
+  NOT: [UserScalarWhereInput!]
+  id: ID
+
+  """All values that are not equal to given value."""
+  id_not: ID
+
+  """All values that are contained in given list."""
+  id_in: [ID!]
+
+  """All values that are not contained in given list."""
+  id_not_in: [ID!]
+
+  """All values less than the given value."""
+  id_lt: ID
+
+  """All values less than or equal the given value."""
+  id_lte: ID
+
+  """All values greater than the given value."""
+  id_gt: ID
+
+  """All values greater than or equal the given value."""
+  id_gte: ID
+
+  """All values containing the given string."""
+  id_contains: ID
+
+  """All values not containing the given string."""
+  id_not_contains: ID
+
+  """All values starting with the given string."""
+  id_starts_with: ID
+
+  """All values not starting with the given string."""
+  id_not_starts_with: ID
+
+  """All values ending with the given string."""
+  id_ends_with: ID
+
+  """All values not ending with the given string."""
+  id_not_ends_with: ID
+  email: String
+
+  """All values that are not equal to given value."""
+  email_not: String
+
+  """All values that are contained in given list."""
+  email_in: [String!]
+
+  """All values that are not contained in given list."""
+  email_not_in: [String!]
+
+  """All values less than the given value."""
+  email_lt: String
+
+  """All values less than or equal the given value."""
+  email_lte: String
+
+  """All values greater than the given value."""
+  email_gt: String
+
+  """All values greater than or equal the given value."""
+  email_gte: String
+
+  """All values containing the given string."""
+  email_contains: String
+
+  """All values not containing the given string."""
+  email_not_contains: String
+
+  """All values starting with the given string."""
+  email_starts_with: String
+
+  """All values not starting with the given string."""
+  email_not_starts_with: String
+
+  """All values ending with the given string."""
+  email_ends_with: String
+
+  """All values not ending with the given string."""
+  email_not_ends_with: String
+  set_private: Boolean
+
+  """All values that are not equal to given value."""
+  set_private_not: Boolean
+  username: String
+
+  """All values that are not equal to given value."""
+  username_not: String
+
+  """All values that are contained in given list."""
+  username_in: [String!]
+
+  """All values that are not contained in given list."""
+  username_not_in: [String!]
+
+  """All values less than the given value."""
+  username_lt: String
+
+  """All values less than or equal the given value."""
+  username_lte: String
+
+  """All values greater than the given value."""
+  username_gt: String
+
+  """All values greater than or equal the given value."""
+  username_gte: String
+
+  """All values containing the given string."""
+  username_contains: String
+
+  """All values not containing the given string."""
+  username_not_contains: String
+
+  """All values starting with the given string."""
+  username_starts_with: String
+
+  """All values not starting with the given string."""
+  username_not_starts_with: String
+
+  """All values ending with the given string."""
+  username_ends_with: String
+
+  """All values not ending with the given string."""
+  username_not_ends_with: String
+  password: String
+
+  """All values that are not equal to given value."""
+  password_not: String
+
+  """All values that are contained in given list."""
+  password_in: [String!]
+
+  """All values that are not contained in given list."""
+  password_not_in: [String!]
+
+  """All values less than the given value."""
+  password_lt: String
+
+  """All values less than or equal the given value."""
+  password_lte: String
+
+  """All values greater than the given value."""
+  password_gt: String
+
+  """All values greater than or equal the given value."""
+  password_gte: String
+
+  """All values containing the given string."""
+  password_contains: String
+
+  """All values not containing the given string."""
+  password_not_contains: String
+
+  """All values starting with the given string."""
+  password_starts_with: String
+
+  """All values not starting with the given string."""
+  password_not_starts_with: String
+
+  """All values ending with the given string."""
+  password_ends_with: String
+
+  """All values not ending with the given string."""
+  password_not_ends_with: String
+  confirmed: Boolean
+
+  """All values that are not equal to given value."""
+  confirmed_not: Boolean
+  online: Boolean
+
+  """All values that are not equal to given value."""
+  online_not: Boolean
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  role: UserRole
+
+  """All values that are not equal to given value."""
+  role_not: UserRole
+
+  """All values that are contained in given list."""
+  role_in: [UserRole!]
+
+  """All values that are not contained in given list."""
+  role_not_in: [UserRole!]
+}
+
 type UserSubscriptionPayload {
   mutation: MutationType!
   node: User
@@ -3146,12 +4386,24 @@ input UserUpdateInput {
   owned_channels: ChannelUpdateManyWithoutAuthorInput
 }
 
+input UserUpdateManyDataInput {
+  email: String
+  set_private: Boolean
+  username: String
+  password: String
+  confirmed: Boolean
+  online: Boolean
+  role: UserRole
+}
+
 input UserUpdateManyInput {
   create: [UserCreateInput!]
   connect: [UserWhereUniqueInput!]
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueNestedInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueNestedInput!]
 }
 
@@ -3171,6 +4423,8 @@ input UserUpdateManyWithoutChannelsInput {
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutChannelsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutChannelsInput!]
 }
 
@@ -3180,7 +4434,14 @@ input UserUpdateManyWithoutTeamsInput {
   disconnect: [UserWhereUniqueInput!]
   delete: [UserWhereUniqueInput!]
   update: [UserUpdateWithWhereUniqueWithoutTeamsInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
+  deleteMany: [UserScalarWhereInput!]
   upsert: [UserUpsertWithWhereUniqueWithoutTeamsInput!]
+}
+
+input UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput!
+  data: UserUpdateManyDataInput!
 }
 
 input UserUpdateOneInput {
@@ -3747,6 +5008,8 @@ export type CommentOrderByInput =   'id_ASC' |
   'createdAt_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC'
+
+export type PrismaDatabase =   'default'
 
 export type MutationType =   'CREATED' |
   'UPDATED' |
@@ -4758,6 +6021,8 @@ export interface UserUpdateManyInput {
   disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
   delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
   update?: UserUpdateWithWhereUniqueNestedInput[] | UserUpdateWithWhereUniqueNestedInput
+  updateMany?: UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput
   upsert?: UserUpsertWithWhereUniqueNestedInput[] | UserUpsertWithWhereUniqueNestedInput
 }
 
@@ -4790,6 +6055,8 @@ export interface NotificationUpdateManyWithoutAuthorInput {
   disconnect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput
   delete?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput
   update?: NotificationUpdateWithWhereUniqueWithoutAuthorInput[] | NotificationUpdateWithWhereUniqueWithoutAuthorInput
+  updateMany?: NotificationUpdateManyWithWhereNestedInput[] | NotificationUpdateManyWithWhereNestedInput
+  deleteMany?: NotificationScalarWhereInput[] | NotificationScalarWhereInput
   upsert?: NotificationUpsertWithWhereUniqueWithoutAuthorInput[] | NotificationUpsertWithWhereUniqueWithoutAuthorInput
 }
 
@@ -4799,6 +6066,49 @@ export interface NotificationUpdateWithWhereUniqueWithoutAuthorInput {
 }
 
 export interface NotificationUpdateWithoutAuthorDataInput {
+  message?: String
+}
+
+export interface NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput
+  data: NotificationUpdateManyDataInput
+}
+
+export interface NotificationScalarWhereInput {
+  AND?: NotificationScalarWhereInput[] | NotificationScalarWhereInput
+  OR?: NotificationScalarWhereInput[] | NotificationScalarWhereInput
+  NOT?: NotificationScalarWhereInput[] | NotificationScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  message?: String
+  message_not?: String
+  message_in?: String[] | String
+  message_not_in?: String[] | String
+  message_lt?: String
+  message_lte?: String
+  message_gt?: String
+  message_gte?: String
+  message_contains?: String
+  message_not_contains?: String
+  message_starts_with?: String
+  message_not_starts_with?: String
+  message_ends_with?: String
+  message_not_ends_with?: String
+}
+
+export interface NotificationUpdateManyDataInput {
   message?: String
 }
 
@@ -4814,6 +6124,8 @@ export interface TeamUpdateManyWithoutMembersInput {
   disconnect?: TeamWhereUniqueInput[] | TeamWhereUniqueInput
   delete?: TeamWhereUniqueInput[] | TeamWhereUniqueInput
   update?: TeamUpdateWithWhereUniqueWithoutMembersInput[] | TeamUpdateWithWhereUniqueWithoutMembersInput
+  updateMany?: TeamUpdateManyWithWhereNestedInput[] | TeamUpdateManyWithWhereNestedInput
+  deleteMany?: TeamScalarWhereInput[] | TeamScalarWhereInput
   upsert?: TeamUpsertWithWhereUniqueWithoutMembersInput[] | TeamUpsertWithWhereUniqueWithoutMembersInput
 }
 
@@ -4862,6 +6174,8 @@ export interface ChannelUpdateManyWithoutMembersInput {
   disconnect?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   delete?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   update?: ChannelUpdateWithWhereUniqueWithoutMembersInput[] | ChannelUpdateWithWhereUniqueWithoutMembersInput
+  updateMany?: ChannelUpdateManyWithWhereNestedInput[] | ChannelUpdateManyWithWhereNestedInput
+  deleteMany?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
   upsert?: ChannelUpsertWithWhereUniqueWithoutMembersInput[] | ChannelUpsertWithWhereUniqueWithoutMembersInput
 }
 
@@ -4885,6 +6199,8 @@ export interface MessageUpdateManyInput {
   disconnect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
   delete?: MessageWhereUniqueInput[] | MessageWhereUniqueInput
   update?: MessageUpdateWithWhereUniqueNestedInput[] | MessageUpdateWithWhereUniqueNestedInput
+  updateMany?: MessageUpdateManyWithWhereNestedInput[] | MessageUpdateManyWithWhereNestedInput
+  deleteMany?: MessageScalarWhereInput[] | MessageScalarWhereInput
   upsert?: MessageUpsertWithWhereUniqueNestedInput[] | MessageUpsertWithWhereUniqueNestedInput
 }
 
@@ -4911,6 +6227,110 @@ export interface UserUpdateOneRequiredInput {
 export interface UserUpsertNestedInput {
   update: UserUpdateDataInput
   create: UserCreateInput
+}
+
+export interface MessageUpdateManyWithWhereNestedInput {
+  where: MessageScalarWhereInput
+  data: MessageUpdateManyDataInput
+}
+
+export interface MessageScalarWhereInput {
+  AND?: MessageScalarWhereInput[] | MessageScalarWhereInput
+  OR?: MessageScalarWhereInput[] | MessageScalarWhereInput
+  NOT?: MessageScalarWhereInput[] | MessageScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  body?: String
+  body_not?: String
+  body_in?: String[] | String
+  body_not_in?: String[] | String
+  body_lt?: String
+  body_lte?: String
+  body_gt?: String
+  body_gte?: String
+  body_contains?: String
+  body_not_contains?: String
+  body_starts_with?: String
+  body_not_starts_with?: String
+  body_ends_with?: String
+  body_not_ends_with?: String
+  parentId?: ID_Input
+  parentId_not?: ID_Input
+  parentId_in?: ID_Input[] | ID_Input
+  parentId_not_in?: ID_Input[] | ID_Input
+  parentId_lt?: ID_Input
+  parentId_lte?: ID_Input
+  parentId_gt?: ID_Input
+  parentId_gte?: ID_Input
+  parentId_contains?: ID_Input
+  parentId_not_contains?: ID_Input
+  parentId_starts_with?: ID_Input
+  parentId_not_starts_with?: ID_Input
+  parentId_ends_with?: ID_Input
+  parentId_not_ends_with?: ID_Input
+  url?: String
+  url_not?: String
+  url_in?: String[] | String
+  url_not_in?: String[] | String
+  url_lt?: String
+  url_lte?: String
+  url_gt?: String
+  url_gte?: String
+  url_contains?: String
+  url_not_contains?: String
+  url_starts_with?: String
+  url_not_starts_with?: String
+  url_ends_with?: String
+  url_not_ends_with?: String
+  filetype?: String
+  filetype_not?: String
+  filetype_in?: String[] | String
+  filetype_not_in?: String[] | String
+  filetype_lt?: String
+  filetype_lte?: String
+  filetype_gt?: String
+  filetype_gte?: String
+  filetype_contains?: String
+  filetype_not_contains?: String
+  filetype_starts_with?: String
+  filetype_not_starts_with?: String
+  filetype_ends_with?: String
+  filetype_not_ends_with?: String
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+}
+
+export interface MessageUpdateManyDataInput {
+  body?: String
+  parentId?: ID_Input
+  url?: String
+  filetype?: String
 }
 
 export interface MessageUpsertWithWhereUniqueNestedInput {
@@ -4949,6 +6369,8 @@ export interface TeamUpdateManyWithoutAuthorInput {
   disconnect?: TeamWhereUniqueInput[] | TeamWhereUniqueInput
   delete?: TeamWhereUniqueInput[] | TeamWhereUniqueInput
   update?: TeamUpdateWithWhereUniqueWithoutAuthorInput[] | TeamUpdateWithWhereUniqueWithoutAuthorInput
+  updateMany?: TeamUpdateManyWithWhereNestedInput[] | TeamUpdateManyWithWhereNestedInput
+  deleteMany?: TeamScalarWhereInput[] | TeamScalarWhereInput
   upsert?: TeamUpsertWithWhereUniqueWithoutAuthorInput[] | TeamUpsertWithWhereUniqueWithoutAuthorInput
 }
 
@@ -4973,6 +6395,8 @@ export interface UserUpdateManyWithoutTeamsInput {
   disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
   delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
   update?: UserUpdateWithWhereUniqueWithoutTeamsInput[] | UserUpdateWithWhereUniqueWithoutTeamsInput
+  updateMany?: UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput
   upsert?: UserUpsertWithWhereUniqueWithoutTeamsInput[] | UserUpsertWithWhereUniqueWithoutTeamsInput
 }
 
@@ -5004,6 +6428,8 @@ export interface ChannelUpdateManyWithoutAuthorInput {
   disconnect?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   delete?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   update?: ChannelUpdateWithWhereUniqueWithoutAuthorInput[] | ChannelUpdateWithWhereUniqueWithoutAuthorInput
+  updateMany?: ChannelUpdateManyWithWhereNestedInput[] | ChannelUpdateManyWithWhereNestedInput
+  deleteMany?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
   upsert?: ChannelUpsertWithWhereUniqueWithoutAuthorInput[] | ChannelUpsertWithWhereUniqueWithoutAuthorInput
 }
 
@@ -5027,6 +6453,8 @@ export interface UserUpdateManyWithoutChannelsInput {
   disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput
   delete?: UserWhereUniqueInput[] | UserWhereUniqueInput
   update?: UserUpdateWithWhereUniqueWithoutChannelsInput[] | UserUpdateWithWhereUniqueWithoutChannelsInput
+  updateMany?: UserUpdateManyWithWhereNestedInput[] | UserUpdateManyWithWhereNestedInput
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput
   upsert?: UserUpsertWithWhereUniqueWithoutChannelsInput[] | UserUpsertWithWhereUniqueWithoutChannelsInput
 }
 
@@ -5052,10 +6480,190 @@ export interface UserUpdateWithoutChannelsDataInput {
   owned_channels?: ChannelUpdateManyWithoutAuthorInput
 }
 
+export interface UserUpdateManyWithWhereNestedInput {
+  where: UserScalarWhereInput
+  data: UserUpdateManyDataInput
+}
+
+export interface UserScalarWhereInput {
+  AND?: UserScalarWhereInput[] | UserScalarWhereInput
+  OR?: UserScalarWhereInput[] | UserScalarWhereInput
+  NOT?: UserScalarWhereInput[] | UserScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  email?: String
+  email_not?: String
+  email_in?: String[] | String
+  email_not_in?: String[] | String
+  email_lt?: String
+  email_lte?: String
+  email_gt?: String
+  email_gte?: String
+  email_contains?: String
+  email_not_contains?: String
+  email_starts_with?: String
+  email_not_starts_with?: String
+  email_ends_with?: String
+  email_not_ends_with?: String
+  set_private?: Boolean
+  set_private_not?: Boolean
+  username?: String
+  username_not?: String
+  username_in?: String[] | String
+  username_not_in?: String[] | String
+  username_lt?: String
+  username_lte?: String
+  username_gt?: String
+  username_gte?: String
+  username_contains?: String
+  username_not_contains?: String
+  username_starts_with?: String
+  username_not_starts_with?: String
+  username_ends_with?: String
+  username_not_ends_with?: String
+  password?: String
+  password_not?: String
+  password_in?: String[] | String
+  password_not_in?: String[] | String
+  password_lt?: String
+  password_lte?: String
+  password_gt?: String
+  password_gte?: String
+  password_contains?: String
+  password_not_contains?: String
+  password_starts_with?: String
+  password_not_starts_with?: String
+  password_ends_with?: String
+  password_not_ends_with?: String
+  confirmed?: Boolean
+  confirmed_not?: Boolean
+  online?: Boolean
+  online_not?: Boolean
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  role?: UserRole
+  role_not?: UserRole
+  role_in?: UserRole[] | UserRole
+  role_not_in?: UserRole[] | UserRole
+}
+
+export interface UserUpdateManyDataInput {
+  email?: String
+  set_private?: Boolean
+  username?: String
+  password?: String
+  confirmed?: Boolean
+  online?: Boolean
+  role?: UserRole
+}
+
 export interface UserUpsertWithWhereUniqueWithoutChannelsInput {
   where: UserWhereUniqueInput
   update: UserUpdateWithoutChannelsDataInput
   create: UserCreateWithoutChannelsInput
+}
+
+export interface ChannelUpdateManyWithWhereNestedInput {
+  where: ChannelScalarWhereInput
+  data: ChannelUpdateManyDataInput
+}
+
+export interface ChannelScalarWhereInput {
+  AND?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
+  OR?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
+  NOT?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  slug?: String
+  slug_not?: String
+  slug_in?: String[] | String
+  slug_not_in?: String[] | String
+  slug_lt?: String
+  slug_lte?: String
+  slug_gt?: String
+  slug_gte?: String
+  slug_contains?: String
+  slug_not_contains?: String
+  slug_starts_with?: String
+  slug_not_starts_with?: String
+  slug_ends_with?: String
+  slug_not_ends_with?: String
+  public?: Boolean
+  public_not?: Boolean
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+}
+
+export interface ChannelUpdateManyDataInput {
+  name?: String
+  slug?: String
+  public?: Boolean
 }
 
 export interface ChannelUpsertWithWhereUniqueWithoutAuthorInput {
@@ -5076,6 +6684,8 @@ export interface ChannelUpdateManyInput {
   disconnect?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   delete?: ChannelWhereUniqueInput[] | ChannelWhereUniqueInput
   update?: ChannelUpdateWithWhereUniqueNestedInput[] | ChannelUpdateWithWhereUniqueNestedInput
+  updateMany?: ChannelUpdateManyWithWhereNestedInput[] | ChannelUpdateManyWithWhereNestedInput
+  deleteMany?: ChannelScalarWhereInput[] | ChannelScalarWhereInput
   upsert?: ChannelUpsertWithWhereUniqueNestedInput[] | ChannelUpsertWithWhereUniqueNestedInput
 }
 
@@ -5098,6 +6708,86 @@ export interface ChannelUpsertWithWhereUniqueNestedInput {
   where: ChannelWhereUniqueInput
   update: ChannelUpdateDataInput
   create: ChannelCreateInput
+}
+
+export interface TeamUpdateManyWithWhereNestedInput {
+  where: TeamScalarWhereInput
+  data: TeamUpdateManyDataInput
+}
+
+export interface TeamScalarWhereInput {
+  AND?: TeamScalarWhereInput[] | TeamScalarWhereInput
+  OR?: TeamScalarWhereInput[] | TeamScalarWhereInput
+  NOT?: TeamScalarWhereInput[] | TeamScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  name?: String
+  name_not?: String
+  name_in?: String[] | String
+  name_not_in?: String[] | String
+  name_lt?: String
+  name_lte?: String
+  name_gt?: String
+  name_gte?: String
+  name_contains?: String
+  name_not_contains?: String
+  name_starts_with?: String
+  name_not_starts_with?: String
+  name_ends_with?: String
+  name_not_ends_with?: String
+  slug?: String
+  slug_not?: String
+  slug_in?: String[] | String
+  slug_not_in?: String[] | String
+  slug_lt?: String
+  slug_lte?: String
+  slug_gt?: String
+  slug_gte?: String
+  slug_contains?: String
+  slug_not_contains?: String
+  slug_starts_with?: String
+  slug_not_starts_with?: String
+  slug_ends_with?: String
+  slug_not_ends_with?: String
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+  confirmed?: Boolean
+  confirmed_not?: Boolean
+  online?: Boolean
+  online_not?: Boolean
+}
+
+export interface TeamUpdateManyDataInput {
+  name?: String
+  slug?: String
+  confirmed?: Boolean
+  online?: Boolean
 }
 
 export interface TeamUpsertWithWhereUniqueWithoutAuthorInput {
@@ -5216,6 +6906,8 @@ export interface CommentUpdateManyInput {
   disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput
   delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput
   update?: CommentUpdateWithWhereUniqueNestedInput[] | CommentUpdateWithWhereUniqueNestedInput
+  updateMany?: CommentUpdateManyWithWhereNestedInput[] | CommentUpdateManyWithWhereNestedInput
+  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput
   upsert?: CommentUpsertWithWhereUniqueNestedInput[] | CommentUpsertWithWhereUniqueNestedInput
 }
 
@@ -5232,6 +6924,95 @@ export interface CommentUpdateDataInput {
   ratings?: RatingUpdateOneRequiredInput
   replies?: CommentUpdateManyInput
   author?: UserUpdateOneRequiredInput
+}
+
+export interface CommentUpdateManyWithWhereNestedInput {
+  where: CommentScalarWhereInput
+  data: CommentUpdateManyDataInput
+}
+
+export interface CommentScalarWhereInput {
+  AND?: CommentScalarWhereInput[] | CommentScalarWhereInput
+  OR?: CommentScalarWhereInput[] | CommentScalarWhereInput
+  NOT?: CommentScalarWhereInput[] | CommentScalarWhereInput
+  id?: ID_Input
+  id_not?: ID_Input
+  id_in?: ID_Input[] | ID_Input
+  id_not_in?: ID_Input[] | ID_Input
+  id_lt?: ID_Input
+  id_lte?: ID_Input
+  id_gt?: ID_Input
+  id_gte?: ID_Input
+  id_contains?: ID_Input
+  id_not_contains?: ID_Input
+  id_starts_with?: ID_Input
+  id_not_starts_with?: ID_Input
+  id_ends_with?: ID_Input
+  id_not_ends_with?: ID_Input
+  body?: String
+  body_not?: String
+  body_in?: String[] | String
+  body_not_in?: String[] | String
+  body_lt?: String
+  body_lte?: String
+  body_gt?: String
+  body_gte?: String
+  body_contains?: String
+  body_not_contains?: String
+  body_starts_with?: String
+  body_not_starts_with?: String
+  body_ends_with?: String
+  body_not_ends_with?: String
+  parentId?: ID_Input
+  parentId_not?: ID_Input
+  parentId_in?: ID_Input[] | ID_Input
+  parentId_not_in?: ID_Input[] | ID_Input
+  parentId_lt?: ID_Input
+  parentId_lte?: ID_Input
+  parentId_gt?: ID_Input
+  parentId_gte?: ID_Input
+  parentId_contains?: ID_Input
+  parentId_not_contains?: ID_Input
+  parentId_starts_with?: ID_Input
+  parentId_not_starts_with?: ID_Input
+  parentId_ends_with?: ID_Input
+  parentId_not_ends_with?: ID_Input
+  pageId?: ID_Input
+  pageId_not?: ID_Input
+  pageId_in?: ID_Input[] | ID_Input
+  pageId_not_in?: ID_Input[] | ID_Input
+  pageId_lt?: ID_Input
+  pageId_lte?: ID_Input
+  pageId_gt?: ID_Input
+  pageId_gte?: ID_Input
+  pageId_contains?: ID_Input
+  pageId_not_contains?: ID_Input
+  pageId_starts_with?: ID_Input
+  pageId_not_starts_with?: ID_Input
+  pageId_ends_with?: ID_Input
+  pageId_not_ends_with?: ID_Input
+  createdAt?: DateTime
+  createdAt_not?: DateTime
+  createdAt_in?: DateTime[] | DateTime
+  createdAt_not_in?: DateTime[] | DateTime
+  createdAt_lt?: DateTime
+  createdAt_lte?: DateTime
+  createdAt_gt?: DateTime
+  createdAt_gte?: DateTime
+  updatedAt?: DateTime
+  updatedAt_not?: DateTime
+  updatedAt_in?: DateTime[] | DateTime
+  updatedAt_not_in?: DateTime[] | DateTime
+  updatedAt_lt?: DateTime
+  updatedAt_lte?: DateTime
+  updatedAt_gt?: DateTime
+  updatedAt_gte?: DateTime
+}
+
+export interface CommentUpdateManyDataInput {
+  body?: String
+  parentId?: ID_Input
+  pageId?: ID_Input
 }
 
 export interface CommentUpsertWithWhereUniqueNestedInput {
@@ -5867,3 +7648,8 @@ The `Long` scalar type represents non-fractional signed whole numeric values.
 Long can represent values between -(2^63) and 2^63 - 1.
 */
 export type Long = string
+
+/*
+Raw JSON value
+*/
+export type Json = any

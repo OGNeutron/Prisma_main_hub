@@ -1,10 +1,10 @@
-import { ApolloError, ForbiddenError } from 'apollo-server'
+import { ApolloError, ForbiddenError } from 'apollo-server';
 
-import { Context } from '../../tstypes'
-import { logger } from '../../utils/logger'
-import { INVALID_CREDENTIALS } from '../../constants'
-import { GQL } from '../../tstypes/schema'
-import { User } from '../../generated/prisma'
+import { Context } from '../../tstypes';
+import { logger } from '../../utils/logger';
+import { INVALID_CREDENTIALS } from '../../constants';
+import { GQL } from '../../tstypes/schema';
+import { User } from '../../generated/prisma';
 
 export const resolvers = {
 	Subscription: {
@@ -19,17 +19,17 @@ export const resolvers = {
 					return ctx.db.subscription.user(
 						{
 							where: {
-								mutation_in: ['UPDATED'],
+								mutation_in: [ 'UPDATED' ],
 								node: {
 									id
 								}
 							}
 						},
 						info
-					)
+					);
 				} catch (error) {
-					logger.error({ level: '5', message: error })
-					return error
+					logger.error({ level: '5', message: error });
+					return error;
 				}
 			}
 		},
@@ -44,17 +44,17 @@ export const resolvers = {
 					return ctx.db.subscription.user(
 						{
 							where: {
-								mutation_in: ['CREATED', 'UPDATED'],
+								mutation_in: [ 'CREATED', 'UPDATED' ],
 								node: {
 									id
 								}
 							}
 						},
 						info
-					)
+					);
 				} catch (error) {
-					logger.error({ level: '5', message: error })
-					return error
+					logger.error({ level: '5', message: error });
+					return error;
 				}
 			}
 		}
@@ -62,9 +62,9 @@ export const resolvers = {
 	Query: {
 		async queryUsers(_: any, __: any, { db }: Context, info: any) {
 			try {
-				return await db.query.users({}, info)
+				return await db.query.users({}, info);
 			} catch (error) {
-				return logger.error({ level: 5, message: error })
+				return logger.error({ level: 5, message: error });
 			}
 		},
 		async getProfile(
@@ -74,21 +74,22 @@ export const resolvers = {
 			info: any
 		) {
 			try {
+				console.log('PROFILE');
 				const profile: User | null = await db.query.user(
 					{ where: { username } },
 					info
-				)
+				);
 
 				if (!profile) {
-					return new ApolloError('No such user')
+					return new ApolloError('No such user');
 				}
 
-				console.log('PROFILE', profile)
+				console.log('PROFILE', profile);
 
-				return profile
+				return profile;
 			} catch (error) {
-				logger.error({ level: '5', message: error })
-				return error
+				logger.error({ level: '5', message: error });
+				return error;
 			}
 		}
 	},
@@ -100,7 +101,7 @@ export const resolvers = {
 		) {
 			try {
 				if (!session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 
 				if (id) {
@@ -115,16 +116,16 @@ export const resolvers = {
 								}
 							}
 						}
-					})
+					});
 
 					return {
 						ok: true
-					}
+					};
 				} else {
-					return new ApolloError('ID is required')
+					return new ApolloError('ID is required');
 				}
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		},
 		async friendRequest(
@@ -135,9 +136,9 @@ export const resolvers = {
 		) {
 			try {
 				if (requestedId == undefined) {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				} else if (!session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 
 				const requested: User | null = await db.query.user(
@@ -152,16 +153,16 @@ export const resolvers = {
 							username
 						}
 					}`
-				)
+				);
 
-				console.log(requested)
+				console.log(requested);
 
 				if (requested && requested.friends) {
 					const found = requested.friends.find(
-						fr => fr.id === requestedId
-					)
+						(fr) => fr.id === requestedId
+					);
 
-					console.log('FOUND', found)
+					console.log('FOUND', found);
 
 					if (found !== undefined) {
 						return {
@@ -172,7 +173,7 @@ export const resolvers = {
 									message: 'Already a friend'
 								}
 							]
-						}
+						};
 					}
 				}
 
@@ -190,34 +191,32 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 
 				const requester = await db.query.user({
 					where: { id: session.userId }
-				})
+				});
 
 				if (requester) {
 					await db.mutation.createNotification({
 						data: {
-							message: `Friend request from ${
-								requester.username
-							}`,
+							message: `Friend request from ${requester.username}`,
 							author: {
 								connect: {
 									id: requestedId
 								}
 							}
 						}
-					})
+					});
 
 					return {
 						ok: true
-					}
+					};
 				} else {
-					throw new ApolloError('Error with friend request')
+					throw new ApolloError('Error with friend request');
 				}
 			} catch (error) {
-				logger.error({ level: '5', message: error })
+				logger.error({ level: '5', message: error });
 				return {
 					ok: true,
 					error: [
@@ -226,7 +225,7 @@ export const resolvers = {
 							message: error.message
 						}
 					]
-				}
+				};
 			}
 		},
 		async addFriend(
@@ -236,7 +235,7 @@ export const resolvers = {
 			info: any
 		) {
 			try {
-				console.log(requestedId)
+				console.log(requestedId);
 
 				await db.mutation.updateUser({
 					where: {
@@ -249,7 +248,7 @@ export const resolvers = {
 							}
 						}
 					}
-				})
+				});
 
 				const requestedUser = await db.mutation.updateUser({
 					where: {
@@ -262,24 +261,22 @@ export const resolvers = {
 							}
 						}
 					}
-				})
+				});
 
 				if (requestedUser) {
 					await db.mutation.createNotification({
 						data: {
-							message: `Friend request accepted from ${
-								requestedUser.username
-							}`,
+							message: `Friend request accepted from ${requestedUser.username}`,
 							author: {
 								connect: {
 									id: requestedUser.id
 								}
 							}
 						}
-					})
+					});
 				}
 
-				console.log('THIS FAR')
+				console.log('THIS FAR');
 
 				await db.mutation.updateUser({
 					where: {
@@ -292,7 +289,7 @@ export const resolvers = {
 							}
 						}
 					}
-				})
+				});
 
 				const user: User | null = await db.query.user(
 					{
@@ -301,15 +298,15 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 
 				return {
 					ok: true,
 					errors: [],
 					user
-				}
+				};
 			} catch (error) {
-				logger.error({ level: '5', message: error })
+				logger.error({ level: '5', message: error });
 				return {
 					ok: false,
 					error: [
@@ -318,8 +315,8 @@ export const resolvers = {
 							message: error.message
 						}
 					]
-				}
+				};
 			}
 		}
 	}
-}
+};

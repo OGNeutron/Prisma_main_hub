@@ -1,4 +1,4 @@
-type AggregateChannel {
+export const typeDefs = /* GraphQL */ `type AggregateChannel {
   count: Int!
 }
 
@@ -2896,3 +2896,4 @@ input UserWhereUniqueInput {
   email: String
   username: String
 }
+`
