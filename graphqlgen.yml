@@ -5,6 +5,7 @@ context: ./src/tstypes/index.ts:Context
 models:
   files:
     - ./src/generated/prisma-client/index.ts
+    - ./src/tstypes/index.ts
 
 output: ./src/generated/graphqlgen.ts
 

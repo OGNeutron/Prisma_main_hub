@@ -1,41 +1,5 @@
-import { sign } from 'jsonwebtoken';
-// import { pick } from 'ramda'
 import { Redis } from 'ioredis';
 import { USER_SESSION_ID_PREFIX, REDIS_PREFIX } from '../../constants';
-import { logger } from '../logger';
-
-export const createToken = async (
-	{ username, id }: any,
-	refreshSecret: string
-): Promise<Array<string>> => {
-	try {
-		const secret = process.env.JWT_SECRET as string;
-
-		const createToken: string = sign({ user: { username, id } }, secret, {
-			expiresIn: '24h'
-		});
-
-		console.log('CREATETOKEN', createToken);
-
-		if (refreshSecret) {
-			const refreshToken: string = sign(
-				{
-					user: { id }
-				},
-				refreshSecret,
-				{
-					expiresIn: '7d'
-				}
-			);
-			return [ createToken, refreshToken ];
-		}
-
-		return [ createToken ];
-	} catch (error) {
-		logger.error({ level: '5', message: error });
-		return error;
-	}
-};
 
 export const removeAllUsersSessions = async (
 	userId: string,

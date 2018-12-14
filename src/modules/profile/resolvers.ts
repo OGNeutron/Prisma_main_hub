@@ -3,15 +3,19 @@ import { ApolloError, ForbiddenError } from 'apollo-server';
 import { Context } from '../../tstypes';
 import { logger } from '../../utils/logger';
 import { INVALID_CREDENTIALS } from '../../constants';
-import { GQL } from '../../tstypes/schema';
 import { User } from '../../generated/prisma';
+import {
+	SubscriptionResolvers,
+	QueryResolvers,
+	MutationResolvers
+} from '../../generated/graphqlgen';
 
 export const resolvers = {
 	Subscription: {
 		friendSubscription: {
 			subscribe(
 				_: any,
-				{ id }: GQL.IFriendSubscriptionOnSubscriptionArguments,
+				{ id }: SubscriptionResolvers.ArgsFriendSubscription,
 				ctx: Context,
 				info: any
 			) {
@@ -36,7 +40,7 @@ export const resolvers = {
 		friendRequestSubscription: {
 			subscribe(
 				_: any,
-				{ id }: GQL.IFriendRequestSubscriptionOnSubscriptionArguments,
+				{ id }: SubscriptionResolvers.ArgsFriendRequestSubscription,
 				ctx: any,
 				info: any
 			) {
@@ -69,7 +73,7 @@ export const resolvers = {
 		},
 		async getProfile(
 			_: any,
-			{ username }: any,
+			{ username }: QueryResolvers.ArgsGetProfile,
 			{ db }: Context,
 			info: any
 		) {
@@ -96,7 +100,7 @@ export const resolvers = {
 	Mutation: {
 		async friendReject(
 			_: any,
-			{ id }: GQL.IFriendRejectOnMutationArguments,
+			{ id }: MutationResolvers.ArgsFriendReject,
 			{ db, session }: Context
 		) {
 			try {
@@ -130,7 +134,7 @@ export const resolvers = {
 		},
 		async friendRequest(
 			_: any,
-			{ requestedId }: GQL.IFriendRequestOnMutationArguments,
+			{ requestedId }: MutationResolvers.ArgsFriendRequest,
 			{ db, session }: Context,
 			info: any
 		) {
@@ -230,7 +234,7 @@ export const resolvers = {
 		},
 		async addFriend(
 			_: any,
-			{ requestedId }: GQL.IAddFriendOnMutationArguments,
+			{ requestedId }: MutationResolvers.ArgsAddFriend,
 			{ db, session }: Context,
 			info: any
 		) {

@@ -1,29 +1,30 @@
-import { ForbiddenError } from 'apollo-server'
+import { ForbiddenError } from 'apollo-server';
 
-import { Context } from '../../../tstypes'
-import { INVALID_CREDENTIALS } from '../../../constants'
-import { removeAllUsersSessions } from '../../../utils/auth/helperFunctions'
-import { logger } from '../../../utils/logger'
+import { Context } from '../../../tstypes';
+import { INVALID_CREDENTIALS } from '../../../constants';
+import { removeAllUsersSessions } from '../../../utils/auth/helperFunctions';
+import { logger } from '../../../utils/logger';
+import { MutationResolvers } from '../../../generated/graphqlgen';
 
 export const resolvers = {
 	Mutation: {
 		async logout(
 			_: any,
-			__: any,
+			__: MutationResolvers.LogoutResolver,
 			{ db, session, redis }: Context
 		): Promise<boolean> {
 			try {
-				let userId
+				let userId;
 				if (session) {
 					if (session.decodedUser) {
-						userId = session.decodedUser
+						userId = session.decodedUser;
 					} else {
-						userId = session.userId
+						userId = session.userId;
 					}
 				}
 
 				if (userId === undefined) {
-					throw new ForbiddenError(INVALID_CREDENTIALS)
+					throw new ForbiddenError(INVALID_CREDENTIALS);
 				}
 
 				await db.mutation.updateUser({
@@ -33,21 +34,21 @@ export const resolvers = {
 					where: {
 						id: userId
 					}
-				})
+				});
 
-				removeAllUsersSessions(userId, redis)
+				removeAllUsersSessions(userId, redis);
 
-				session.destroy(err => {
+				session.destroy((err) => {
 					if (err) {
-						logger.info({ level: 0, message: err })
+						logger.info({ level: 0, message: err });
 					}
-				})
+				});
 
-				return true
+				return true;
 			} catch (error) {
-				logger.info({ level: '0', message: error })
-				return false
+				logger.info({ level: '0', message: error });
+				return false;
 			}
 		}
 	}
-}
+};

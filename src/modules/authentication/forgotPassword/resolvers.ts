@@ -11,9 +11,9 @@ import {
 } from '../../../constants';
 import { sendResetPasswordEmail } from '../../../utils/auth/emailHelpers';
 import { logger } from '../../../utils/logger';
-import { GQL } from '../../../tstypes/schema';
 import { User } from '../../../generated/prisma';
 import { hashPassword } from 'scotts_utilities';
+import { MutationResolvers } from '../../../generated/graphqlgen';
 
 const schema = yup.object().shape({
 	newPassword: yup.string().required()
@@ -23,7 +23,7 @@ export const resolvers = {
 	Mutation: {
 		async forgotPassword(
 			_: any,
-			{ email }: GQL.IForgotPasswordOnMutationArguments,
+			{ email }: MutationResolvers.ArgsForgotPassword,
 			{ db, redis, req }: Context
 		): Promise<any> {
 			try {
@@ -51,7 +51,7 @@ export const resolvers = {
 		},
 		async checkToken(
 			_: any,
-			{ token }: any,
+			{ token }: MutationResolvers.ArgsCheckToken,
 			{ db }: Context
 		): Promise<any> {
 			try {
@@ -86,7 +86,7 @@ export const resolvers = {
 		},
 		async resetPassword(
 			_: any,
-			{ id, password }: any,
+			{ id, password }: MutationResolvers.ArgsResetPassword,
 			{ db, redis }: Context
 		): Promise<any> {
 			try {

@@ -7,8 +7,8 @@ import { Context } from '../../../tstypes';
 import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers';
 import { INVALID_CREDENTIALS } from '../../../constants';
 import { logger } from '../../../utils/logger';
-import { GQL } from '../../../tstypes/schema';
 import { User } from '../../../generated/prisma';
+import { MutationResolvers } from '../../../generated/graphqlgen';
 
 const schema: yup.ObjectSchema<{}> = yup.object().shape({
 	username: yup.string().required(),
@@ -20,7 +20,7 @@ export const resolvers = {
 	Mutation: {
 		async authConfirmation(
 			_: any,
-			{ token }: GQL.IAuthConfirmationOnMutationArguments,
+			{ token }: MutationResolvers.ArgsAuthConfirmation,
 			{ db }: Context
 		) {
 			try {
@@ -58,7 +58,7 @@ export const resolvers = {
 		},
 		async register(
 			_: any,
-			{ username, email, password }: GQL.IRegisterOnMutationArguments,
+			{ username, email, password }: MutationResolvers.ArgsRegister,
 			{ db, req }: Context
 		): Promise<any> {
 			try {

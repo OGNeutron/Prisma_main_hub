@@ -10,11 +10,10 @@ import { platform, arch } from 'os';
 import { makeExecutableSchema } from 'graphql-tools';
 import { importSchema } from 'graphql-import';
 import { applyMiddleware } from 'graphql-middleware';
-import { consolePrint, normalisePort } from 'scotts_utilities';
+import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities';
 
 import { redis } from './redis';
 import { PORT } from './constants';
-import { genResolvers } from './utils/genSchema';
 import { Prisma } from './generated/prisma';
 import { middleware } from './middleware/express';
 import { logger } from './utils/logger';
@@ -43,7 +42,7 @@ const typeDefs: string = importSchema(path.join(__dirname, './schema.graphql'));
 
 const makeSchema = makeExecutableSchema({
 	typeDefs,
-	resolvers: genResolvers()
+	resolvers: genResolvers(path.join(__dirname, '/**/resolvers.?s'))
 });
 
 const app = express();

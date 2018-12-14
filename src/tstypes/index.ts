@@ -1,34 +1,34 @@
-import { Request, Response } from 'express'
-import { Redis } from 'ioredis'
-import { S3 } from 'aws-sdk'
-import { Prisma } from '../generated/prisma'
+import { Request, Response } from 'express';
+import { Redis } from 'ioredis';
+import { S3 } from 'aws-sdk';
+import { Prisma } from '../generated/prisma';
 
 export interface IExpressTypes {
-	request: Request
-	response: Response
+	request: Request;
+	response: Response;
 }
 
 export interface ProcessEnv {
-	[key: string]: string | undefined
+	[key: string]: string | undefined;
 }
 
 export interface User {
-	id: string
-	username: string
+	id: string;
+	username: string;
 }
 
 export interface Session extends Express.Session {
-	userId?: string
-	decodedUser?: string
+	userId?: string;
+	decodedUser?: string;
 }
 
 export interface Context {
-	redis: Redis
-	session: Session
-	req: Request
-	res: Response
-	db: Prisma
-	s3: S3
+	redis: Redis;
+	session: Session;
+	req: Request;
+	res: Response;
+	db: Prisma;
+	s3: S3;
 }
 
 export type Resolver = (
@@ -36,7 +36,7 @@ export type Resolver = (
 	args: Object,
 	context: Context,
 	info: any
-) => any
+) => any;
 
 export type GraphqlMiddleFunc = (
 	resolver: Resolver,
@@ -44,10 +44,34 @@ export type GraphqlMiddleFunc = (
 	args: Object,
 	context: Context,
 	info: any
-) => any
+) => any;
 
 export interface ResolverMap {
 	[key: string]: {
-		[key: string]: Resolver
-	}
+		[key: string]: Resolver;
+	};
+}
+
+export interface LoginResponse {
+	ok: boolean;
+	token: string | null;
+	refreshToken: string;
+}
+export interface RegisterResponse {
+	ok: boolean;
+	result: string;
+}
+export interface ForgotPasswordResponse {
+	ok: boolean;
+	result: string;
+}
+export interface VoidResponse {
+	ok: boolean | null;
+}
+export interface Error {
+	path: string;
+	message: string;
+}
+export interface AddFriendResponse {
+	ok: boolean;
 }

@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-import { comparePassword } from 'scotts_utilities';
+import { comparePassword, createToken } from 'scotts_utilities';
 import {
 	ForbiddenError,
 	ApolloError,
@@ -12,10 +12,9 @@ import {
 	INVALID_CREDENTIALS,
 	USER_SESSION_ID_PREFIX
 } from '../../../constants';
-import { createToken } from '../../../utils/auth/helperFunctions';
 import { logger } from '../../../utils/logger';
-import { GQL } from '../../../tstypes/schema';
 import { User } from '../../../generated/prisma';
+import { MutationResolvers } from '../../../generated/graphqlgen';
 
 const loginSchema: yup.ObjectSchema<{}> = yup.object().shape({
 	email: yup.string().required().email(),
@@ -26,9 +25,9 @@ export const resolvers = {
 	Mutation: {
 		async login(
 			_: any,
-			{ email, password }: GQL.ILoginOnMutationArguments,
+			{ email, password }: MutationResolvers.ArgsLogin,
 			{ db, session, redis, req }: Context
-		): Promise<any> {
+		) {
 			try {
 				if (
 					await loginSchema.validate(
@@ -78,7 +77,6 @@ export const resolvers = {
 					}
 
 					return {
-						__typename: 'LoginResponse',
 						ok: true,
 						token,
 						refreshToken,

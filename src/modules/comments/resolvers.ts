@@ -1,16 +1,16 @@
-import { ForbiddenError, ApolloError } from 'apollo-server'
+import { ForbiddenError, ApolloError } from 'apollo-server';
 
-import { Context } from '../../tstypes'
-import { logger } from '../../utils/logger'
-import { INVALID_CREDENTIALS } from '../../constants'
-import { GQL } from '../../tstypes/schema'
-import { Comment } from '../../generated/prisma'
+import { Context } from '../../tstypes';
+import { logger } from '../../utils/logger';
+import { INVALID_CREDENTIALS } from '../../constants';
+import { Comment } from '../../generated/prisma';
+import { QueryResolvers, MutationResolvers } from '../../generated/graphqlgen';
 
 export const resolvers = {
 	Query: {
 		async queryComment(
 			_: any,
-			{ parentId }: GQL.IQueryCommentOnQueryArguments,
+			{ parentId }: QueryResolvers.ArgsQueryComment,
 			{ db }: Context,
 			info: any
 		) {
@@ -23,18 +23,18 @@ export const resolvers = {
 						orderBy: 'createdAt_DESC'
 					},
 					info
-				)
+				);
 
-				return comments
+				return comments;
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		}
 	},
 	Mutation: {
 		async deleteComment(
 			_: any,
-			{ id }: GQL.IDeleteCommentOnMutationArguments,
+			{ id }: MutationResolvers.ArgsDeleteComment,
 			{ db, session }: Context,
 			info: any
 		) {
@@ -46,32 +46,32 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 
-				console.log('COMMENT', comment)
+				console.log('COMMENT', comment);
 
 				if (!comment) {
-					return new ApolloError(INVALID_CREDENTIALS)
+					return new ApolloError(INVALID_CREDENTIALS);
 				}
 
 				if (comment.author.id !== session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 
 				await db.mutation.deleteComment({
 					where: {
 						id: comment.id
 					}
-				})
+				});
 
-				return comment
+				return comment;
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		},
 		async editComment(
 			_: any,
-			{ id, body }: GQL.IEditCommentOnMutationArguments,
+			{ id, body }: MutationResolvers.ArgsEditComment,
 			{ db, session }: Context,
 			info: any
 		) {
@@ -83,14 +83,14 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 
 				if (!comment) {
-					return new ApolloError(INVALID_CREDENTIALS)
+					return new ApolloError(INVALID_CREDENTIALS);
 				}
 
 				if (comment.author.id !== session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 
 				return await db.mutation.updateComment(
@@ -103,20 +103,20 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		},
 		async likeComment(
 			_: any,
-			{ commentId }: GQL.ILikeCommentOnMutationArguments,
+			{ commentId }: MutationResolvers.ArgsLikeComment,
 			{ db, session }: Context,
 			info: any
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID = session.userId
+					const userID = session.userId;
 
 					const comment: any = await db.query.comment(
 						{
@@ -125,17 +125,17 @@ export const resolvers = {
 							}
 						},
 						info
-					)
+					);
 
 					if (comment) {
 						if (comment.ratings) {
-							console.log('COMMENT', comment)
+							console.log('COMMENT', comment);
 
 							const found = comment.ratings.author.find(
 								(author: any) => author.id === userID
-							)
+							);
 
-							console.log('FOUND', found)
+							console.log('FOUND', found);
 
 							if (found === undefined) {
 								return await db.mutation.updateComment(
@@ -159,20 +159,20 @@ export const resolvers = {
 										}
 									},
 									info
-								)
+								);
 							}
 						} else {
-							return new ApolloError('No comment author')
+							return new ApolloError('No comment author');
 						}
 					} else {
-						return new ApolloError('No such comment')
+						return new ApolloError('No such comment');
 					}
-					return comment
+					return comment;
 				} else {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		},
 		async createReply(
@@ -182,14 +182,14 @@ export const resolvers = {
 				body,
 				parentId,
 				repliedTo
-			}: GQL.ICreateReplyOnMutationArguments,
+			}: MutationResolvers.ArgsCreateReply,
 			{ db, session }: Context,
 			info: any
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID = session.userId
-					let comment: any
+					const userID = session.userId;
+					let comment: any;
 					if (body) {
 						comment = await db.mutation.createComment(
 							{
@@ -215,7 +215,7 @@ export const resolvers = {
 								}
 							},
 							info
-						)
+						);
 					}
 
 					if (comment) {
@@ -230,26 +230,26 @@ export const resolvers = {
 									}
 								}
 							}
-						})
+						});
 					}
 
-					return comment
+					return comment;
 				}
 
-				return new ForbiddenError(INVALID_CREDENTIALS)
+				return new ForbiddenError(INVALID_CREDENTIALS);
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		},
 		async createComment(
 			_: any,
-			{ pageId, body, parentId }: GQL.ICreateCommentOnMutationArguments,
+			{ pageId, body, parentId }: MutationResolvers.ArgsCreateComment,
 			{ db, session }: Context,
 			info: any
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID: string | undefined = session.userId
+					const userID: string | undefined = session.userId;
 
 					if (body) {
 						const comment: Comment = await db.mutation.createComment(
@@ -271,17 +271,17 @@ export const resolvers = {
 								}
 							},
 							info
-						)
-						return comment
+						);
+						return comment;
 					} else {
-						return new ApolloError('Comment body required')
+						return new ApolloError('Comment body required');
 					}
 				} else {
-					return new ForbiddenError(INVALID_CREDENTIALS)
+					return new ForbiddenError(INVALID_CREDENTIALS);
 				}
 			} catch (error) {
-				return logger.error({ level: '5', message: error })
+				return logger.error({ level: '5', message: error });
 			}
 		}
 	}
-}
+};

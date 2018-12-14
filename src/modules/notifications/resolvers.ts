@@ -1,19 +1,19 @@
-import { Context } from '../../tstypes'
-import { GQL } from '../../tstypes/schema'
+import { Context } from '../../tstypes';
+import { SubscriptionResolvers } from '../../generated/graphqlgen';
 
 export const resolvers = {
 	Subscription: {
 		NotificationSubscription: {
 			subscribe(
 				_: any,
-				{ id }: GQL.INotificationSubscriptionOnSubscriptionArguments,
+				{ id }: SubscriptionResolvers.ArgsNotificationSubscription,
 				{ db }: Context,
 				info: any
 			) {
 				return db.subscription.notification(
 					{
 						where: {
-							mutation_in: ['CREATED'],
+							mutation_in: [ 'CREATED' ],
 							node: {
 								author: {
 									id
@@ -22,8 +22,8 @@ export const resolvers = {
 						}
 					},
 					info
-				)
+				);
 			}
 		}
 	}
-}
+};
