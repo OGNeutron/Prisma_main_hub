@@ -9,7 +9,7 @@ import { S3 } from 'aws-sdk';
 import { platform, arch } from 'os';
 import { makeExecutableSchema } from 'graphql-tools';
 import { importSchema } from 'graphql-import';
-import { applyMiddleware } from 'graphql-middleware';
+// import { applyMiddleware } from 'graphql-middleware';
 import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities';
 
 import { redis } from './redis';
@@ -17,7 +17,7 @@ import { PORT } from './constants';
 import { Prisma } from './generated/prisma';
 import { middleware } from './middleware/express';
 import { logger } from './utils/logger';
-import { ShieldMiddleware } from './middleware/graphql/shield';
+// import { ShieldMiddleware } from './middleware/graphql/shield';
 // import { graphqlMiddleware } from './middleware/graphql/graphql-middleware';
 // import { Prisma } from './generated/prisma-client';
 
@@ -40,7 +40,7 @@ const db: Prisma = new Prisma({
 
 const typeDefs: string = importSchema(path.join(__dirname, './schema.graphql'));
 
-const makeSchema = makeExecutableSchema({
+const schema = makeExecutableSchema({
 	typeDefs,
 	resolvers: genResolvers(path.join(__dirname, '/**/resolvers.?s'))
 });
@@ -49,7 +49,7 @@ const app = express();
 
 middleware(app);
 
-const { schema } = applyMiddleware(makeSchema, ShieldMiddleware);
+// const { schema } = applyMiddleware(makeSchema, ShieldMiddleware);
 
 const server: ApolloServer = new ApolloServer({
 	subscriptions: {
@@ -107,3 +107,5 @@ httpServer.on('listening', async () => {
 });
 
 httpServer.on('error', (err) => logger.error({ level: '0', message: err }));
+
+export default server;

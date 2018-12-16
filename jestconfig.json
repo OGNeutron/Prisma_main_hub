@@ -1,0 +1,10 @@
+{
+	"moduleDirectories": [ "node_modules" ],
+	"coveragePathIgnorePatterns": [ "/node_modules/", "/dist" ],
+	"testPathIgnorePatterns": [ "/dist" ],
+	"transform": {
+		"^.+\\.(t|j)sx?$": "ts-jest"
+	},
+	"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts?|js?)$",
+	"moduleFileExtensions": [ "ts", "tsx", "js", "jsx", "json", "node" ]
+}
