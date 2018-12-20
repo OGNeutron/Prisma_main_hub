@@ -1,25 +1,21 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
-import { comparePassword, createToken } from 'scotts_utilities';
-import {
-	ForbiddenError,
-	ApolloError,
-	AuthenticationError
-} from 'apollo-server';
+import { comparePassword, createToken } from 'scotts_utilities'
+import { ForbiddenError, ApolloError, AuthenticationError } from 'apollo-server'
 
-import { Context } from '../../../tstypes';
-import {
-	INVALID_CREDENTIALS,
-	USER_SESSION_ID_PREFIX
-} from '../../../constants';
-import { logger } from '../../../utils/logger';
-import { User } from '../../../generated/prisma';
-import { MutationResolvers } from '../../../generated/graphqlgen';
+import { Context } from '../../../tstypes'
+import { INVALID_CREDENTIALS, USER_SESSION_ID_PREFIX } from '../../../constants'
+import { logger } from '../../../utils/logger'
+import { User } from '../../../generated/prisma'
+import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const loginSchema: yup.ObjectSchema<{}> = yup.object().shape({
-	email: yup.string().required().email(),
+	email: yup
+		.string()
+		.required()
+		.email(),
 	password: yup.string().required()
-});
+})
 
 export const resolvers = {
 	Mutation: {
@@ -37,43 +33,52 @@ export const resolvers = {
 				) {
 					const user: User | null = await db.query.user({
 						where: { email }
-					});
+					})
 
 					if (!user) {
-						throw new AuthenticationError(INVALID_CREDENTIALS);
+						throw new AuthenticationError(INVALID_CREDENTIALS)
+					}
+
+					if (!user.password) {
+						throw new AuthenticationError('Need to add a password')
 					}
 
 					if (!user.confirmed) {
 						throw new ApolloError(
 							`User is not confirmed, please check your email: ${email}`
-						);
+						)
 					}
 
 					const valid = await comparePassword(
 						password as string,
 						user.password
-					);
+					)
 
 					if (!valid) {
-						throw new ForbiddenError(INVALID_CREDENTIALS);
+						throw new ForbiddenError(INVALID_CREDENTIALS)
 					}
 
 					await db.mutation.updateUser({
 						where: { email },
 						data: { online: true }
-					});
+					})
 
-					const [ token, refreshToken ] = await createToken(
+					const [token, refreshToken] = await createToken(
 						user,
-						'secret'
-					);
+						'secret',
+						{ expiresIn: '7d' },
+						'moresecrets',
+						user
+					)
 
-					session.userId = user.id;
+					console.log(token)
+
+					session.userId = user.id
 					if (req.sessionID) {
 						await redis.lpush(
 							`${USER_SESSION_ID_PREFIX}${user.id}`,
 							req.sessionID
-						);
+						)
 					}
 
 					return {
@@ -81,14 +86,14 @@ export const resolvers = {
 						token,
 						refreshToken,
 						user
-					};
+					}
 				} else {
-					throw new AuthenticationError(INVALID_CREDENTIALS);
+					throw new AuthenticationError(INVALID_CREDENTIALS)
 				}
 			} catch (error) {
-				logger.error({ level: '5', message: error });
-				return error;
+				logger.error({ level: '5', message: error })
+				return error
 			}
 		}
 	}
-};
+}

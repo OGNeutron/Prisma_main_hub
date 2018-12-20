@@ -42,6 +42,10 @@ type User {
 	set_private: Boolean! @default(value: true)
 	username: String! @unique
 	password: String!
+	gitHubId: String
+	facebookId: String
+	twitterId: String
+	gmailId: String
 	avatar_url: File!
 	confirmed: Boolean! @default(value: false)
 	online: Boolean! @default(value: false)
@@ -83,7 +87,7 @@ type Message {
 type Channel {
 	id: ID! @unique
 	name: String!
-	slug: String!
+	slug: String! @unique
 	moderators: [User!]! @relation(name: "ChannelModerators")
 	public: Boolean @default(value: true)
 	messages: [Message!]!
@@ -95,8 +99,8 @@ type Channel {
 
 type Team {
 	id: ID! @unique
-	name: String! @unique
-	slug: String!
+	name: String!
+	slug: String! @unique
 	moderators: [User!]! @relation(name: "TeamModerators")
 	author: User! @relation(name: "TeamAuthor")
 	members: [User!]! @relation(name: "TeamMembers")

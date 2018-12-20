@@ -1,20 +1,22 @@
-import * as yup from 'yup';
-import { AuthenticationError, ForbiddenError } from 'apollo-server';
-import { decode } from 'jsonwebtoken';
-import { hashPassword } from 'scotts_utilities';
+import * as yup from 'yup'
+import { AuthenticationError, ForbiddenError } from 'apollo-server'
+import { hashPassword, decodeToken } from 'scotts_utilities'
 
-import { Context } from '../../../tstypes';
-import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers';
-import { INVALID_CREDENTIALS } from '../../../constants';
-import { logger } from '../../../utils/logger';
-import { User } from '../../../generated/prisma';
-import { MutationResolvers } from '../../../generated/graphqlgen';
+import { Context } from '../../../tstypes'
+import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers'
+import { INVALID_CREDENTIALS } from '../../../constants'
+import { logger } from '../../../utils/logger'
+import { User } from '../../../generated/prisma'
+import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const schema: yup.ObjectSchema<{}> = yup.object().shape({
 	username: yup.string().required(),
-	email: yup.string().required().email(),
+	email: yup
+		.string()
+		.required()
+		.email(),
 	password: yup.string().required()
-});
+})
 
 export const resolvers = {
 	Mutation: {
@@ -24,36 +26,38 @@ export const resolvers = {
 			{ db }: Context
 		) {
 			try {
-				let decoded: any;
+				let decoded: any
 				if (token != null) {
-					decoded = decode(token);
+					decoded = decodeToken(token)
 				}
 
 				if (decoded == null) {
-					throw new ForbiddenError(INVALID_CREDENTIALS);
+					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
+				console.log(decoded)
+
 				const user: User | null = await db.mutation.updateUser({
-					where: { id: decoded.user.id },
+					where: { id: decoded.id },
 					data: {
 						confirmed: true
 					}
-				});
+				})
 
 				if (user) {
 					return {
 						ok: true,
 						result: `${user.username}`
-					};
+					}
 				} else {
 					return {
 						ok: true,
 						result: INVALID_CREDENTIALS
-					};
+					}
 				}
 			} catch (error) {
-				logger.error({ level: '0', message: error.message });
-				return error;
+				logger.error({ level: '0', message: error.message })
+				return error
 			}
 		},
 		async register(
@@ -69,13 +73,13 @@ export const resolvers = {
 						password
 					},
 					{ abortEarly: false }
-				);
+				)
 
 				if (isValid) {
 					const passwordHash: string = await hashPassword(
 						password as string,
 						10
-					);
+					)
 
 					const user: User = await db.mutation.createUser({
 						data: {
@@ -95,29 +99,29 @@ export const resolvers = {
 								}
 							}
 						}
-					});
+					})
 
-					const url: string = req.get('origin') as string;
+					const url: string = req.get('origin') as string
 
-					sendConfirmationEmail(user, url);
+					sendConfirmationEmail(user, url)
 
 					return {
 						__typename: 'RegisterResponse',
 						ok: true,
 						result: `Confirmation email sent to ${user.email}`
-					};
+					}
 				} else {
 					return {
 						__typename: 'RegisterResponse',
 						ok: false,
 						result: new AuthenticationError(INVALID_CREDENTIALS)
 							.message
-					};
+					}
 				}
 			} catch (error) {
-				logger.error({ level: '0', message: error });
-				return error;
+				logger.error({ level: '0', message: error })
+				return error
 			}
 		}
 	}
-};
+}

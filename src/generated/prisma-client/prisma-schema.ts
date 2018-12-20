@@ -408,6 +408,7 @@ input ChannelWhereInput {
 
 input ChannelWhereUniqueInput {
   id: ID
+  slug: String
 }
 
 type Comment {
@@ -2069,7 +2070,7 @@ input TeamWhereInput {
 
 input TeamWhereUniqueInput {
   id: ID
-  name: String
+  slug: String
 }
 
 type User {
@@ -2079,6 +2080,10 @@ type User {
   set_private: Boolean!
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: File!
   confirmed: Boolean!
   online: Boolean!
@@ -2105,6 +2110,10 @@ input UserCreateInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2168,6 +2177,10 @@ input UserCreateWithoutChannelsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2185,6 +2198,10 @@ input UserCreateWithoutFriend_requestsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2202,6 +2219,10 @@ input UserCreateWithoutFriendsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2218,6 +2239,10 @@ input UserCreateWithoutNotificationsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2236,6 +2261,10 @@ input UserCreateWithoutOwned_channelsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2253,6 +2282,10 @@ input UserCreateWithoutOwned_teamsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2270,6 +2303,10 @@ input UserCreateWithoutTeamsInput {
   set_private: Boolean
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileCreateOneInput!
   confirmed: Boolean
   online: Boolean
@@ -2297,6 +2334,14 @@ enum UserOrderByInput {
   username_DESC
   password_ASC
   password_DESC
+  gitHubId_ASC
+  gitHubId_DESC
+  facebookId_ASC
+  facebookId_DESC
+  twitterId_ASC
+  twitterId_DESC
+  gmailId_ASC
+  gmailId_DESC
   confirmed_ASC
   confirmed_DESC
   online_ASC
@@ -2315,6 +2360,10 @@ type UserPreviousValues {
   set_private: Boolean!
   username: String!
   password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   confirmed: Boolean!
   online: Boolean!
   createdAt: DateTime!
@@ -2387,6 +2436,62 @@ input UserScalarWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  gitHubId: String
+  gitHubId_not: String
+  gitHubId_in: [String!]
+  gitHubId_not_in: [String!]
+  gitHubId_lt: String
+  gitHubId_lte: String
+  gitHubId_gt: String
+  gitHubId_gte: String
+  gitHubId_contains: String
+  gitHubId_not_contains: String
+  gitHubId_starts_with: String
+  gitHubId_not_starts_with: String
+  gitHubId_ends_with: String
+  gitHubId_not_ends_with: String
+  facebookId: String
+  facebookId_not: String
+  facebookId_in: [String!]
+  facebookId_not_in: [String!]
+  facebookId_lt: String
+  facebookId_lte: String
+  facebookId_gt: String
+  facebookId_gte: String
+  facebookId_contains: String
+  facebookId_not_contains: String
+  facebookId_starts_with: String
+  facebookId_not_starts_with: String
+  facebookId_ends_with: String
+  facebookId_not_ends_with: String
+  twitterId: String
+  twitterId_not: String
+  twitterId_in: [String!]
+  twitterId_not_in: [String!]
+  twitterId_lt: String
+  twitterId_lte: String
+  twitterId_gt: String
+  twitterId_gte: String
+  twitterId_contains: String
+  twitterId_not_contains: String
+  twitterId_starts_with: String
+  twitterId_not_starts_with: String
+  twitterId_ends_with: String
+  twitterId_not_ends_with: String
+  gmailId: String
+  gmailId_not: String
+  gmailId_in: [String!]
+  gmailId_not_in: [String!]
+  gmailId_lt: String
+  gmailId_lte: String
+  gmailId_gt: String
+  gmailId_gte: String
+  gmailId_contains: String
+  gmailId_not_contains: String
+  gmailId_starts_with: String
+  gmailId_not_starts_with: String
+  gmailId_ends_with: String
+  gmailId_not_ends_with: String
   confirmed: Boolean
   confirmed_not: Boolean
   online: Boolean
@@ -2440,6 +2545,10 @@ input UserUpdateDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2458,6 +2567,10 @@ input UserUpdateInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2475,6 +2588,10 @@ input UserUpdateManyDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   confirmed: Boolean
   online: Boolean
   role: UserRole
@@ -2496,6 +2613,10 @@ input UserUpdateManyMutationInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   confirmed: Boolean
   online: Boolean
   role: UserRole
@@ -2593,6 +2714,10 @@ input UserUpdateWithoutChannelsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2610,6 +2735,10 @@ input UserUpdateWithoutFriend_requestsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2627,6 +2756,10 @@ input UserUpdateWithoutFriendsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2643,6 +2776,10 @@ input UserUpdateWithoutNotificationsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2661,6 +2798,10 @@ input UserUpdateWithoutOwned_channelsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2678,6 +2819,10 @@ input UserUpdateWithoutOwned_teamsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2695,6 +2840,10 @@ input UserUpdateWithoutTeamsDataInput {
   set_private: Boolean
   username: String
   password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
   avatar_url: FileUpdateOneRequiredInput
   confirmed: Boolean
   online: Boolean
@@ -2843,6 +2992,62 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
+  gitHubId: String
+  gitHubId_not: String
+  gitHubId_in: [String!]
+  gitHubId_not_in: [String!]
+  gitHubId_lt: String
+  gitHubId_lte: String
+  gitHubId_gt: String
+  gitHubId_gte: String
+  gitHubId_contains: String
+  gitHubId_not_contains: String
+  gitHubId_starts_with: String
+  gitHubId_not_starts_with: String
+  gitHubId_ends_with: String
+  gitHubId_not_ends_with: String
+  facebookId: String
+  facebookId_not: String
+  facebookId_in: [String!]
+  facebookId_not_in: [String!]
+  facebookId_lt: String
+  facebookId_lte: String
+  facebookId_gt: String
+  facebookId_gte: String
+  facebookId_contains: String
+  facebookId_not_contains: String
+  facebookId_starts_with: String
+  facebookId_not_starts_with: String
+  facebookId_ends_with: String
+  facebookId_not_ends_with: String
+  twitterId: String
+  twitterId_not: String
+  twitterId_in: [String!]
+  twitterId_not_in: [String!]
+  twitterId_lt: String
+  twitterId_lte: String
+  twitterId_gt: String
+  twitterId_gte: String
+  twitterId_contains: String
+  twitterId_not_contains: String
+  twitterId_starts_with: String
+  twitterId_not_starts_with: String
+  twitterId_ends_with: String
+  twitterId_not_ends_with: String
+  gmailId: String
+  gmailId_not: String
+  gmailId_in: [String!]
+  gmailId_not_in: [String!]
+  gmailId_lt: String
+  gmailId_lte: String
+  gmailId_gt: String
+  gmailId_gte: String
+  gmailId_contains: String
+  gmailId_not_contains: String
+  gmailId_starts_with: String
+  gmailId_not_starts_with: String
+  gmailId_ends_with: String
+  gmailId_not_ends_with: String
   avatar_url: FileWhereInput
   confirmed: Boolean
   confirmed_not: Boolean

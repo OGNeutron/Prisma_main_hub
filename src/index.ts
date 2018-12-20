@@ -1,23 +1,25 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import * as express from 'express';
-import * as http from 'http';
-import * as path from 'path';
+import * as express from 'express'
+import * as http from 'http'
+import * as path from 'path'
 
-import { ApolloServer } from 'apollo-server-express';
-import { S3 } from 'aws-sdk';
-import { platform, arch } from 'os';
-import { makeExecutableSchema } from 'graphql-tools';
-import { importSchema } from 'graphql-import';
-// import { applyMiddleware } from 'graphql-middleware';
-import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities';
+import { ApolloServer } from 'apollo-server-express'
+import { S3 } from 'aws-sdk'
+import { platform, arch } from 'os'
+import { makeExecutableSchema } from 'graphql-tools'
+import { importSchema } from 'graphql-import'
+import { applyMiddleware } from 'graphql-middleware'
+import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities'
 
-import { redis } from './redis';
-import { PORT } from './constants';
-import { Prisma } from './generated/prisma';
-import { middleware } from './middleware/express';
-import { logger } from './utils/logger';
-// import { ShieldMiddleware } from './middleware/graphql/shield';
+import { redis } from './redis'
+import { PORT } from './constants'
+import { Prisma } from './generated/prisma'
+import { middleware } from './middleware/express'
+import { logger } from './utils/logger'
+import ApiRouter from './apiRoutes'
+import { setupPassport } from './passport'
+import { ShieldMiddleware } from './middleware/graphql/shield'
 // import { graphqlMiddleware } from './middleware/graphql/graphql-middleware';
 // import { Prisma } from './generated/prisma-client';
 
@@ -27,7 +29,7 @@ const s3Client: S3 = new S3({
 	params: {
 		Bucket: process.env.AWS_BUCKET
 	}
-});
+})
 
 const db: Prisma = new Prisma({
 	endpoint:
@@ -36,20 +38,24 @@ const db: Prisma = new Prisma({
 			: `${process.env.HEROKU_PRISMA_ENDPOINT}`,
 	secret: process.env.MANAGEMENT_API_SECRET || 'my-secret',
 	debug: false
-});
+})
 
-const typeDefs: string = importSchema(path.join(__dirname, './schema.graphql'));
+const typeDefs: string = importSchema(path.join(__dirname, './schema.graphql'))
 
-const schema = makeExecutableSchema({
+const makeSchema = makeExecutableSchema({
 	typeDefs,
 	resolvers: genResolvers(path.join(__dirname, '/**/resolvers.?s'))
-});
+})
 
-const app = express();
+const app = express()
 
-middleware(app);
+let passport = setupPassport()
 
-// const { schema } = applyMiddleware(makeSchema, ShieldMiddleware);
+middleware(app, passport)
+
+app.use('/api/v1', ApiRouter)
+
+const { schema } = applyMiddleware(makeSchema, ShieldMiddleware)
 
 const server: ApolloServer = new ApolloServer({
 	subscriptions: {
@@ -65,9 +71,9 @@ const server: ApolloServer = new ApolloServer({
 			redis: redis,
 			db,
 			s3: s3Client
-		};
+		}
 	}
-} as any);
+} as any)
 
 server.applyMiddleware({
 	app,
@@ -82,18 +88,18 @@ server.applyMiddleware({
 			'http://mainsite.surge.sh'
 		]
 	}
-});
+})
 
-const httpServer = http.createServer(app);
+const httpServer = http.createServer(app)
 
-httpServer.listen(normalisePort(PORT));
-server.installSubscriptionHandlers(httpServer);
+httpServer.listen(normalisePort(PORT))
+server.installSubscriptionHandlers(httpServer)
 
 httpServer.on('listening', async () => {
-	const enviroment = process.env.NODE_ENV as string;
+	const enviroment = process.env.NODE_ENV as string
 
 	if (enviroment === 'test') {
-		redis.flushall();
+		redis.flushall()
 	}
 
 	const messages: string[] = [
@@ -101,11 +107,11 @@ httpServer.on('listening', async () => {
 		`Subscriptions on: http://localhost:${PORT}${server.subscriptionsPath}`,
 		`Current development status: ${enviroment}`,
 		`Operating system: ${platform()} ${arch()}`
-	];
+	]
 
-	await consolePrint(messages);
-});
+	await consolePrint(messages)
+})
 
-httpServer.on('error', (err) => logger.error({ level: '0', message: err }));
+httpServer.on('error', err => logger.error({ level: '0', message: err }))
 
-export default server;
+export default server

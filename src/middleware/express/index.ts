@@ -1,30 +1,31 @@
-import * as compression from 'compression';
-import * as helmet from 'helmet';
-import * as express from 'express';
-import * as path from 'path';
-import * as session from 'express-session';
-import * as morgan from 'morgan';
+import * as compression from 'compression'
+import * as helmet from 'helmet'
+import * as express from 'express'
+import * as path from 'path'
+import * as session from 'express-session'
+import * as morgan from 'morgan'
+import * as passport from 'passport'
 
-import { Express } from 'express';
+import { Express } from 'express'
 
-const redisStore = require('connect-redis')(session);
+const redisStore = require('connect-redis')(session)
 // import uuid from 'uuid/v4'
 
 // import { REDIS_PREFIX } from '../constants'
 // import { redis } from '../redis'
-import { addUser } from '../../utils/auth/middleware';
-import { redis } from '../../redis';
-import { REDIS_PREFIX } from '../../constants';
+import { addUser } from '../../utils/auth/middleware'
+import { redis } from '../../redis'
+import { REDIS_PREFIX } from '../../constants'
 
-export const middleware = (app: Express) => {
+export const middleware = (app: Express, passport: passport.PassportStatic) => {
 	if (process.env.NODE_ENV !== 'production') {
 	}
 
-	app.disable('x-powered-by');
-	app.use(morgan('dev'));
-	app.use(helmet());
-	app.use(compression());
-	app.use(express.json());
+	app.disable('x-powered-by')
+	app.use(morgan('dev'))
+	app.use(helmet())
+	app.use(compression())
+	app.use(express.json())
 	app.use(
 		express.urlencoded({
 			extended: true,
@@ -32,8 +33,8 @@ export const middleware = (app: Express) => {
 			limit: '100kb',
 			parameterLimit: 1000
 		})
-	);
-	app.use(express.static(path.join(__dirname, '../public')));
+	)
+	app.use(express.static(path.join(__dirname, '../public')))
 
 	app.use(
 		session({
@@ -47,10 +48,11 @@ export const middleware = (app: Express) => {
 			saveUninitialized: false,
 			cookie: {
 				httpOnly: true,
-				secure: false, // process.env.NODE_ENV === 'production', remember for https
+				secure: 'auto', // process.env.NODE_ENV === 'production', remember for https
 				maxAge: 1000 * 60 * 60 * 24 * 7
 			}
 		})
-	);
-	app.use(addUser as any);
-};
+	)
+	app.use(passport.initialize())
+	app.use(addUser as any)
+}
