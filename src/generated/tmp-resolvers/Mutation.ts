@@ -5,6 +5,9 @@ import { MutationResolvers } from '../graphqlgen'
 
 export const Mutation: MutationResolvers.Type = {
 	...MutationResolvers.defaultResolvers,
+	friendRemove: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
 	removeChannelMember: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
 	},
@@ -69,6 +72,21 @@ export const Mutation: MutationResolvers.Type = {
 		throw new Error('Resolver not implemented')
 	},
 	friendReject: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	createTodo: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	editTodo: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	deleteTodo: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	createTodoProject: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	createOrder: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
 	}
 }

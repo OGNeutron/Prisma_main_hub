@@ -1,5 +1,5 @@
-import { Context } from '../../tstypes';
-import { SubscriptionResolvers } from '../../generated/graphqlgen';
+import { Context } from '../../tstypes'
+import { SubscriptionResolvers } from '../../generated/graphqlgen'
 
 export const resolvers = {
 	Subscription: {
@@ -7,23 +7,17 @@ export const resolvers = {
 			subscribe(
 				_: any,
 				{ id }: SubscriptionResolvers.ArgsNotificationSubscription,
-				{ db }: Context,
-				info: any
+				{ db }: Context
 			) {
-				return db.subscription.notification(
-					{
-						where: {
-							mutation_in: [ 'CREATED' ],
-							node: {
-								author: {
-									id
-								}
-							}
+				return db.$subscribe.notification({
+					mutation_in: ['CREATED'],
+					node: {
+						author: {
+							id
 						}
-					},
-					info
-				);
+					}
+				})
 			}
 		}
 	}
-};
+}

@@ -1,33 +1,28 @@
-import { ForbiddenError, ApolloError } from 'apollo-server';
+import { ForbiddenError, ApolloError } from 'apollo-server'
 
-import { Context } from '../../tstypes';
-import { logger } from '../../utils/logger';
-import { INVALID_CREDENTIALS } from '../../constants';
-import { Comment } from '../../generated/prisma';
-import { QueryResolvers, MutationResolvers } from '../../generated/graphqlgen';
+import { Context } from '../../tstypes'
+import { logger } from '../../utils/logger'
+import { INVALID_CREDENTIALS } from '../../constants'
+import { QueryResolvers, MutationResolvers } from '../../generated/graphqlgen'
 
 export const resolvers = {
 	Query: {
 		async queryComment(
 			_: any,
 			{ parentId }: QueryResolvers.ArgsQueryComment,
-			{ db }: Context,
-			info: any
+			{ db }: Context
 		) {
 			try {
-				const comments: Comment[] = await db.query.comments(
-					{
-						where: {
-							parentId
-						},
-						orderBy: 'createdAt_DESC'
+				const comments = await db.comments({
+					where: {
+						id: parentId
 					},
-					info
-				);
+					orderBy: 'createdAt_DESC'
+				})
 
-				return comments;
+				return comments
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		}
 	},
@@ -35,144 +30,130 @@ export const resolvers = {
 		async deleteComment(
 			_: any,
 			{ id }: MutationResolvers.ArgsDeleteComment,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
-				const comment: Comment | null = await db.query.comment(
-					{
-						where: {
-							id
-						}
-					},
-					info
-				);
+				const comment = await db
+					.comment({
+						id
+					})
+					.author()
 
-				console.log('COMMENT', comment);
+				const author = await db
+					.comment({
+						id
+					})
+					.author()
+
+				console.log('COMMENT', comment)
 
 				if (!comment) {
-					return new ApolloError(INVALID_CREDENTIALS);
+					return new ApolloError(INVALID_CREDENTIALS)
 				}
 
-				if (comment.author.id !== session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS);
+				if (author.id !== session.userId) {
+					return new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
-				await db.mutation.deleteComment({
-					where: {
-						id: comment.id
-					}
-				});
+				await db.deleteComment({
+					id: comment.id
+				})
 
-				return comment;
+				return comment
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		},
 		async editComment(
 			_: any,
 			{ id, body }: MutationResolvers.ArgsEditComment,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
-				const comment: Comment | null = await db.query.comment(
-					{
-						where: {
-							id
-						}
-					},
-					info
-				);
+				const comment = await db.comment({
+					id
+				})
+
+				const author = await db
+					.comment({
+						id
+					})
+					.author()
 
 				if (!comment) {
-					return new ApolloError(INVALID_CREDENTIALS);
+					return new ApolloError(INVALID_CREDENTIALS)
 				}
 
-				if (comment.author.id !== session.userId) {
-					return new ForbiddenError(INVALID_CREDENTIALS);
+				if (author.id !== session.userId) {
+					return new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
-				return await db.mutation.updateComment(
-					{
-						where: {
-							id: comment.id
-						},
-						data: {
-							body
-						}
+				return await db.updateComment({
+					where: {
+						id: comment.id
 					},
-					info
-				);
+					data: {
+						body
+					}
+				})
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		},
 		async likeComment(
 			_: any,
 			{ commentId }: MutationResolvers.ArgsLikeComment,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID = session.userId;
+					const userID = session.userId
 
-					const comment: any = await db.query.comment(
-						{
-							where: {
-								id: commentId
-							}
-						},
-						info
-					);
+					const comment: any = await db.comment({
+						id: commentId
+					})
 
 					if (comment) {
 						if (comment.ratings) {
-							console.log('COMMENT', comment);
+							console.log('COMMENT', comment)
 
 							const found = comment.ratings.author.find(
 								(author: any) => author.id === userID
-							);
+							)
 
-							console.log('FOUND', found);
+							console.log('FOUND', found)
 
 							if (found === undefined) {
-								return await db.mutation.updateComment(
-									{
-										data: {
-											ratings: {
-												update: {
-													vote:
-														comment.ratings.vote +
-														1,
-													author: {
-														connect: {
-															id: userID
-														}
+								return await db.updateComment({
+									data: {
+										ratings: {
+											update: {
+												vote: comment.ratings.vote + 1,
+												author: {
+													connect: {
+														id: userID
 													}
 												}
 											}
-										},
-										where: {
-											id: comment.id
 										}
 									},
-									info
-								);
+									where: {
+										id: comment.id
+									}
+								})
 							}
 						} else {
-							return new ApolloError('No comment author');
+							return new ApolloError('No comment author')
 						}
 					} else {
-						return new ApolloError('No such comment');
+						return new ApolloError('No such comment')
 					}
-					return comment;
+					return comment
 				} else {
-					return new ForbiddenError(INVALID_CREDENTIALS);
+					return new ForbiddenError(INVALID_CREDENTIALS)
 				}
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		},
 		async createReply(
@@ -183,43 +164,37 @@ export const resolvers = {
 				parentId,
 				repliedTo
 			}: MutationResolvers.ArgsCreateReply,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID = session.userId;
-					let comment: any;
+					const userID = session.userId
+					let comment: any
 					if (body) {
-						comment = await db.mutation.createComment(
-							{
-								data: {
-									body,
-									parentId,
-									pageId,
-									repliedTo: {
-										connect: {
-											id: repliedTo || ''
-										}
-									},
-									ratings: {
-										create: {
-											vote: 0
-										}
-									},
-									author: {
-										connect: {
-											id: userID
-										}
-									}
+						comment = await db.createComment({
+							body,
+							parentId,
+							pageId,
+							repliedTo: {
+								connect: {
+									id: repliedTo || ''
 								}
 							},
-							info
-						);
+							ratings: {
+								create: {
+									vote: 0
+								}
+							},
+							author: {
+								connect: {
+									id: userID
+								}
+							}
+						})
 					}
 
 					if (comment) {
-						await db.mutation.updateComment({
+						await db.updateComment({
 							where: {
 								id: parentId
 							},
@@ -230,58 +205,52 @@ export const resolvers = {
 									}
 								}
 							}
-						});
+						})
 					}
 
-					return comment;
+					return comment
 				}
 
-				return new ForbiddenError(INVALID_CREDENTIALS);
+				return new ForbiddenError(INVALID_CREDENTIALS)
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		},
 		async createComment(
 			_: any,
 			{ pageId, body, parentId }: MutationResolvers.ArgsCreateComment,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
 				if (session.userId || session.decodedUser) {
-					const userID: string | undefined = session.userId;
+					const userID: string | undefined = session.userId
 
 					if (body) {
-						const comment: Comment = await db.mutation.createComment(
-							{
-								data: {
-									body,
-									parentId,
-									pageId,
-									ratings: {
-										create: {
-											vote: 0
-										}
-									},
-									author: {
-										connect: {
-											id: userID
-										}
-									}
+						const comment = await db.createComment({
+							body,
+							parentId,
+							pageId,
+							ratings: {
+								create: {
+									vote: 0
 								}
 							},
-							info
-						);
-						return comment;
+							author: {
+								connect: {
+									id: userID
+								}
+							}
+						})
+						return comment
 					} else {
-						return new ApolloError('Comment body required');
+						return new ApolloError('Comment body required')
 					}
 				} else {
-					return new ForbiddenError(INVALID_CREDENTIALS);
+					return new ForbiddenError(INVALID_CREDENTIALS)
 				}
 			} catch (error) {
-				return logger.error({ level: '5', message: error });
+				return logger.error({ level: '5', message: error })
 			}
 		}
 	}
-};
+}

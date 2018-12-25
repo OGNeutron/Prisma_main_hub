@@ -12,13 +12,20 @@ import { Channel } from './Channel'
 import { Message } from './Message'
 import { Comment } from './Comment'
 import { Rating } from './Rating'
+import { Todo } from './Todo'
 import { Mutation } from './Mutation'
+import { FriendRemoveResponse } from './FriendRemoveResponse'
 import { LoginResponse } from './LoginResponse'
 import { RegisterResponse } from './RegisterResponse'
 import { ForgotPasswordResponse } from './ForgotPasswordResponse'
 import { VoidResponse } from './VoidResponse'
 import { Error } from './Error'
 import { AddFriendResponse } from './AddFriendResponse'
+import { TodoProject } from './TodoProject'
+import { ProductsInput } from './ProductsInput'
+import { Order } from './Order'
+import { Product } from './Product'
+import { Customer } from './Customer'
 import { Subscription } from './Subscription'
 import { UserSubscriptionPayload } from './UserSubscriptionPayload'
 import { UserPreviousValues } from './UserPreviousValues'
@@ -37,13 +44,20 @@ export const resolvers: Resolvers = {
 	Message,
 	Comment,
 	Rating,
+	Todo,
 	Mutation,
+	FriendRemoveResponse,
 	LoginResponse,
 	RegisterResponse,
 	ForgotPasswordResponse,
 	VoidResponse,
 	Error,
 	AddFriendResponse,
+	TodoProject,
+	ProductsInput,
+	Order,
+	Product,
+	Customer,
 	Subscription,
 	UserSubscriptionPayload,
 	UserPreviousValues,

@@ -27,7 +27,7 @@ export const resolvers = {
 					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
-				await db.mutation.updateUser({
+				await db.updateUser({
 					data: {
 						online: false
 					},

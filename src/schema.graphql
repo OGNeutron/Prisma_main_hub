@@ -33,6 +33,11 @@ type AddFriendResponse {
 	user: User
 }
 
+type FriendRemoveResponse {
+	ok: Boolean!
+	user: User
+}
+
 type Query {
 	currentUser: User
 	getProfile(username: String!): User!
@@ -41,6 +46,7 @@ type Query {
 	showTeam(teamSlug: String!): Team!
 	showTeams(authorId: ID!): [Team!]
 	showChannel(channelId: ID!): Channel!
+	fetchTodos: [Todo!]
 }
 
 type Subscription {
@@ -51,6 +57,7 @@ type Subscription {
 }
 
 type Mutation {
+	friendRemove(friendId: ID!): FriendRemoveResponse!
 	removeChannelMember(channelId: ID!, userId: ID!): Channel!
 	createMessage(body: String!, channelId: ID!): Message!
 	createChannel(name: String!, teamId: ID!): Channel!
@@ -87,4 +94,9 @@ type Mutation {
 	friendRequest(requestedId: ID!): VoidResponse!
 	addFriend(requestedId: ID!): AddFriendResponse!
 	friendReject(id: ID!): VoidResponse!
+	createTodo(body: String!): Todo
+	editTodo(id: ID!): Todo
+	deleteTodo(id: ID!): Todo
+	createTodoProject: TodoProject
+	createOrder(totalPrice: Float!): Order
 }

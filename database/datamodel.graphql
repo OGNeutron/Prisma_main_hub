@@ -110,3 +110,54 @@ type Team {
 	confirmed: Boolean! @default(value: false)
 	online: Boolean! @default(value: false)
 }
+
+type Todo {
+	id: ID! @unique
+	body: String!
+	author: User! @unique
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+
+type TodoProject {
+	id: ID! @unique
+	name: String!
+	todos: [Todo!]!
+	author: User! @unique
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+
+type Order {
+	id: ID! @unique
+	products: [Product!]
+	customer: Customer!
+	total_price: Float!
+	confirmed: Boolean!
+	currency: String!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+
+type Customer {
+	id: ID! @unique
+	user: User!
+	stripeId: ID!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+
+type Product {
+	id: ID! @unique
+	name: String! @unique
+	stock: Int!
+	price: Float!
+	createdAt: DateTime!
+	updatedAt: DateTime!
+}
+
+# type Subscription {
+# 	id: ID! @unique
+# 	createdAt: DateTime!
+# 	updatedAt: DateTime!
+# }

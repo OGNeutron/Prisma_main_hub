@@ -25,5 +25,8 @@ export const Query: QueryResolvers.Type = {
 	},
 	showChannel: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
+	},
+	fetchTodos: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
 	}
 }

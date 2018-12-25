@@ -4,15 +4,5 @@
 import { NotificationSubscriptionPayloadResolvers } from '../graphqlgen'
 
 export const NotificationSubscriptionPayload: NotificationSubscriptionPayloadResolvers.Type = {
-	...NotificationSubscriptionPayloadResolvers.defaultResolvers,
-
-	node: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	},
-	updatedFields: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	},
-	previousValues: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	}
+	...NotificationSubscriptionPayloadResolvers.defaultResolvers
 }

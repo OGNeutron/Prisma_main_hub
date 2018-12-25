@@ -6,6 +6,10 @@ type AggregateComment {
   count: Int!
 }
 
+type AggregateCustomer {
+  count: Int!
+}
+
 type AggregateFile {
   count: Int!
 }
@@ -18,11 +22,27 @@ type AggregateNotification {
   count: Int!
 }
 
+type AggregateOrder {
+  count: Int!
+}
+
+type AggregateProduct {
+  count: Int!
+}
+
 type AggregateRating {
   count: Int!
 }
 
 type AggregateTeam {
+  count: Int!
+}
+
+type AggregateTodo {
+  count: Int!
+}
+
+type AggregateTodoProject {
   count: Int!
 }
 
@@ -725,6 +745,152 @@ input CommentWhereUniqueInput {
   id: ID
 }
 
+type Customer {
+  id: ID!
+  user: User!
+  stripeId: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CustomerConnection {
+  pageInfo: PageInfo!
+  edges: [CustomerEdge]!
+  aggregate: AggregateCustomer!
+}
+
+input CustomerCreateInput {
+  user: UserCreateOneInput!
+  stripeId: ID!
+}
+
+input CustomerCreateOneInput {
+  create: CustomerCreateInput
+  connect: CustomerWhereUniqueInput
+}
+
+type CustomerEdge {
+  node: Customer!
+  cursor: String!
+}
+
+enum CustomerOrderByInput {
+  id_ASC
+  id_DESC
+  stripeId_ASC
+  stripeId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type CustomerPreviousValues {
+  id: ID!
+  stripeId: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type CustomerSubscriptionPayload {
+  mutation: MutationType!
+  node: Customer
+  updatedFields: [String!]
+  previousValues: CustomerPreviousValues
+}
+
+input CustomerSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: CustomerWhereInput
+  AND: [CustomerSubscriptionWhereInput!]
+  OR: [CustomerSubscriptionWhereInput!]
+  NOT: [CustomerSubscriptionWhereInput!]
+}
+
+input CustomerUpdateDataInput {
+  user: UserUpdateOneRequiredInput
+  stripeId: ID
+}
+
+input CustomerUpdateInput {
+  user: UserUpdateOneRequiredInput
+  stripeId: ID
+}
+
+input CustomerUpdateManyMutationInput {
+  stripeId: ID
+}
+
+input CustomerUpdateOneRequiredInput {
+  create: CustomerCreateInput
+  update: CustomerUpdateDataInput
+  upsert: CustomerUpsertNestedInput
+  connect: CustomerWhereUniqueInput
+}
+
+input CustomerUpsertNestedInput {
+  update: CustomerUpdateDataInput!
+  create: CustomerCreateInput!
+}
+
+input CustomerWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  user: UserWhereInput
+  stripeId: ID
+  stripeId_not: ID
+  stripeId_in: [ID!]
+  stripeId_not_in: [ID!]
+  stripeId_lt: ID
+  stripeId_lte: ID
+  stripeId_gt: ID
+  stripeId_gte: ID
+  stripeId_contains: ID
+  stripeId_not_contains: ID
+  stripeId_starts_with: ID
+  stripeId_not_starts_with: ID
+  stripeId_ends_with: ID
+  stripeId_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [CustomerWhereInput!]
+  OR: [CustomerWhereInput!]
+  NOT: [CustomerWhereInput!]
+}
+
+input CustomerWhereUniqueInput {
+  id: ID
+}
+
 scalar DateTime
 
 type File {
@@ -1319,6 +1485,12 @@ type Mutation {
   upsertComment(where: CommentWhereUniqueInput!, create: CommentCreateInput!, update: CommentUpdateInput!): Comment!
   deleteComment(where: CommentWhereUniqueInput!): Comment
   deleteManyComments(where: CommentWhereInput): BatchPayload!
+  createCustomer(data: CustomerCreateInput!): Customer!
+  updateCustomer(data: CustomerUpdateInput!, where: CustomerWhereUniqueInput!): Customer
+  updateManyCustomers(data: CustomerUpdateManyMutationInput!, where: CustomerWhereInput): BatchPayload!
+  upsertCustomer(where: CustomerWhereUniqueInput!, create: CustomerCreateInput!, update: CustomerUpdateInput!): Customer!
+  deleteCustomer(where: CustomerWhereUniqueInput!): Customer
+  deleteManyCustomers(where: CustomerWhereInput): BatchPayload!
   createFile(data: FileCreateInput!): File!
   updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
@@ -1337,6 +1509,18 @@ type Mutation {
   upsertNotification(where: NotificationWhereUniqueInput!, create: NotificationCreateInput!, update: NotificationUpdateInput!): Notification!
   deleteNotification(where: NotificationWhereUniqueInput!): Notification
   deleteManyNotifications(where: NotificationWhereInput): BatchPayload!
+  createOrder(data: OrderCreateInput!): Order!
+  updateOrder(data: OrderUpdateInput!, where: OrderWhereUniqueInput!): Order
+  updateManyOrders(data: OrderUpdateManyMutationInput!, where: OrderWhereInput): BatchPayload!
+  upsertOrder(where: OrderWhereUniqueInput!, create: OrderCreateInput!, update: OrderUpdateInput!): Order!
+  deleteOrder(where: OrderWhereUniqueInput!): Order
+  deleteManyOrders(where: OrderWhereInput): BatchPayload!
+  createProduct(data: ProductCreateInput!): Product!
+  updateProduct(data: ProductUpdateInput!, where: ProductWhereUniqueInput!): Product
+  updateManyProducts(data: ProductUpdateManyMutationInput!, where: ProductWhereInput): BatchPayload!
+  upsertProduct(where: ProductWhereUniqueInput!, create: ProductCreateInput!, update: ProductUpdateInput!): Product!
+  deleteProduct(where: ProductWhereUniqueInput!): Product
+  deleteManyProducts(where: ProductWhereInput): BatchPayload!
   createRating(data: RatingCreateInput!): Rating!
   updateRating(data: RatingUpdateInput!, where: RatingWhereUniqueInput!): Rating
   updateManyRatings(data: RatingUpdateManyMutationInput!, where: RatingWhereInput): BatchPayload!
@@ -1349,6 +1533,18 @@ type Mutation {
   upsertTeam(where: TeamWhereUniqueInput!, create: TeamCreateInput!, update: TeamUpdateInput!): Team!
   deleteTeam(where: TeamWhereUniqueInput!): Team
   deleteManyTeams(where: TeamWhereInput): BatchPayload!
+  createTodo(data: TodoCreateInput!): Todo!
+  updateTodo(data: TodoUpdateInput!, where: TodoWhereUniqueInput!): Todo
+  updateManyTodoes(data: TodoUpdateManyMutationInput!, where: TodoWhereInput): BatchPayload!
+  upsertTodo(where: TodoWhereUniqueInput!, create: TodoCreateInput!, update: TodoUpdateInput!): Todo!
+  deleteTodo(where: TodoWhereUniqueInput!): Todo
+  deleteManyTodoes(where: TodoWhereInput): BatchPayload!
+  createTodoProject(data: TodoProjectCreateInput!): TodoProject!
+  updateTodoProject(data: TodoProjectUpdateInput!, where: TodoProjectWhereUniqueInput!): TodoProject
+  updateManyTodoProjects(data: TodoProjectUpdateManyMutationInput!, where: TodoProjectWhereInput): BatchPayload!
+  upsertTodoProject(where: TodoProjectWhereUniqueInput!, create: TodoProjectCreateInput!, update: TodoProjectUpdateInput!): TodoProject!
+  deleteTodoProject(where: TodoProjectWhereUniqueInput!): TodoProject
+  deleteManyTodoProjects(where: TodoProjectWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -1549,11 +1745,426 @@ input NotificationWhereUniqueInput {
   id: ID
 }
 
+type Order {
+  id: ID!
+  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product!]
+  customer: Customer!
+  total_price: Float!
+  confirmed: Boolean!
+  currency: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderConnection {
+  pageInfo: PageInfo!
+  edges: [OrderEdge]!
+  aggregate: AggregateOrder!
+}
+
+input OrderCreateInput {
+  products: ProductCreateManyInput
+  customer: CustomerCreateOneInput!
+  total_price: Float!
+  confirmed: Boolean!
+  currency: String!
+}
+
+type OrderEdge {
+  node: Order!
+  cursor: String!
+}
+
+enum OrderOrderByInput {
+  id_ASC
+  id_DESC
+  total_price_ASC
+  total_price_DESC
+  confirmed_ASC
+  confirmed_DESC
+  currency_ASC
+  currency_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type OrderPreviousValues {
+  id: ID!
+  total_price: Float!
+  confirmed: Boolean!
+  currency: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OrderSubscriptionPayload {
+  mutation: MutationType!
+  node: Order
+  updatedFields: [String!]
+  previousValues: OrderPreviousValues
+}
+
+input OrderSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: OrderWhereInput
+  AND: [OrderSubscriptionWhereInput!]
+  OR: [OrderSubscriptionWhereInput!]
+  NOT: [OrderSubscriptionWhereInput!]
+}
+
+input OrderUpdateInput {
+  products: ProductUpdateManyInput
+  customer: CustomerUpdateOneRequiredInput
+  total_price: Float
+  confirmed: Boolean
+  currency: String
+}
+
+input OrderUpdateManyMutationInput {
+  total_price: Float
+  confirmed: Boolean
+  currency: String
+}
+
+input OrderWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  products_every: ProductWhereInput
+  products_some: ProductWhereInput
+  products_none: ProductWhereInput
+  customer: CustomerWhereInput
+  total_price: Float
+  total_price_not: Float
+  total_price_in: [Float!]
+  total_price_not_in: [Float!]
+  total_price_lt: Float
+  total_price_lte: Float
+  total_price_gt: Float
+  total_price_gte: Float
+  confirmed: Boolean
+  confirmed_not: Boolean
+  currency: String
+  currency_not: String
+  currency_in: [String!]
+  currency_not_in: [String!]
+  currency_lt: String
+  currency_lte: String
+  currency_gt: String
+  currency_gte: String
+  currency_contains: String
+  currency_not_contains: String
+  currency_starts_with: String
+  currency_not_starts_with: String
+  currency_ends_with: String
+  currency_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [OrderWhereInput!]
+  OR: [OrderWhereInput!]
+  NOT: [OrderWhereInput!]
+}
+
+input OrderWhereUniqueInput {
+  id: ID
+}
+
 type PageInfo {
   hasNextPage: Boolean!
   hasPreviousPage: Boolean!
   startCursor: String
   endCursor: String
+}
+
+type Product {
+  id: ID!
+  name: String!
+  stock: Int!
+  price: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ProductConnection {
+  pageInfo: PageInfo!
+  edges: [ProductEdge]!
+  aggregate: AggregateProduct!
+}
+
+input ProductCreateInput {
+  name: String!
+  stock: Int!
+  price: Float!
+}
+
+input ProductCreateManyInput {
+  create: [ProductCreateInput!]
+  connect: [ProductWhereUniqueInput!]
+}
+
+type ProductEdge {
+  node: Product!
+  cursor: String!
+}
+
+enum ProductOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  stock_ASC
+  stock_DESC
+  price_ASC
+  price_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProductPreviousValues {
+  id: ID!
+  name: String!
+  stock: Int!
+  price: Float!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ProductScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  stock: Int
+  stock_not: Int
+  stock_in: [Int!]
+  stock_not_in: [Int!]
+  stock_lt: Int
+  stock_lte: Int
+  stock_gt: Int
+  stock_gte: Int
+  price: Float
+  price_not: Float
+  price_in: [Float!]
+  price_not_in: [Float!]
+  price_lt: Float
+  price_lte: Float
+  price_gt: Float
+  price_gte: Float
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ProductScalarWhereInput!]
+  OR: [ProductScalarWhereInput!]
+  NOT: [ProductScalarWhereInput!]
+}
+
+type ProductSubscriptionPayload {
+  mutation: MutationType!
+  node: Product
+  updatedFields: [String!]
+  previousValues: ProductPreviousValues
+}
+
+input ProductSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProductWhereInput
+  AND: [ProductSubscriptionWhereInput!]
+  OR: [ProductSubscriptionWhereInput!]
+  NOT: [ProductSubscriptionWhereInput!]
+}
+
+input ProductUpdateDataInput {
+  name: String
+  stock: Int
+  price: Float
+}
+
+input ProductUpdateInput {
+  name: String
+  stock: Int
+  price: Float
+}
+
+input ProductUpdateManyDataInput {
+  name: String
+  stock: Int
+  price: Float
+}
+
+input ProductUpdateManyInput {
+  create: [ProductCreateInput!]
+  update: [ProductUpdateWithWhereUniqueNestedInput!]
+  upsert: [ProductUpsertWithWhereUniqueNestedInput!]
+  delete: [ProductWhereUniqueInput!]
+  connect: [ProductWhereUniqueInput!]
+  disconnect: [ProductWhereUniqueInput!]
+  deleteMany: [ProductScalarWhereInput!]
+  updateMany: [ProductUpdateManyWithWhereNestedInput!]
+}
+
+input ProductUpdateManyMutationInput {
+  name: String
+  stock: Int
+  price: Float
+}
+
+input ProductUpdateManyWithWhereNestedInput {
+  where: ProductScalarWhereInput!
+  data: ProductUpdateManyDataInput!
+}
+
+input ProductUpdateWithWhereUniqueNestedInput {
+  where: ProductWhereUniqueInput!
+  data: ProductUpdateDataInput!
+}
+
+input ProductUpsertWithWhereUniqueNestedInput {
+  where: ProductWhereUniqueInput!
+  update: ProductUpdateDataInput!
+  create: ProductCreateInput!
+}
+
+input ProductWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  stock: Int
+  stock_not: Int
+  stock_in: [Int!]
+  stock_not_in: [Int!]
+  stock_lt: Int
+  stock_lte: Int
+  stock_gt: Int
+  stock_gte: Int
+  price: Float
+  price_not: Float
+  price_in: [Float!]
+  price_not_in: [Float!]
+  price_lt: Float
+  price_lte: Float
+  price_gt: Float
+  price_gte: Float
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ProductWhereInput!]
+  OR: [ProductWhereInput!]
+  NOT: [ProductWhereInput!]
+}
+
+input ProductWhereUniqueInput {
+  id: ID
+  name: String
 }
 
 type Query {
@@ -1563,6 +2174,9 @@ type Query {
   comment(where: CommentWhereUniqueInput!): Comment
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment]!
   commentsConnection(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CommentConnection!
+  customer(where: CustomerWhereUniqueInput!): Customer
+  customers(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Customer]!
+  customersConnection(where: CustomerWhereInput, orderBy: CustomerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): CustomerConnection!
   file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
@@ -1572,12 +2186,24 @@ type Query {
   notification(where: NotificationWhereUniqueInput!): Notification
   notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification]!
   notificationsConnection(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): NotificationConnection!
+  order(where: OrderWhereUniqueInput!): Order
+  orders(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Order]!
+  ordersConnection(where: OrderWhereInput, orderBy: OrderOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrderConnection!
+  product(where: ProductWhereUniqueInput!): Product
+  products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
+  productsConnection(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductConnection!
   rating(where: RatingWhereUniqueInput!): Rating
   ratings(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rating]!
   ratingsConnection(where: RatingWhereInput, orderBy: RatingOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RatingConnection!
   team(where: TeamWhereUniqueInput!): Team
   teams(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Team]!
   teamsConnection(where: TeamWhereInput, orderBy: TeamOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TeamConnection!
+  todo(where: TodoWhereUniqueInput!): Todo
+  todoes(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo]!
+  todoesConnection(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoConnection!
+  todoProject(where: TodoProjectWhereUniqueInput!): TodoProject
+  todoProjects(where: TodoProjectWhereInput, orderBy: TodoProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [TodoProject]!
+  todoProjectsConnection(where: TodoProjectWhereInput, orderBy: TodoProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TodoProjectConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -1709,11 +2335,16 @@ input RatingWhereUniqueInput {
 type Subscription {
   channel(where: ChannelSubscriptionWhereInput): ChannelSubscriptionPayload
   comment(where: CommentSubscriptionWhereInput): CommentSubscriptionPayload
+  customer(where: CustomerSubscriptionWhereInput): CustomerSubscriptionPayload
   file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
   message(where: MessageSubscriptionWhereInput): MessageSubscriptionPayload
   notification(where: NotificationSubscriptionWhereInput): NotificationSubscriptionPayload
+  order(where: OrderSubscriptionWhereInput): OrderSubscriptionPayload
+  product(where: ProductSubscriptionWhereInput): ProductSubscriptionPayload
   rating(where: RatingSubscriptionWhereInput): RatingSubscriptionPayload
   team(where: TeamSubscriptionWhereInput): TeamSubscriptionPayload
+  todo(where: TodoSubscriptionWhereInput): TodoSubscriptionPayload
+  todoProject(where: TodoProjectSubscriptionWhereInput): TodoProjectSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -2071,6 +2702,351 @@ input TeamWhereInput {
 input TeamWhereUniqueInput {
   id: ID
   slug: String
+}
+
+type Todo {
+  id: ID!
+  body: String!
+  author: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TodoConnection {
+  pageInfo: PageInfo!
+  edges: [TodoEdge]!
+  aggregate: AggregateTodo!
+}
+
+input TodoCreateInput {
+  body: String!
+  author: UserCreateOneInput!
+}
+
+input TodoCreateManyInput {
+  create: [TodoCreateInput!]
+  connect: [TodoWhereUniqueInput!]
+}
+
+type TodoEdge {
+  node: Todo!
+  cursor: String!
+}
+
+enum TodoOrderByInput {
+  id_ASC
+  id_DESC
+  body_ASC
+  body_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TodoPreviousValues {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TodoProject {
+  id: ID!
+  name: String!
+  todos(where: TodoWhereInput, orderBy: TodoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Todo!]
+  author: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TodoProjectConnection {
+  pageInfo: PageInfo!
+  edges: [TodoProjectEdge]!
+  aggregate: AggregateTodoProject!
+}
+
+input TodoProjectCreateInput {
+  name: String!
+  todos: TodoCreateManyInput
+  author: UserCreateOneInput!
+}
+
+type TodoProjectEdge {
+  node: TodoProject!
+  cursor: String!
+}
+
+enum TodoProjectOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type TodoProjectPreviousValues {
+  id: ID!
+  name: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TodoProjectSubscriptionPayload {
+  mutation: MutationType!
+  node: TodoProject
+  updatedFields: [String!]
+  previousValues: TodoProjectPreviousValues
+}
+
+input TodoProjectSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoProjectWhereInput
+  AND: [TodoProjectSubscriptionWhereInput!]
+  OR: [TodoProjectSubscriptionWhereInput!]
+  NOT: [TodoProjectSubscriptionWhereInput!]
+}
+
+input TodoProjectUpdateInput {
+  name: String
+  todos: TodoUpdateManyInput
+  author: UserUpdateOneRequiredInput
+}
+
+input TodoProjectUpdateManyMutationInput {
+  name: String
+}
+
+input TodoProjectWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  todos_every: TodoWhereInput
+  todos_some: TodoWhereInput
+  todos_none: TodoWhereInput
+  author: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TodoProjectWhereInput!]
+  OR: [TodoProjectWhereInput!]
+  NOT: [TodoProjectWhereInput!]
+}
+
+input TodoProjectWhereUniqueInput {
+  id: ID
+}
+
+input TodoScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TodoScalarWhereInput!]
+  OR: [TodoScalarWhereInput!]
+  NOT: [TodoScalarWhereInput!]
+}
+
+type TodoSubscriptionPayload {
+  mutation: MutationType!
+  node: Todo
+  updatedFields: [String!]
+  previousValues: TodoPreviousValues
+}
+
+input TodoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: TodoWhereInput
+  AND: [TodoSubscriptionWhereInput!]
+  OR: [TodoSubscriptionWhereInput!]
+  NOT: [TodoSubscriptionWhereInput!]
+}
+
+input TodoUpdateDataInput {
+  body: String
+  author: UserUpdateOneRequiredInput
+}
+
+input TodoUpdateInput {
+  body: String
+  author: UserUpdateOneRequiredInput
+}
+
+input TodoUpdateManyDataInput {
+  body: String
+}
+
+input TodoUpdateManyInput {
+  create: [TodoCreateInput!]
+  update: [TodoUpdateWithWhereUniqueNestedInput!]
+  upsert: [TodoUpsertWithWhereUniqueNestedInput!]
+  delete: [TodoWhereUniqueInput!]
+  connect: [TodoWhereUniqueInput!]
+  disconnect: [TodoWhereUniqueInput!]
+  deleteMany: [TodoScalarWhereInput!]
+  updateMany: [TodoUpdateManyWithWhereNestedInput!]
+}
+
+input TodoUpdateManyMutationInput {
+  body: String
+}
+
+input TodoUpdateManyWithWhereNestedInput {
+  where: TodoScalarWhereInput!
+  data: TodoUpdateManyDataInput!
+}
+
+input TodoUpdateWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput!
+  data: TodoUpdateDataInput!
+}
+
+input TodoUpsertWithWhereUniqueNestedInput {
+  where: TodoWhereUniqueInput!
+  update: TodoUpdateDataInput!
+  create: TodoCreateInput!
+}
+
+input TodoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  author: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [TodoWhereInput!]
+  OR: [TodoWhereInput!]
+  NOT: [TodoWhereInput!]
+}
+
+input TodoWhereUniqueInput {
+  id: ID
 }
 
 type User {

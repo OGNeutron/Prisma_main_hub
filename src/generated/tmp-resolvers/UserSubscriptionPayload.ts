@@ -4,15 +4,5 @@
 import { UserSubscriptionPayloadResolvers } from '../graphqlgen'
 
 export const UserSubscriptionPayload: UserSubscriptionPayloadResolvers.Type = {
-	...UserSubscriptionPayloadResolvers.defaultResolvers,
-
-	node: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	},
-	updatedFields: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	},
-	previousValues: (parent, args, ctx) => {
-		throw new Error('Resolver not implemented')
-	}
+	...UserSubscriptionPayloadResolvers.defaultResolvers
 }

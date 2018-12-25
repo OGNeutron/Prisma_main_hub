@@ -10,6 +10,11 @@ import {
 	Message,
 	Comment,
 	Rating,
+	Todo,
+	TodoProject,
+	Order,
+	Product,
+	Customer,
 	UserSubscriptionPayload,
 	UserPreviousValues,
 	NotificationSubscriptionPayload,
@@ -18,12 +23,14 @@ import {
 	MessagePreviousValues
 } from './prisma-client/index'
 import {
+	FriendRemoveResponse,
 	LoginResponse,
 	RegisterResponse,
 	ForgotPasswordResponse,
 	VoidResponse,
 	Error,
-	AddFriendResponse
+	AddFriendResponse,
+	ProductsInput
 } from '../tstypes/index'
 import { Context } from '../tstypes/index'
 
@@ -48,6 +55,14 @@ type UserOrderByInput =
 	| 'username_DESC'
 	| 'password_ASC'
 	| 'password_DESC'
+	| 'gitHubId_ASC'
+	| 'gitHubId_DESC'
+	| 'facebookId_ASC'
+	| 'facebookId_DESC'
+	| 'twitterId_ASC'
+	| 'twitterId_DESC'
+	| 'gmailId_ASC'
+	| 'gmailId_DESC'
 	| 'confirmed_ASC'
 	| 'confirmed_DESC'
 	| 'online_ASC'
@@ -110,6 +125,28 @@ type CommentOrderByInput =
 	| 'parentId_DESC'
 	| 'pageId_ASC'
 	| 'pageId_DESC'
+	| 'createdAt_ASC'
+	| 'createdAt_DESC'
+	| 'updatedAt_ASC'
+	| 'updatedAt_DESC'
+type TodoOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'body_ASC'
+	| 'body_DESC'
+	| 'createdAt_ASC'
+	| 'createdAt_DESC'
+	| 'updatedAt_ASC'
+	| 'updatedAt_DESC'
+type ProductOrderByInput =
+	| 'id_ASC'
+	| 'id_DESC'
+	| 'name_ASC'
+	| 'name_DESC'
+	| 'stock_ASC'
+	| 'stock_DESC'
+	| 'price_ASC'
+	| 'price_DESC'
 	| 'createdAt_ASC'
 	| 'createdAt_DESC'
 	| 'updatedAt_ASC'
@@ -188,6 +225,13 @@ export namespace QueryResolvers {
 		info: GraphQLResolveInfo
 	) => Channel | Promise<Channel>
 
+	export type FetchTodosResolver = (
+		parent: undefined,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Todo[] | Promise<Todo[]>
+
 	export interface Type {
 		currentUser: (
 			parent: undefined,
@@ -237,6 +281,13 @@ export namespace QueryResolvers {
 			ctx: Context,
 			info: GraphQLResolveInfo
 		) => Channel | Promise<Channel>
+
+		fetchTodos: (
+			parent: undefined,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Todo[] | Promise<Todo[]>
 	}
 }
 
@@ -247,6 +298,14 @@ export namespace UserResolvers {
 		set_private: (parent: User) => parent.set_private,
 		username: (parent: User) => parent.username,
 		password: (parent: User) => parent.password,
+		gitHubId: (parent: User) =>
+			parent.gitHubId === undefined ? null : parent.gitHubId,
+		facebookId: (parent: User) =>
+			parent.facebookId === undefined ? null : parent.facebookId,
+		twitterId: (parent: User) =>
+			parent.twitterId === undefined ? null : parent.twitterId,
+		gmailId: (parent: User) =>
+			parent.gmailId === undefined ? null : parent.gmailId,
 		confirmed: (parent: User) => parent.confirmed,
 		online: (parent: User) => parent.online,
 		createdAt: (parent: User) => parent.createdAt,
@@ -350,6 +409,62 @@ export namespace UserResolvers {
 		password_not_starts_with: string | null
 		password_ends_with: string | null
 		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
 		avatar_url: FileWhereInput | null
 		confirmed: boolean | null
 		confirmed_not: boolean | null
@@ -873,6 +988,34 @@ export namespace UserResolvers {
 		info: GraphQLResolveInfo
 	) => string | Promise<string>
 
+	export type GitHubIdResolver = (
+		parent: User,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type FacebookIdResolver = (
+		parent: User,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type TwitterIdResolver = (
+		parent: User,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type GmailIdResolver = (
+		parent: User,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
 	export type Avatar_urlResolver = (
 		parent: User,
 		args: {},
@@ -999,6 +1142,34 @@ export namespace UserResolvers {
 			ctx: Context,
 			info: GraphQLResolveInfo
 		) => string | Promise<string>
+
+		gitHubId: (
+			parent: User,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		facebookId: (
+			parent: User,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		twitterId: (
+			parent: User,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		gmailId: (
+			parent: User,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
 
 		avatar_url: (
 			parent: User,
@@ -1352,6 +1523,62 @@ export namespace TeamResolvers {
 		password_not_starts_with: string | null
 		password_ends_with: string | null
 		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
 		avatar_url: FileWhereInput | null
 		confirmed: boolean | null
 		confirmed_not: boolean | null
@@ -2057,6 +2284,62 @@ export namespace ChannelResolvers {
 		password_not_starts_with: string | null
 		password_ends_with: string | null
 		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
 		avatar_url: FileWhereInput | null
 		confirmed: boolean | null
 		confirmed_not: boolean | null
@@ -2956,6 +3239,62 @@ export namespace CommentResolvers {
 		password_not_starts_with: string | null
 		password_ends_with: string | null
 		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
 		avatar_url: FileWhereInput | null
 		confirmed: boolean | null
 		confirmed_not: boolean | null
@@ -3652,6 +3991,62 @@ export namespace RatingResolvers {
 		password_not_starts_with: string | null
 		password_ends_with: string | null
 		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
 		avatar_url: FileWhereInput | null
 		confirmed: boolean | null
 		confirmed_not: boolean | null
@@ -4152,8 +4547,93 @@ export namespace RatingResolvers {
 	}
 }
 
+export namespace TodoResolvers {
+	export const defaultResolvers = {
+		id: (parent: Todo) => parent.id,
+		body: (parent: Todo) => parent.body,
+		createdAt: (parent: Todo) => parent.createdAt,
+		updatedAt: (parent: Todo) => parent.updatedAt
+	}
+
+	export type IdResolver = (
+		parent: Todo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type BodyResolver = (
+		parent: Todo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type AuthorResolver = (
+		parent: Todo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => User | Promise<User>
+
+	export type CreatedAtResolver = (
+		parent: Todo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: Todo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: Todo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		body: (
+			parent: Todo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		author: (
+			parent: Todo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => User | Promise<User>
+
+		createdAt: (
+			parent: Todo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: Todo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
 export namespace MutationResolvers {
 	export const defaultResolvers = {}
+
+	export interface ArgsFriendRemove {
+		friendId: string
+	}
 
 	export interface ArgsRemoveChannelMember {
 		channelId: string
@@ -4255,6 +4735,30 @@ export namespace MutationResolvers {
 	export interface ArgsFriendReject {
 		id: string
 	}
+
+	export interface ArgsCreateTodo {
+		body: string
+	}
+
+	export interface ArgsEditTodo {
+		id: string
+	}
+
+	export interface ArgsDeleteTodo {
+		id: string
+	}
+
+	export interface ArgsCreateOrder {
+		productIds: ProductsInput[] | null
+		totalPrice: number
+	}
+
+	export type FriendRemoveResolver = (
+		parent: undefined,
+		args: ArgsFriendRemove,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => FriendRemoveResponse | Promise<FriendRemoveResponse>
 
 	export type RemoveChannelMemberResolver = (
 		parent: undefined,
@@ -4410,7 +4914,49 @@ export namespace MutationResolvers {
 		info: GraphQLResolveInfo
 	) => VoidResponse | Promise<VoidResponse>
 
+	export type CreateTodoResolver = (
+		parent: undefined,
+		args: ArgsCreateTodo,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Todo | null | Promise<Todo | null>
+
+	export type EditTodoResolver = (
+		parent: undefined,
+		args: ArgsEditTodo,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Todo | null | Promise<Todo | null>
+
+	export type DeleteTodoResolver = (
+		parent: undefined,
+		args: ArgsDeleteTodo,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Todo | null | Promise<Todo | null>
+
+	export type CreateTodoProjectResolver = (
+		parent: undefined,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => TodoProject | null | Promise<TodoProject | null>
+
+	export type CreateOrderResolver = (
+		parent: undefined,
+		args: ArgsCreateOrder,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Order | null | Promise<Order | null>
+
 	export interface Type {
+		friendRemove: (
+			parent: undefined,
+			args: ArgsFriendRemove,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => FriendRemoveResponse | Promise<FriendRemoveResponse>
+
 		removeChannelMember: (
 			parent: undefined,
 			args: ArgsRemoveChannelMember,
@@ -4564,6 +5110,77 @@ export namespace MutationResolvers {
 			ctx: Context,
 			info: GraphQLResolveInfo
 		) => VoidResponse | Promise<VoidResponse>
+
+		createTodo: (
+			parent: undefined,
+			args: ArgsCreateTodo,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Todo | null | Promise<Todo | null>
+
+		editTodo: (
+			parent: undefined,
+			args: ArgsEditTodo,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Todo | null | Promise<Todo | null>
+
+		deleteTodo: (
+			parent: undefined,
+			args: ArgsDeleteTodo,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Todo | null | Promise<Todo | null>
+
+		createTodoProject: (
+			parent: undefined,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => TodoProject | null | Promise<TodoProject | null>
+
+		createOrder: (
+			parent: undefined,
+			args: ArgsCreateOrder,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Order | null | Promise<Order | null>
+	}
+}
+
+export namespace FriendRemoveResponseResolvers {
+	export const defaultResolvers = {
+		ok: (parent: FriendRemoveResponse) => parent.ok
+	}
+
+	export type OkResolver = (
+		parent: FriendRemoveResponse,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => boolean | Promise<boolean>
+
+	export type UserResolver = (
+		parent: FriendRemoveResponse,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => User | null | Promise<User | null>
+
+	export interface Type {
+		ok: (
+			parent: FriendRemoveResponse,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => boolean | Promise<boolean>
+
+		user: (
+			parent: FriendRemoveResponse,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => User | null | Promise<User | null>
 	}
 }
 
@@ -4832,6 +5449,1125 @@ export namespace AddFriendResponseResolvers {
 	}
 }
 
+export namespace TodoProjectResolvers {
+	export const defaultResolvers = {
+		id: (parent: TodoProject) => parent.id,
+		name: (parent: TodoProject) => parent.name,
+		createdAt: (parent: TodoProject) => parent.createdAt,
+		updatedAt: (parent: TodoProject) => parent.updatedAt
+	}
+
+	export interface TodoWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		body: string | null
+		body_not: string | null
+		body_in: string[]
+		body_not_in: string[]
+		body_lt: string | null
+		body_lte: string | null
+		body_gt: string | null
+		body_gte: string | null
+		body_contains: string | null
+		body_not_contains: string | null
+		body_starts_with: string | null
+		body_not_starts_with: string | null
+		body_ends_with: string | null
+		body_not_ends_with: string | null
+		author: UserWhereInput | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		AND: TodoWhereInput[]
+		OR: TodoWhereInput[]
+		NOT: TodoWhereInput[]
+	}
+	export interface UserWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		email: string | null
+		email_not: string | null
+		email_in: string[]
+		email_not_in: string[]
+		email_lt: string | null
+		email_lte: string | null
+		email_gt: string | null
+		email_gte: string | null
+		email_contains: string | null
+		email_not_contains: string | null
+		email_starts_with: string | null
+		email_not_starts_with: string | null
+		email_ends_with: string | null
+		email_not_ends_with: string | null
+		notifications_every: NotificationWhereInput | null
+		notifications_some: NotificationWhereInput | null
+		notifications_none: NotificationWhereInput | null
+		set_private: boolean | null
+		set_private_not: boolean | null
+		username: string | null
+		username_not: string | null
+		username_in: string[]
+		username_not_in: string[]
+		username_lt: string | null
+		username_lte: string | null
+		username_gt: string | null
+		username_gte: string | null
+		username_contains: string | null
+		username_not_contains: string | null
+		username_starts_with: string | null
+		username_not_starts_with: string | null
+		username_ends_with: string | null
+		username_not_ends_with: string | null
+		password: string | null
+		password_not: string | null
+		password_in: string[]
+		password_not_in: string[]
+		password_lt: string | null
+		password_lte: string | null
+		password_gt: string | null
+		password_gte: string | null
+		password_contains: string | null
+		password_not_contains: string | null
+		password_starts_with: string | null
+		password_not_starts_with: string | null
+		password_ends_with: string | null
+		password_not_ends_with: string | null
+		gitHubId: string | null
+		gitHubId_not: string | null
+		gitHubId_in: string[]
+		gitHubId_not_in: string[]
+		gitHubId_lt: string | null
+		gitHubId_lte: string | null
+		gitHubId_gt: string | null
+		gitHubId_gte: string | null
+		gitHubId_contains: string | null
+		gitHubId_not_contains: string | null
+		gitHubId_starts_with: string | null
+		gitHubId_not_starts_with: string | null
+		gitHubId_ends_with: string | null
+		gitHubId_not_ends_with: string | null
+		facebookId: string | null
+		facebookId_not: string | null
+		facebookId_in: string[]
+		facebookId_not_in: string[]
+		facebookId_lt: string | null
+		facebookId_lte: string | null
+		facebookId_gt: string | null
+		facebookId_gte: string | null
+		facebookId_contains: string | null
+		facebookId_not_contains: string | null
+		facebookId_starts_with: string | null
+		facebookId_not_starts_with: string | null
+		facebookId_ends_with: string | null
+		facebookId_not_ends_with: string | null
+		twitterId: string | null
+		twitterId_not: string | null
+		twitterId_in: string[]
+		twitterId_not_in: string[]
+		twitterId_lt: string | null
+		twitterId_lte: string | null
+		twitterId_gt: string | null
+		twitterId_gte: string | null
+		twitterId_contains: string | null
+		twitterId_not_contains: string | null
+		twitterId_starts_with: string | null
+		twitterId_not_starts_with: string | null
+		twitterId_ends_with: string | null
+		twitterId_not_ends_with: string | null
+		gmailId: string | null
+		gmailId_not: string | null
+		gmailId_in: string[]
+		gmailId_not_in: string[]
+		gmailId_lt: string | null
+		gmailId_lte: string | null
+		gmailId_gt: string | null
+		gmailId_gte: string | null
+		gmailId_contains: string | null
+		gmailId_not_contains: string | null
+		gmailId_starts_with: string | null
+		gmailId_not_starts_with: string | null
+		gmailId_ends_with: string | null
+		gmailId_not_ends_with: string | null
+		avatar_url: FileWhereInput | null
+		confirmed: boolean | null
+		confirmed_not: boolean | null
+		online: boolean | null
+		online_not: boolean | null
+		friends_every: UserWhereInput | null
+		friends_some: UserWhereInput | null
+		friends_none: UserWhereInput | null
+		friend_requests_every: UserWhereInput | null
+		friend_requests_some: UserWhereInput | null
+		friend_requests_none: UserWhereInput | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		role: UserRole | null
+		role_not: UserRole | null
+		role_in: UserRole[]
+		role_not_in: UserRole[]
+		teams_every: TeamWhereInput | null
+		teams_some: TeamWhereInput | null
+		teams_none: TeamWhereInput | null
+		channels_every: ChannelWhereInput | null
+		channels_some: ChannelWhereInput | null
+		channels_none: ChannelWhereInput | null
+		owned_teams_every: TeamWhereInput | null
+		owned_teams_some: TeamWhereInput | null
+		owned_teams_none: TeamWhereInput | null
+		owned_channels_every: ChannelWhereInput | null
+		owned_channels_some: ChannelWhereInput | null
+		owned_channels_none: ChannelWhereInput | null
+		AND: UserWhereInput[]
+		OR: UserWhereInput[]
+		NOT: UserWhereInput[]
+	}
+	export interface NotificationWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		message: string | null
+		message_not: string | null
+		message_in: string[]
+		message_not_in: string[]
+		message_lt: string | null
+		message_lte: string | null
+		message_gt: string | null
+		message_gte: string | null
+		message_contains: string | null
+		message_not_contains: string | null
+		message_starts_with: string | null
+		message_not_starts_with: string | null
+		message_ends_with: string | null
+		message_not_ends_with: string | null
+		author: UserWhereInput | null
+		AND: NotificationWhereInput[]
+		OR: NotificationWhereInput[]
+		NOT: NotificationWhereInput[]
+	}
+	export interface FileWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		filename: string | null
+		filename_not: string | null
+		filename_in: string[]
+		filename_not_in: string[]
+		filename_lt: string | null
+		filename_lte: string | null
+		filename_gt: string | null
+		filename_gte: string | null
+		filename_contains: string | null
+		filename_not_contains: string | null
+		filename_starts_with: string | null
+		filename_not_starts_with: string | null
+		filename_ends_with: string | null
+		filename_not_ends_with: string | null
+		mimetype: string | null
+		mimetype_not: string | null
+		mimetype_in: string[]
+		mimetype_not_in: string[]
+		mimetype_lt: string | null
+		mimetype_lte: string | null
+		mimetype_gt: string | null
+		mimetype_gte: string | null
+		mimetype_contains: string | null
+		mimetype_not_contains: string | null
+		mimetype_starts_with: string | null
+		mimetype_not_starts_with: string | null
+		mimetype_ends_with: string | null
+		mimetype_not_ends_with: string | null
+		encoding: string | null
+		encoding_not: string | null
+		encoding_in: string[]
+		encoding_not_in: string[]
+		encoding_lt: string | null
+		encoding_lte: string | null
+		encoding_gt: string | null
+		encoding_gte: string | null
+		encoding_contains: string | null
+		encoding_not_contains: string | null
+		encoding_starts_with: string | null
+		encoding_not_starts_with: string | null
+		encoding_ends_with: string | null
+		encoding_not_ends_with: string | null
+		key: string | null
+		key_not: string | null
+		key_in: string[]
+		key_not_in: string[]
+		key_lt: string | null
+		key_lte: string | null
+		key_gt: string | null
+		key_gte: string | null
+		key_contains: string | null
+		key_not_contains: string | null
+		key_starts_with: string | null
+		key_not_starts_with: string | null
+		key_ends_with: string | null
+		key_not_ends_with: string | null
+		ETag: string | null
+		ETag_not: string | null
+		ETag_in: string[]
+		ETag_not_in: string[]
+		ETag_lt: string | null
+		ETag_lte: string | null
+		ETag_gt: string | null
+		ETag_gte: string | null
+		ETag_contains: string | null
+		ETag_not_contains: string | null
+		ETag_starts_with: string | null
+		ETag_not_starts_with: string | null
+		ETag_ends_with: string | null
+		ETag_not_ends_with: string | null
+		url: string | null
+		url_not: string | null
+		url_in: string[]
+		url_not_in: string[]
+		url_lt: string | null
+		url_lte: string | null
+		url_gt: string | null
+		url_gte: string | null
+		url_contains: string | null
+		url_not_contains: string | null
+		url_starts_with: string | null
+		url_not_starts_with: string | null
+		url_ends_with: string | null
+		url_not_ends_with: string | null
+		AND: FileWhereInput[]
+		OR: FileWhereInput[]
+		NOT: FileWhereInput[]
+	}
+	export interface TeamWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		name: string | null
+		name_not: string | null
+		name_in: string[]
+		name_not_in: string[]
+		name_lt: string | null
+		name_lte: string | null
+		name_gt: string | null
+		name_gte: string | null
+		name_contains: string | null
+		name_not_contains: string | null
+		name_starts_with: string | null
+		name_not_starts_with: string | null
+		name_ends_with: string | null
+		name_not_ends_with: string | null
+		slug: string | null
+		slug_not: string | null
+		slug_in: string[]
+		slug_not_in: string[]
+		slug_lt: string | null
+		slug_lte: string | null
+		slug_gt: string | null
+		slug_gte: string | null
+		slug_contains: string | null
+		slug_not_contains: string | null
+		slug_starts_with: string | null
+		slug_not_starts_with: string | null
+		slug_ends_with: string | null
+		slug_not_ends_with: string | null
+		moderators_every: UserWhereInput | null
+		moderators_some: UserWhereInput | null
+		moderators_none: UserWhereInput | null
+		author: UserWhereInput | null
+		members_every: UserWhereInput | null
+		members_some: UserWhereInput | null
+		members_none: UserWhereInput | null
+		channels_every: ChannelWhereInput | null
+		channels_some: ChannelWhereInput | null
+		channels_none: ChannelWhereInput | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		confirmed: boolean | null
+		confirmed_not: boolean | null
+		online: boolean | null
+		online_not: boolean | null
+		AND: TeamWhereInput[]
+		OR: TeamWhereInput[]
+		NOT: TeamWhereInput[]
+	}
+	export interface ChannelWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		name: string | null
+		name_not: string | null
+		name_in: string[]
+		name_not_in: string[]
+		name_lt: string | null
+		name_lte: string | null
+		name_gt: string | null
+		name_gte: string | null
+		name_contains: string | null
+		name_not_contains: string | null
+		name_starts_with: string | null
+		name_not_starts_with: string | null
+		name_ends_with: string | null
+		name_not_ends_with: string | null
+		slug: string | null
+		slug_not: string | null
+		slug_in: string[]
+		slug_not_in: string[]
+		slug_lt: string | null
+		slug_lte: string | null
+		slug_gt: string | null
+		slug_gte: string | null
+		slug_contains: string | null
+		slug_not_contains: string | null
+		slug_starts_with: string | null
+		slug_not_starts_with: string | null
+		slug_ends_with: string | null
+		slug_not_ends_with: string | null
+		moderators_every: UserWhereInput | null
+		moderators_some: UserWhereInput | null
+		moderators_none: UserWhereInput | null
+		public: boolean | null
+		public_not: boolean | null
+		messages_every: MessageWhereInput | null
+		messages_some: MessageWhereInput | null
+		messages_none: MessageWhereInput | null
+		members_every: UserWhereInput | null
+		members_some: UserWhereInput | null
+		members_none: UserWhereInput | null
+		author: UserWhereInput | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		AND: ChannelWhereInput[]
+		OR: ChannelWhereInput[]
+		NOT: ChannelWhereInput[]
+	}
+	export interface MessageWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		body: string | null
+		body_not: string | null
+		body_in: string[]
+		body_not_in: string[]
+		body_lt: string | null
+		body_lte: string | null
+		body_gt: string | null
+		body_gte: string | null
+		body_contains: string | null
+		body_not_contains: string | null
+		body_starts_with: string | null
+		body_not_starts_with: string | null
+		body_ends_with: string | null
+		body_not_ends_with: string | null
+		parentId: string | null
+		parentId_not: string | null
+		parentId_in: string[]
+		parentId_not_in: string[]
+		parentId_lt: string | null
+		parentId_lte: string | null
+		parentId_gt: string | null
+		parentId_gte: string | null
+		parentId_contains: string | null
+		parentId_not_contains: string | null
+		parentId_starts_with: string | null
+		parentId_not_starts_with: string | null
+		parentId_ends_with: string | null
+		parentId_not_ends_with: string | null
+		url: string | null
+		url_not: string | null
+		url_in: string[]
+		url_not_in: string[]
+		url_lt: string | null
+		url_lte: string | null
+		url_gt: string | null
+		url_gte: string | null
+		url_contains: string | null
+		url_not_contains: string | null
+		url_starts_with: string | null
+		url_not_starts_with: string | null
+		url_ends_with: string | null
+		url_not_ends_with: string | null
+		filetype: string | null
+		filetype_not: string | null
+		filetype_in: string[]
+		filetype_not_in: string[]
+		filetype_lt: string | null
+		filetype_lte: string | null
+		filetype_gt: string | null
+		filetype_gte: string | null
+		filetype_contains: string | null
+		filetype_not_contains: string | null
+		filetype_starts_with: string | null
+		filetype_not_starts_with: string | null
+		filetype_ends_with: string | null
+		filetype_not_ends_with: string | null
+		author: UserWhereInput | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		AND: MessageWhereInput[]
+		OR: MessageWhereInput[]
+		NOT: MessageWhereInput[]
+	}
+
+	export interface ArgsTodos {
+		where: TodoWhereInput | null
+		orderBy: TodoOrderByInput | null
+		skip: number | null
+		after: string | null
+		before: string | null
+		first: number | null
+		last: number | null
+	}
+
+	export type IdResolver = (
+		parent: TodoProject,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type NameResolver = (
+		parent: TodoProject,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type TodosResolver = (
+		parent: TodoProject,
+		args: ArgsTodos,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Todo[] | Promise<Todo[]>
+
+	export type AuthorResolver = (
+		parent: TodoProject,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => User | Promise<User>
+
+	export type CreatedAtResolver = (
+		parent: TodoProject,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: TodoProject,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: TodoProject,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		name: (
+			parent: TodoProject,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		todos: (
+			parent: TodoProject,
+			args: ArgsTodos,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Todo[] | Promise<Todo[]>
+
+		author: (
+			parent: TodoProject,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => User | Promise<User>
+
+		createdAt: (
+			parent: TodoProject,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: TodoProject,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
+export namespace ProductsInputResolvers {
+	export const defaultResolvers = {
+		id: (parent: ProductsInput) => parent.id
+	}
+
+	export type IdResolver = (
+		parent: ProductsInput,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: ProductsInput,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
+export namespace OrderResolvers {
+	export const defaultResolvers = {
+		id: (parent: Order) => parent.id,
+		total_price: (parent: Order) => parent.total_price,
+		confirmed: (parent: Order) => parent.confirmed,
+		currency: (parent: Order) => parent.currency,
+		createdAt: (parent: Order) => parent.createdAt,
+		updatedAt: (parent: Order) => parent.updatedAt
+	}
+
+	export interface ProductWhereInput {
+		id: string | null
+		id_not: string | null
+		id_in: string[]
+		id_not_in: string[]
+		id_lt: string | null
+		id_lte: string | null
+		id_gt: string | null
+		id_gte: string | null
+		id_contains: string | null
+		id_not_contains: string | null
+		id_starts_with: string | null
+		id_not_starts_with: string | null
+		id_ends_with: string | null
+		id_not_ends_with: string | null
+		name: string | null
+		name_not: string | null
+		name_in: string[]
+		name_not_in: string[]
+		name_lt: string | null
+		name_lte: string | null
+		name_gt: string | null
+		name_gte: string | null
+		name_contains: string | null
+		name_not_contains: string | null
+		name_starts_with: string | null
+		name_not_starts_with: string | null
+		name_ends_with: string | null
+		name_not_ends_with: string | null
+		stock: number | null
+		stock_not: number | null
+		stock_in: number[]
+		stock_not_in: number[]
+		stock_lt: number | null
+		stock_lte: number | null
+		stock_gt: number | null
+		stock_gte: number | null
+		price: number | null
+		price_not: number | null
+		price_in: number[]
+		price_not_in: number[]
+		price_lt: number | null
+		price_lte: number | null
+		price_gt: number | null
+		price_gte: number | null
+		createdAt: string | null
+		createdAt_not: string | null
+		createdAt_in: string[]
+		createdAt_not_in: string[]
+		createdAt_lt: string | null
+		createdAt_lte: string | null
+		createdAt_gt: string | null
+		createdAt_gte: string | null
+		updatedAt: string | null
+		updatedAt_not: string | null
+		updatedAt_in: string[]
+		updatedAt_not_in: string[]
+		updatedAt_lt: string | null
+		updatedAt_lte: string | null
+		updatedAt_gt: string | null
+		updatedAt_gte: string | null
+		AND: ProductWhereInput[]
+		OR: ProductWhereInput[]
+		NOT: ProductWhereInput[]
+	}
+
+	export interface ArgsProducts {
+		where: ProductWhereInput | null
+		orderBy: ProductOrderByInput | null
+		skip: number | null
+		after: string | null
+		before: string | null
+		first: number | null
+		last: number | null
+	}
+
+	export type IdResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type ProductsResolver = (
+		parent: Order,
+		args: ArgsProducts,
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Product[] | Promise<Product[]>
+
+	export type CustomerResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Customer | Promise<Customer>
+
+	export type Total_priceResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => number | Promise<number>
+
+	export type ConfirmedResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => boolean | Promise<boolean>
+
+	export type CurrencyResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type CreatedAtResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: Order,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		products: (
+			parent: Order,
+			args: ArgsProducts,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Product[] | Promise<Product[]>
+
+		customer: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Customer | Promise<Customer>
+
+		total_price: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => number | Promise<number>
+
+		confirmed: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => boolean | Promise<boolean>
+
+		currency: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		createdAt: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: Order,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
+export namespace ProductResolvers {
+	export const defaultResolvers = {
+		id: (parent: Product) => parent.id,
+		name: (parent: Product) => parent.name,
+		stock: (parent: Product) => parent.stock,
+		price: (parent: Product) => parent.price,
+		createdAt: (parent: Product) => parent.createdAt,
+		updatedAt: (parent: Product) => parent.updatedAt
+	}
+
+	export type IdResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type NameResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type StockResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => number | Promise<number>
+
+	export type PriceResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => number | Promise<number>
+
+	export type CreatedAtResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: Product,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		name: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		stock: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => number | Promise<number>
+
+		price: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => number | Promise<number>
+
+		createdAt: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: Product,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
+export namespace CustomerResolvers {
+	export const defaultResolvers = {
+		id: (parent: Customer) => parent.id,
+		stripeId: (parent: Customer) => parent.stripeId,
+		createdAt: (parent: Customer) => parent.createdAt,
+		updatedAt: (parent: Customer) => parent.updatedAt
+	}
+
+	export type IdResolver = (
+		parent: Customer,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UserResolver = (
+		parent: Customer,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => User | Promise<User>
+
+	export type StripeIdResolver = (
+		parent: Customer,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type CreatedAtResolver = (
+		parent: Customer,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: Customer,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: Customer,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		user: (
+			parent: Customer,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => User | Promise<User>
+
+		stripeId: (
+			parent: Customer,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		createdAt: (
+			parent: Customer,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: Customer,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
 export namespace SubscriptionResolvers {
 	export const defaultResolvers = {}
 
@@ -4998,7 +6734,12 @@ export namespace SubscriptionResolvers {
 
 export namespace UserSubscriptionPayloadResolvers {
 	export const defaultResolvers = {
-		mutation: (parent: UserSubscriptionPayload) => parent.mutation
+		mutation: (parent: UserSubscriptionPayload) => parent.mutation,
+		node: (parent: UserSubscriptionPayload) => parent.node,
+		updatedFields: (parent: UserSubscriptionPayload) =>
+			parent.updatedFields,
+		previousValues: (parent: UserSubscriptionPayload) =>
+			parent.previousValues
 	}
 
 	export type MutationResolver = (
@@ -5067,6 +6808,14 @@ export namespace UserPreviousValuesResolvers {
 		set_private: (parent: UserPreviousValues) => parent.set_private,
 		username: (parent: UserPreviousValues) => parent.username,
 		password: (parent: UserPreviousValues) => parent.password,
+		gitHubId: (parent: UserPreviousValues) =>
+			parent.gitHubId === undefined ? null : parent.gitHubId,
+		facebookId: (parent: UserPreviousValues) =>
+			parent.facebookId === undefined ? null : parent.facebookId,
+		twitterId: (parent: UserPreviousValues) =>
+			parent.twitterId === undefined ? null : parent.twitterId,
+		gmailId: (parent: UserPreviousValues) =>
+			parent.gmailId === undefined ? null : parent.gmailId,
 		confirmed: (parent: UserPreviousValues) => parent.confirmed,
 		online: (parent: UserPreviousValues) => parent.online,
 		createdAt: (parent: UserPreviousValues) => parent.createdAt,
@@ -5108,6 +6857,34 @@ export namespace UserPreviousValuesResolvers {
 		ctx: Context,
 		info: GraphQLResolveInfo
 	) => string | Promise<string>
+
+	export type GitHubIdResolver = (
+		parent: UserPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type FacebookIdResolver = (
+		parent: UserPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type TwitterIdResolver = (
+		parent: UserPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type GmailIdResolver = (
+		parent: UserPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
 
 	export type ConfirmedResolver = (
 		parent: UserPreviousValues,
@@ -5180,6 +6957,34 @@ export namespace UserPreviousValuesResolvers {
 			info: GraphQLResolveInfo
 		) => string | Promise<string>
 
+		gitHubId: (
+			parent: UserPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		facebookId: (
+			parent: UserPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		twitterId: (
+			parent: UserPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		gmailId: (
+			parent: UserPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
 		confirmed: (
 			parent: UserPreviousValues,
 			args: {},
@@ -5219,7 +7024,12 @@ export namespace UserPreviousValuesResolvers {
 
 export namespace NotificationSubscriptionPayloadResolvers {
 	export const defaultResolvers = {
-		mutation: (parent: NotificationSubscriptionPayload) => parent.mutation
+		mutation: (parent: NotificationSubscriptionPayload) => parent.mutation,
+		node: (parent: NotificationSubscriptionPayload) => parent.node,
+		updatedFields: (parent: NotificationSubscriptionPayload) =>
+			parent.updatedFields,
+		previousValues: (parent: NotificationSubscriptionPayload) =>
+			parent.previousValues
 	}
 
 	export type MutationResolver = (
@@ -5326,7 +7136,12 @@ export namespace NotificationPreviousValuesResolvers {
 
 export namespace MessageSubscriptionPayloadResolvers {
 	export const defaultResolvers = {
-		mutation: (parent: MessageSubscriptionPayload) => parent.mutation
+		mutation: (parent: MessageSubscriptionPayload) => parent.mutation,
+		node: (parent: MessageSubscriptionPayload) => parent.node,
+		updatedFields: (parent: MessageSubscriptionPayload) =>
+			parent.updatedFields,
+		previousValues: (parent: MessageSubscriptionPayload) =>
+			parent.previousValues
 	}
 
 	export type MutationResolver = (
@@ -5513,13 +7328,20 @@ export interface Resolvers {
 	Message: MessageResolvers.Type
 	Comment: CommentResolvers.Type
 	Rating: RatingResolvers.Type
+	Todo: TodoResolvers.Type
 	Mutation: MutationResolvers.Type
+	FriendRemoveResponse: FriendRemoveResponseResolvers.Type
 	LoginResponse: LoginResponseResolvers.Type
 	RegisterResponse: RegisterResponseResolvers.Type
 	ForgotPasswordResponse: ForgotPasswordResponseResolvers.Type
 	VoidResponse: VoidResponseResolvers.Type
 	Error: ErrorResolvers.Type
 	AddFriendResponse: AddFriendResponseResolvers.Type
+	TodoProject: TodoProjectResolvers.Type
+	ProductsInput: ProductsInputResolvers.Type
+	Order: OrderResolvers.Type
+	Product: ProductResolvers.Type
+	Customer: CustomerResolvers.Type
 	Subscription: SubscriptionResolvers.Type
 	UserSubscriptionPayload: UserSubscriptionPayloadResolvers.Type
 	UserPreviousValues: UserPreviousValuesResolvers.Type

@@ -21,7 +21,7 @@ export const resolvers: ResolverMap = {
 					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
-				return await db.query.user({ where: { id: userId } })
+				return await db.user({ id: userId })
 			} catch (error) {
 				logger.error({ level: '', message: error })
 				return error

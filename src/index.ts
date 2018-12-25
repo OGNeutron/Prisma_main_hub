@@ -3,6 +3,8 @@ import 'dotenv/config'
 import * as express from 'express'
 import * as http from 'http'
 import * as path from 'path'
+//Replace it someday
+import * as Stripe from 'stripe'
 
 import { ApolloServer } from 'apollo-server-express'
 import { S3 } from 'aws-sdk'
@@ -14,7 +16,7 @@ import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities'
 
 import { redis } from './redis'
 import { PORT } from './constants'
-import { Prisma } from './generated/prisma'
+import { Prisma } from './generated/prisma-client'
 import { middleware } from './middleware/express'
 import { logger } from './utils/logger'
 import ApiRouter from './apiRoutes'
@@ -22,6 +24,8 @@ import { setupPassport } from './passport'
 import { ShieldMiddleware } from './middleware/graphql/shield'
 // import { graphqlMiddleware } from './middleware/graphql/graphql-middleware';
 // import { Prisma } from './generated/prisma-client';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 const s3Client: S3 = new S3({
 	accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -70,7 +74,8 @@ const server: ApolloServer = new ApolloServer({
 			session: req !== undefined ? req.session : req,
 			redis: redis,
 			db,
-			s3: s3Client
+			s3: s3Client,
+			stripe
 		}
 	}
 } as any)

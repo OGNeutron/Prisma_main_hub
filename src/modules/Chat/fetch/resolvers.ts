@@ -1,76 +1,61 @@
-import { logger } from '../../../utils/logger';
-import { QueryResolvers } from '../../../generated/graphqlgen';
-import { Context } from '../../../tstypes';
+import { logger } from '../../../utils/logger'
+import { QueryResolvers } from '../../../generated/graphqlgen'
+import { Context } from '../../../tstypes'
 
 export const resolvers = {
 	Query: {
 		async showChannel(
 			_: any,
 			{ channelId }: QueryResolvers.ArgsShowChannel,
-			{ db }: Context,
-			info: any
+			{ db }: Context
 		) {
-			return await db.query.channel(
-				{
-					where: {
-						id: channelId
-					}
-				},
-				info
-			);
+			return await db.channel({
+				id: channelId
+			})
 		},
 		async showTeams(
 			_: any,
 			{ authorId }: QueryResolvers.ArgsShowTeams,
-			{ db, session }: Context,
-			info: any
+			{ db, session }: Context
 		) {
 			try {
-				const response = await db.query.teams(
-					{
-						where: {
-							OR: [
-								{
-									author: {
-										id: authorId
-									}
-								},
-								{
-									members_some: {
-										id: session.userId
-									}
+				const response = await db.teams({
+					where: {
+						OR: [
+							{
+								author: {
+									id: authorId
 								}
-							]
-						}
-					},
-					info
-				);
-				console.log(response);
+							},
+							{
+								members_some: {
+									id: session.userId
+								}
+							}
+						]
+					}
+				})
 
-				return response;
+				return response
 			} catch (error) {
-				return logger.error({ level: '5', message: error.message });
+				return logger.error({ level: '5', message: error.message })
 			}
 		},
 		async showTeam(
 			_: any,
 			{ teamSlug }: QueryResolvers.ArgsShowTeam,
-			{ db }: Context,
-			info: any
+			{ db }: Context
 		) {
 			try {
-				const team = await db.query.teams(
-					{
-						where: {
-							slug: teamSlug
-						}
-					},
-					info
-				);
+				const team = await db.teams({
+					where: {
+						slug: teamSlug
+					}
+				})
 
-				return team[0];
+				return team[0]
 			} catch (error) {
-				return logger.error({ level: '5', message: error.message });
+				return logger.error({ level: '5', message: error.message })
 			}
 		}
 		// async showChannels(_: any, {teamId}: any, {db}: Context, info: any) {
@@ -85,4 +70,4 @@ export const resolvers = {
 		// 	}
 		// }
 	}
-};
+}

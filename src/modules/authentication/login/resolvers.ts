@@ -6,7 +6,6 @@ import { ForbiddenError, ApolloError, AuthenticationError } from 'apollo-server'
 import { Context } from '../../../tstypes'
 import { INVALID_CREDENTIALS, USER_SESSION_ID_PREFIX } from '../../../constants'
 import { logger } from '../../../utils/logger'
-import { User } from '../../../generated/prisma'
 import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const loginSchema: yup.ObjectSchema<{}> = yup.object().shape({
@@ -31,8 +30,8 @@ export const resolvers = {
 						{ abortEarly: false }
 					)
 				) {
-					const user: User | null = await db.query.user({
-						where: { email }
+					const user = await db.user({
+						email
 					})
 
 					if (!user) {
@@ -58,7 +57,7 @@ export const resolvers = {
 						throw new ForbiddenError(INVALID_CREDENTIALS)
 					}
 
-					await db.mutation.updateUser({
+					await db.updateUser({
 						where: { email },
 						data: { online: true }
 					})

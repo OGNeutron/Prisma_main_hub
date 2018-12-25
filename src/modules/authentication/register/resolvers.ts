@@ -6,7 +6,6 @@ import { Context } from '../../../tstypes'
 import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers'
 import { INVALID_CREDENTIALS } from '../../../constants'
 import { logger } from '../../../utils/logger'
-import { User } from '../../../generated/prisma'
 import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const schema: yup.ObjectSchema<{}> = yup.object().shape({
@@ -37,7 +36,7 @@ export const resolvers = {
 
 				console.log(decoded)
 
-				const user: User | null = await db.mutation.updateUser({
+				const user = await db.updateUser({
 					where: { id: decoded.id },
 					data: {
 						confirmed: true
@@ -81,22 +80,20 @@ export const resolvers = {
 						10
 					)
 
-					const user: User = await db.mutation.createUser({
-						data: {
-							username,
-							email,
-							role: 'USER',
-							password: passwordHash,
-							avatar_url: {
-								create: {
-									filename: 'pillars',
-									mimetype: 'image/jpeg',
-									encoding: 'something',
-									key: '1',
-									ETag: 'tag',
-									url:
-										'http://res.cloudinary.com/dmxf3jh8t/image/upload/v1524175832/pillarsofcreation_m6prxe.jpg'
-								}
+					const user = await db.createUser({
+						username,
+						email,
+						role: 'USER',
+						password: passwordHash,
+						avatar_url: {
+							create: {
+								filename: 'pillars',
+								mimetype: 'image/jpeg',
+								encoding: 'something',
+								key: '1',
+								ETag: 'tag',
+								url:
+									'http://res.cloudinary.com/dmxf3jh8t/image/upload/v1524175832/pillarsofcreation_m6prxe.jpg'
 							}
 						}
 					})
