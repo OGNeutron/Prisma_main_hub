@@ -56,6 +56,11 @@ type Subscription {
 	messageSubscription(channelId: ID!): MessageSubscriptionPayload!
 }
 
+type DeleteCommentResponse {
+	id: ID
+	parentId: ID
+}
+
 type Mutation {
 	friendRemove(friendId: ID!): FriendRemoveResponse!
 	removeChannelMember(channelId: ID!, userId: ID!): Channel!
@@ -65,7 +70,7 @@ type Mutation {
 	addTeamMember(userId: ID!, teamId: ID!): Team!
 	addChannelMember(userId: ID!, channelId: ID!): Channel!
 	createChannelMember(userId: String!, channelId: String!): Channel!
-	deleteComment(id: ID!): Comment!
+	deleteComment(id: ID!): DeleteCommentResponse!
 	editComment(id: ID!, body: String!): Comment!
 	login(email: String!, password: String): LoginResponse!
 	register(

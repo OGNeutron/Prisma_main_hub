@@ -18,14 +18,12 @@ export const resolvers = {
 			) {
 				try {
 					console.log('MESSAGE SUBSCRIPTION')
-					return db.$subscribe
-						.message({
-							mutation_in: ['CREATED'],
-							node: {
-								parentId: channelId
-							}
-						})
-						.node()
+					return db.$subscribe.message({
+						mutation_in: ['CREATED', 'UPDATED'],
+						node: {
+							parentId: channelId
+						}
+					})
 				} catch (err) {
 					console.log(err)
 					return err

@@ -33,11 +33,9 @@ export const resolvers = {
 			{ db, session }: Context
 		) {
 			try {
-				const comment = await db
-					.comment({
-						id
-					})
-					.author()
+				const comment = await db.comment({
+					id
+				})
 
 				const author = await db
 					.comment({
@@ -58,6 +56,8 @@ export const resolvers = {
 				await db.deleteComment({
 					id: comment.id
 				})
+
+				console.log(comment)
 
 				return comment
 			} catch (error) {
@@ -163,7 +163,7 @@ export const resolvers = {
 		async createReply(
 			_: any,
 			{
-				pageId,
+				// pageId,
 				body,
 				parentId,
 				repliedTo
@@ -178,7 +178,7 @@ export const resolvers = {
 						comment = await db.createComment({
 							body,
 							parentId,
-							pageId,
+							pageId: '',
 							repliedTo: {
 								connect: {
 									id: repliedTo || ''

@@ -26,31 +26,32 @@ export const resolvers = {
 					logger.error({ level: '5', message: error })
 					return error
 				}
-			}
+			},
+			resolve: (payload: any) => payload
 		},
 		friendRequestSubscription: {
 			subscribe(
 				_: any,
 				{ id }: SubscriptionResolvers.ArgsFriendRequestSubscription,
-				ctx: any,
-				info: any
+				{ db }: Context
 			) {
 				try {
-					return ctx.db.subscription.user(
-						{
-							where: {
-								mutation_in: ['CREATED', 'UPDATED'],
-								node: {
-									id
-								}
-							}
-						},
-						info
-					)
+					return db.$subscribe.user({
+						mutation_in: ['CREATED', 'UPDATED'],
+						node: {
+							id
+						}
+					})
+
+					return
 				} catch (error) {
 					logger.error({ level: '5', message: error })
 					return error
 				}
+			},
+			resolve: (payload: any) => {
+				console.log('FRIEND SUBSCRIPTION', payload)
+				return payload
 			}
 		}
 	},

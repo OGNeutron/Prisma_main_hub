@@ -22,6 +22,13 @@ router.get(
 
 				const user = await prisma.user({ email: req.user.user.email })
 
+				await prisma.updateUser({
+					where: {
+						email: req.user.user.email
+					},
+					data: { online: true }
+				})
+
 				res.redirect(
 					`${process.env.CLIENT_URL}/profile/${user.username}`
 				)
@@ -52,6 +59,13 @@ router.get(
 
 				const user = await prisma.user({ email: req.user.user.email })
 
+				await prisma.updateUser({
+					where: {
+						email: req.user.user.email
+					},
+					data: { online: true }
+				})
+
 				res.redirect(
 					`${process.env.CLIENT_URL}/profile/${user.username}`
 				)
@@ -78,6 +92,13 @@ router.get(
 				req.session.refreshToken = req.user.refreshToken
 
 				const user = await prisma.user({ email: req.user.user.email })
+
+				await prisma.updateUser({
+					where: {
+						email: req.user.user.email
+					},
+					data: { online: true }
+				})
 
 				res.redirect(
 					`${process.env.CLIENT_URL}/profile/${user.username}`

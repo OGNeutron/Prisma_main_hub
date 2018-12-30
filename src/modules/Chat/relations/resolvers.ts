@@ -21,7 +21,9 @@ export const resolvers = {
 		},
 		messages(parent: any, _: any, { db }: Context) {
 			try {
-				return db.channel({ id: parent.id }).messages()
+				return db
+					.channel({ id: parent.id })
+					.messages({ orderBy: 'createdAt_DESC' })
 			} catch (error) {
 				return logger.error({ level: '5', message: error.message })
 			}

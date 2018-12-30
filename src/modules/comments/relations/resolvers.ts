@@ -19,9 +19,12 @@ export const resolvers = {
 				return logger.error({ level: '5', message: error })
 			}
 		},
-		ratings(parent: any, _: any, { db }: Context) {
+		async ratings(parent: any, _: any, { db }: Context) {
 			try {
-				return db.comment({ id: parent.id }).ratings()
+				const comment = await db.comment({ id: parent.id }).ratings()
+				console.log('RATINGS', comment)
+
+				return comment
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}
