@@ -7,6 +7,26 @@ const isAuthenticated = rule()(
 
 export const ShieldMiddleware = shield({
 	Query: {
-		getProfile: isAuthenticated
+		currentUser: isAuthenticated,
+		getProfile: isAuthenticated,
+		showTeam: isAuthenticated,
+		showTeams: isAuthenticated,
+		showChannel: isAuthenticated,
+		queryComment: isAuthenticated
+	},
+	Mutation: {
+		createMessage: isAuthenticated,
+		createChannel: isAuthenticated,
+		createTeam: isAuthenticated,
+		addTeamMember: isAuthenticated,
+		addChannelMember: isAuthenticated,
+		createChannelMember: isAuthenticated,
+		deleteComment: isAuthenticated,
+		editComment: isAuthenticated,
+		createComment: isAuthenticated,
+		createReply: isAuthenticated,
+		likeComment: isAuthenticated,
+		addFriend: isAuthenticated,
+		friendReject: isAuthenticated
 	}
 })

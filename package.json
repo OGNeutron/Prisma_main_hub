@@ -24,8 +24,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"@gql2ts/from-schema": "^1.8.0",
-		"apollo-server": "^2.0.4",
+		"apollo-server": "^2.3.1",
 		"apollo-server-express": "^2.3.1",
 		"aws-sdk": "^2.382.0",
 		"compression": "^1.7.2",
@@ -44,7 +43,6 @@
 		"graphql-tools": "^4.0.2",
 		"helmet": "^3.12.1",
 		"ioredis": "^4.0.0",
-		"lusca": "^1.6.0",
 		"merge-graphql-schemas": "^1.5.2",
 		"mime-types": "^2.1.18",
 		"morgan": "^1.9.0",
@@ -67,7 +65,6 @@
 		"yup": "^0.26.2"
 	},
 	"devDependencies": {
-		"@gql2ts/types": "^1.8.0",
 		"@types/aws-lambda": "^8.10.17",
 		"@types/bluebird": "^3.5.25",
 		"@types/compression": "^0.0.36",
@@ -95,7 +92,6 @@
 		"@types/yup": "^0.26.0",
 		"apollo-server-testing": "^2.3.1",
 		"faker": "^4.1.0",
-		"gql2ts": "^1.8.0",
 		"graphql-binding": "^2.2.3",
 		"graphql-cli": "^3.0.3",
 		"graphql-code-generator": "^0.15.1",

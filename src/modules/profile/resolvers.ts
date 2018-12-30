@@ -68,14 +68,11 @@ export const resolvers = {
 			{ db }: Context
 		) {
 			try {
-				console.log('PROFILE')
 				const profile = await db.user({ username })
 
 				if (!profile) {
 					return new ApolloError('No such user')
 				}
-
-				console.log('PROFILE', profile)
 
 				return profile
 			} catch (error) {

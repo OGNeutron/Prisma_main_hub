@@ -8,8 +8,12 @@ import {
 	Team,
 	Channel,
 	Message,
+	CommentConnection,
+	PageInfo,
+	CommentEdge,
 	Comment,
 	Rating,
+	AggregateComment,
 	Todo,
 	TodoProject,
 	Order,
@@ -29,8 +33,7 @@ import {
 	ForgotPasswordResponse,
 	VoidResponse,
 	Error,
-	AddFriendResponse,
-	ProductsInput
+	AddFriendResponse
 } from '../tstypes/index'
 import { Context } from '../tstypes/index'
 
@@ -162,6 +165,8 @@ export namespace QueryResolvers {
 
 	export interface ArgsQueryComment {
 		parentId: string
+		limit: number | null
+		offset: number | null
 	}
 
 	export interface ArgsShowTeam {
@@ -188,14 +193,14 @@ export namespace QueryResolvers {
 		args: ArgsGetProfile,
 		ctx: Context,
 		info: GraphQLResolveInfo
-	) => User | Promise<User>
+	) => User | null | Promise<User | null>
 
 	export type QueryCommentResolver = (
 		parent: undefined,
 		args: ArgsQueryComment,
 		ctx: Context,
 		info: GraphQLResolveInfo
-	) => Comment[] | Promise<Comment[]>
+	) => CommentConnection | Promise<CommentConnection>
 
 	export type QueryUsersResolver = (
 		parent: undefined,
@@ -245,14 +250,14 @@ export namespace QueryResolvers {
 			args: ArgsGetProfile,
 			ctx: Context,
 			info: GraphQLResolveInfo
-		) => User | Promise<User>
+		) => User | null | Promise<User | null>
 
 		queryComment: (
 			parent: undefined,
 			args: ArgsQueryComment,
 			ctx: Context,
 			info: GraphQLResolveInfo
-		) => Comment[] | Promise<Comment[]>
+		) => CommentConnection | Promise<CommentConnection>
 
 		queryUsers: (
 			parent: undefined,
@@ -3084,6 +3089,163 @@ export namespace MessageResolvers {
 	}
 }
 
+export namespace CommentConnectionResolvers {
+	export const defaultResolvers = {
+		pageInfo: (parent: CommentConnection) => parent.pageInfo,
+		edges: (parent: CommentConnection) => parent.edges
+	}
+
+	export type PageInfoResolver = (
+		parent: CommentConnection,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => PageInfo | Promise<PageInfo>
+
+	export type EdgesResolver = (
+		parent: CommentConnection,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => CommentEdge[] | Promise<CommentEdge[]>
+
+	export type AggregateResolver = (
+		parent: CommentConnection,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => AggregateComment | Promise<AggregateComment>
+
+	export interface Type {
+		pageInfo: (
+			parent: CommentConnection,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => PageInfo | Promise<PageInfo>
+
+		edges: (
+			parent: CommentConnection,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => CommentEdge[] | Promise<CommentEdge[]>
+
+		aggregate: (
+			parent: CommentConnection,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => AggregateComment | Promise<AggregateComment>
+	}
+}
+
+export namespace PageInfoResolvers {
+	export const defaultResolvers = {
+		hasNextPage: (parent: PageInfo) => parent.hasNextPage,
+		hasPreviousPage: (parent: PageInfo) => parent.hasPreviousPage,
+		startCursor: (parent: PageInfo) =>
+			parent.startCursor === undefined ? null : parent.startCursor,
+		endCursor: (parent: PageInfo) =>
+			parent.endCursor === undefined ? null : parent.endCursor
+	}
+
+	export type HasNextPageResolver = (
+		parent: PageInfo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => boolean | Promise<boolean>
+
+	export type HasPreviousPageResolver = (
+		parent: PageInfo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => boolean | Promise<boolean>
+
+	export type StartCursorResolver = (
+		parent: PageInfo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export type EndCursorResolver = (
+		parent: PageInfo,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
+	export interface Type {
+		hasNextPage: (
+			parent: PageInfo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => boolean | Promise<boolean>
+
+		hasPreviousPage: (
+			parent: PageInfo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => boolean | Promise<boolean>
+
+		startCursor: (
+			parent: PageInfo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		endCursor: (
+			parent: PageInfo,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+	}
+}
+
+export namespace CommentEdgeResolvers {
+	export const defaultResolvers = {
+		node: (parent: CommentEdge) => parent.node,
+		cursor: (parent: CommentEdge) => parent.cursor
+	}
+
+	export type NodeResolver = (
+		parent: CommentEdge,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Comment | Promise<Comment>
+
+	export type CursorResolver = (
+		parent: CommentEdge,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		node: (
+			parent: CommentEdge,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Comment | Promise<Comment>
+
+		cursor: (
+			parent: CommentEdge,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
 export namespace CommentResolvers {
 	export const defaultResolvers = {
 		id: (parent: Comment) => parent.id,
@@ -4547,6 +4709,28 @@ export namespace RatingResolvers {
 	}
 }
 
+export namespace AggregateCommentResolvers {
+	export const defaultResolvers = {
+		count: (parent: AggregateComment) => parent.count
+	}
+
+	export type CountResolver = (
+		parent: AggregateComment,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => number | Promise<number>
+
+	export interface Type {
+		count: (
+			parent: AggregateComment,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => number | Promise<number>
+	}
+}
+
 export namespace TodoResolvers {
 	export const defaultResolvers = {
 		id: (parent: Todo) => parent.id,
@@ -4749,7 +4933,6 @@ export namespace MutationResolvers {
 	}
 
 	export interface ArgsCreateOrder {
-		productIds: ProductsInput[] | null
 		totalPrice: number
 	}
 
@@ -6167,28 +6350,6 @@ export namespace TodoProjectResolvers {
 	}
 }
 
-export namespace ProductsInputResolvers {
-	export const defaultResolvers = {
-		id: (parent: ProductsInput) => parent.id
-	}
-
-	export type IdResolver = (
-		parent: ProductsInput,
-		args: {},
-		ctx: Context,
-		info: GraphQLResolveInfo
-	) => string | Promise<string>
-
-	export interface Type {
-		id: (
-			parent: ProductsInput,
-			args: {},
-			ctx: Context,
-			info: GraphQLResolveInfo
-		) => string | Promise<string>
-	}
-}
-
 export namespace OrderResolvers {
 	export const defaultResolvers = {
 		id: (parent: Order) => parent.id,
@@ -7326,8 +7487,12 @@ export interface Resolvers {
 	Team: TeamResolvers.Type
 	Channel: ChannelResolvers.Type
 	Message: MessageResolvers.Type
+	CommentConnection: CommentConnectionResolvers.Type
+	PageInfo: PageInfoResolvers.Type
+	CommentEdge: CommentEdgeResolvers.Type
 	Comment: CommentResolvers.Type
 	Rating: RatingResolvers.Type
+	AggregateComment: AggregateCommentResolvers.Type
 	Todo: TodoResolvers.Type
 	Mutation: MutationResolvers.Type
 	FriendRemoveResponse: FriendRemoveResponseResolvers.Type
@@ -7338,7 +7503,6 @@ export interface Resolvers {
 	Error: ErrorResolvers.Type
 	AddFriendResponse: AddFriendResponseResolvers.Type
 	TodoProject: TodoProjectResolvers.Type
-	ProductsInput: ProductsInputResolvers.Type
 	Order: OrderResolvers.Type
 	Product: ProductResolvers.Type
 	Customer: CustomerResolvers.Type

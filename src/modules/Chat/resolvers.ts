@@ -16,20 +16,25 @@ export const resolvers = {
 				{ channelId }: SubscriptionResolvers.ArgsMessageSubscription,
 				{ db }: Context
 			) {
-				console.log('MESSAGE SUBSCRIPTION', channelId)
 				try {
-					const response = db.$subscribe.message({
-						mutation_in: ['CREATED'],
-						node: {
-							parentId: channelId
-						}
-					})
-
-					return response
+					console.log('MESSAGE SUBSCRIPTION')
+					return db.$subscribe
+						.message({
+							mutation_in: ['CREATED'],
+							node: {
+								parentId: channelId
+							}
+						})
+						.node()
 				} catch (err) {
 					console.log(err)
 					return err
 				}
+			},
+			resolve: (payload: any) => {
+				console.log('payload', payload)
+
+				return payload
 			}
 		}
 	},

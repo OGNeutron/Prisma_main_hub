@@ -40,7 +40,7 @@ const db: Prisma = new Prisma({
 		process.env.NODE_ENV !== 'production'
 			? 'http://localhost:4466/prismadb/dev'
 			: `${process.env.HEROKU_PRISMA_ENDPOINT}`,
-	secret: process.env.MANAGEMENT_API_SECRET || 'my-secret',
+	secret: process.env.MANAGEMENT_API_SECRET || 'my-server-secret-123',
 	debug: false
 })
 

@@ -47,13 +47,11 @@ export const resolvers = {
 			{ db }: Context
 		) {
 			try {
-				const team = await db.teams({
-					where: {
-						slug: teamSlug
-					}
+				const team = await db.team({
+					slug: teamSlug
 				})
 
-				return team[0]
+				return team
 			} catch (error) {
 				return logger.error({ level: '5', message: error.message })
 			}

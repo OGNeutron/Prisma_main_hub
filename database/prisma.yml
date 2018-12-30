@@ -1,9 +1,9 @@
 endpoint: http://localhost:4466/prismadb/dev
-#https://prisma-a98f9d51ac.herokuapp.com/Prisma_backend/dev
+# endpoint: https://prisma-server-2df74d7228.herokuapp.com/Prisma_backend/dev
 datamodel: datamodel.graphql
 
 generate:
-  - generator: typescript-client
-    output: ../src/generated/prisma-client/
-  - generator: graphql-schema
-    output: ../src/generated/
+    - generator: typescript-client
+      output: ../src/generated/prisma-client/
+    - generator: graphql-schema
+      output: ../src/generated/

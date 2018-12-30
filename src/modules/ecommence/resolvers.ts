@@ -2,13 +2,12 @@ import { ApolloError } from 'apollo-server'
 
 import { Context } from '../../tstypes'
 import { logger } from '../../utils/logger'
-import { MutationResolvers } from '../../generated/graphqlgen'
 
 export const resolvers = {
 	Mutation: {
 		async createOrder(
 			_: any,
-			args: MutationResolvers.ArgsCreateOrder,
+			args: any,
 			{ session, db, stripe }: Context
 		) {
 			try {

@@ -10,8 +10,12 @@ import { File } from './File'
 import { Team } from './Team'
 import { Channel } from './Channel'
 import { Message } from './Message'
+import { CommentConnection } from './CommentConnection'
+import { PageInfo } from './PageInfo'
+import { CommentEdge } from './CommentEdge'
 import { Comment } from './Comment'
 import { Rating } from './Rating'
+import { AggregateComment } from './AggregateComment'
 import { Todo } from './Todo'
 import { Mutation } from './Mutation'
 import { FriendRemoveResponse } from './FriendRemoveResponse'
@@ -22,7 +26,6 @@ import { VoidResponse } from './VoidResponse'
 import { Error } from './Error'
 import { AddFriendResponse } from './AddFriendResponse'
 import { TodoProject } from './TodoProject'
-import { ProductsInput } from './ProductsInput'
 import { Order } from './Order'
 import { Product } from './Product'
 import { Customer } from './Customer'
@@ -42,8 +45,12 @@ export const resolvers: Resolvers = {
 	Team,
 	Channel,
 	Message,
+	CommentConnection,
+	PageInfo,
+	CommentEdge,
 	Comment,
 	Rating,
+	AggregateComment,
 	Todo,
 	Mutation,
 	FriendRemoveResponse,
@@ -54,7 +61,6 @@ export const resolvers: Resolvers = {
 	Error,
 	AddFriendResponse,
 	TodoProject,
-	ProductsInput,
 	Order,
 	Product,
 	Customer,

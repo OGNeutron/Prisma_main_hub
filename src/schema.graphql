@@ -40,8 +40,8 @@ type FriendRemoveResponse {
 
 type Query {
 	currentUser: User
-	getProfile(username: String!): User!
-	queryComment(parentId: ID!): [Comment!]
+	getProfile(username: String!): User
+	queryComment(parentId: ID!, limit: Int, offset: Int): CommentConnection!
 	queryUsers: [User!]
 	showTeam(teamSlug: String!): Team!
 	showTeams(authorId: ID!): [Team!]

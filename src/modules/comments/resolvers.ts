@@ -9,18 +9,18 @@ export const resolvers = {
 	Query: {
 		async queryComment(
 			_: any,
-			{ parentId }: QueryResolvers.ArgsQueryComment,
+			{ parentId, offset, limit }: QueryResolvers.ArgsQueryComment,
 			{ db }: Context
 		) {
 			try {
-				const comments = await db.comments({
+				return await db.commentsConnection({
 					where: {
-						id: parentId
+						pageId: parentId
 					},
+					skip: offset || 0,
+					first: limit || undefined,
 					orderBy: 'createdAt_DESC'
 				})
-
-				return comments
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}
@@ -114,21 +114,25 @@ export const resolvers = {
 					})
 
 					if (comment) {
-						if (comment.ratings) {
-							console.log('COMMENT', comment)
+						const ratings = await db
+							.comment({ id: commentId })
+							.ratings()
 
-							const found = comment.ratings.author.find(
+						if (ratings) {
+							const rating = await db
+								.rating({ id: ratings.id })
+								.author()
+
+							const found = rating.find(
 								(author: any) => author.id === userID
 							)
-
-							console.log('FOUND', found)
 
 							if (found === undefined) {
 								return await db.updateComment({
 									data: {
 										ratings: {
 											update: {
-												vote: comment.ratings.vote + 1,
+												vote: ratings.vote + 1,
 												author: {
 													connect: {
 														id: userID
