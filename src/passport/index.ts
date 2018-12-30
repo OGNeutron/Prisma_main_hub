@@ -142,7 +142,7 @@ export const setupPassport = () => {
 					user = await createUser({
 						email: profile.emails[0].value,
 						username: profile.name.givenName,
-						avatar: profile.photos[0].value,
+						avatar: profile._json.picture.data.url,
 						confirmed: true,
 						facebookId: profile.id
 					})

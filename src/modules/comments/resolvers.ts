@@ -57,7 +57,6 @@ export const resolvers = {
 					id: comment.id
 				})
 
-				console.log(comment)
 
 				return comment
 			} catch (error) {
