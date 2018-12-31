@@ -12,19 +12,20 @@ export const resolvers = {
 		}
 	},
 	Comment: {
-		author(parent: any, _: any, { db }: Context) {
+		async author(parent: any, _: any, { db }: Context) {
 			try {
-				return db.comment({ id: parent.id }).author()
+				const commentAuthor = await db
+					.comment({ id: parent.id })
+					.author()
+
+				return commentAuthor
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}
 		},
 		async ratings(parent: any, _: any, { db }: Context) {
 			try {
-				const comment = await db.comment({ id: parent.id }).ratings()
-				console.log('RATINGS', comment)
-
-				return comment
+				return await db.comment({ id: parent.id }).ratings()
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}

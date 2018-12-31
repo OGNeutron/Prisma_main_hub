@@ -39,7 +39,7 @@ export const resolvers = {
 			{ db }: Context
 		) {
 			try {
-				return await db.commentsConnection({
+				const comment = await db.commentsConnection({
 					where: {
 						pageId: parentId
 					},
@@ -47,6 +47,10 @@ export const resolvers = {
 					first: limit || undefined,
 					orderBy: 'createdAt_DESC'
 				})
+
+				console.log(comment)
+
+				return comment
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}
