@@ -2,7 +2,16 @@ import { Context } from '../../../tstypes'
 import { logger } from '../../../utils/logger'
 
 export const resolvers = {
-	User: {
+	MyUser: {
+		blockedUsers(parent: any, _: any, { db }: Context) {
+			try {
+				return db.user({ id: parent.id }).blockedUsers()
+			} catch (error) {
+				logger.error({ level: '5', message: error })
+				return error
+			}
+		},
+
 		avatar_url(parent: any, _: any, { db }: Context) {
 			try {
 				return db.user({ id: parent.id }).avatar_url()

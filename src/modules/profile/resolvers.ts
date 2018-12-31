@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server'
+import { omit } from 'lodash'
 
 import { Context } from '../../tstypes'
 import { logger } from '../../utils/logger'
@@ -66,7 +67,7 @@ export const resolvers = {
 		async getProfile(
 			_: any,
 			{ username }: QueryResolvers.ArgsGetProfile,
-			{ db }: Context
+			{ db, session }: Context
 		) {
 			try {
 				const profile = await db.user({ username })
@@ -75,7 +76,47 @@ export const resolvers = {
 					return new ApolloError('No such user')
 				}
 
-				return profile
+				const blockedUsers = await db.user({ username }).blockedUsers()
+
+				const blocked = blockedUsers.find(
+					user => user.id === session.userId
+				)
+
+				if (blocked) {
+					const avatar_url = await db.user({ username }).avatar_url()
+					return {
+						error: {
+							message: 'This user has blocked you',
+							username: profile.username,
+							avatar_url
+						}
+					}
+				}
+
+				const friends = await db.user({ username }).friends()
+
+				if (profile.private && profile.id !== session.userId) {
+					const friend = friends.find(
+						friend => friend.id === session.userId
+					)
+
+					if (friend) {
+						return omit(profile, 'password')
+					} else {
+						const avatar_url = await db
+							.user({ username })
+							.avatar_url()
+						return {
+							error: {
+								message: 'Account is private',
+								username: profile.username,
+								avatar_url
+							}
+						}
+					}
+				}
+
+				return { user: omit(profile, 'password') }
 			} catch (error) {
 				logger.error({ level: '5', message: error })
 				return error

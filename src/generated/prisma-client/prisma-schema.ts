@@ -460,6 +460,11 @@ input CommentCreateInput {
   author: UserCreateOneInput!
 }
 
+input CommentCreateManyInput {
+  create: [CommentCreateInput!]
+  connect: [CommentWhereUniqueInput!]
+}
+
 input CommentCreateManyWithoutRepliesInput {
   create: [CommentCreateWithoutRepliesInput!]
   connect: [CommentWhereUniqueInput!]
@@ -599,6 +604,16 @@ input CommentSubscriptionWhereInput {
   NOT: [CommentSubscriptionWhereInput!]
 }
 
+input CommentUpdateDataInput {
+  body: String
+  parentId: ID
+  pageId: ID
+  repliedTo: UserUpdateOneInput
+  ratings: RatingUpdateOneRequiredInput
+  replies: CommentUpdateManyWithoutRepliesInput
+  author: UserUpdateOneRequiredInput
+}
+
 input CommentUpdateInput {
   body: String
   parentId: ID
@@ -613,6 +628,17 @@ input CommentUpdateManyDataInput {
   body: String
   parentId: ID
   pageId: ID
+}
+
+input CommentUpdateManyInput {
+  create: [CommentCreateInput!]
+  update: [CommentUpdateWithWhereUniqueNestedInput!]
+  upsert: [CommentUpsertWithWhereUniqueNestedInput!]
+  delete: [CommentWhereUniqueInput!]
+  connect: [CommentWhereUniqueInput!]
+  disconnect: [CommentWhereUniqueInput!]
+  deleteMany: [CommentScalarWhereInput!]
+  updateMany: [CommentUpdateManyWithWhereNestedInput!]
 }
 
 input CommentUpdateManyMutationInput {
@@ -646,9 +672,20 @@ input CommentUpdateWithoutRepliesDataInput {
   author: UserUpdateOneRequiredInput
 }
 
+input CommentUpdateWithWhereUniqueNestedInput {
+  where: CommentWhereUniqueInput!
+  data: CommentUpdateDataInput!
+}
+
 input CommentUpdateWithWhereUniqueWithoutRepliesInput {
   where: CommentWhereUniqueInput!
   data: CommentUpdateWithoutRepliesDataInput!
+}
+
+input CommentUpsertWithWhereUniqueNestedInput {
+  where: CommentWhereUniqueInput!
+  update: CommentUpdateDataInput!
+  create: CommentCreateInput!
 }
 
 input CommentUpsertWithWhereUniqueWithoutRepliesInput {
@@ -3060,7 +3097,10 @@ type User {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   avatar_url: File!
+  private: Boolean!
+  blockedUsers(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
   confirmed: Boolean!
   online: Boolean!
   friends(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User!]
@@ -3090,7 +3130,10 @@ input UserCreateInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3104,6 +3147,11 @@ input UserCreateInput {
 
 input UserCreateManyInput {
   create: [UserCreateInput!]
+  connect: [UserWhereUniqueInput!]
+}
+
+input UserCreateManyWithoutBlockedUsersInput {
+  create: [UserCreateWithoutBlockedUsersInput!]
   connect: [UserWhereUniqueInput!]
 }
 
@@ -3147,6 +3195,30 @@ input UserCreateOneWithoutOwned_teamsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateWithoutBlockedUsersInput {
+  email: String!
+  notifications: NotificationCreateManyWithoutAuthorInput
+  set_private: Boolean
+  username: String!
+  password: String!
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
+  directMessages: CommentCreateManyInput
+  avatar_url: FileCreateOneInput!
+  private: Boolean
+  confirmed: Boolean
+  online: Boolean
+  friends: UserCreateManyWithoutFriendsInput
+  friend_requests: UserCreateManyWithoutFriend_requestsInput
+  role: UserRole!
+  teams: TeamCreateManyWithoutMembersInput
+  channels: ChannelCreateManyWithoutMembersInput
+  owned_teams: TeamCreateManyWithoutAuthorInput
+  owned_channels: ChannelCreateManyWithoutAuthorInput
+}
+
 input UserCreateWithoutChannelsInput {
   email: String!
   notifications: NotificationCreateManyWithoutAuthorInput
@@ -3157,7 +3229,10 @@ input UserCreateWithoutChannelsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3178,7 +3253,10 @@ input UserCreateWithoutFriend_requestsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3199,7 +3277,10 @@ input UserCreateWithoutFriendsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friend_requests: UserCreateManyWithoutFriend_requestsInput
@@ -3219,7 +3300,10 @@ input UserCreateWithoutNotificationsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3241,7 +3325,10 @@ input UserCreateWithoutOwned_channelsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3262,7 +3349,10 @@ input UserCreateWithoutOwned_teamsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3283,7 +3373,10 @@ input UserCreateWithoutTeamsInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
+  private: Boolean
+  blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserCreateManyWithoutFriendsInput
@@ -3318,6 +3411,8 @@ enum UserOrderByInput {
   twitterId_DESC
   gmailId_ASC
   gmailId_DESC
+  private_ASC
+  private_DESC
   confirmed_ASC
   confirmed_DESC
   online_ASC
@@ -3340,6 +3435,7 @@ type UserPreviousValues {
   facebookId: String
   twitterId: String
   gmailId: String
+  private: Boolean!
   confirmed: Boolean!
   online: Boolean!
   createdAt: DateTime!
@@ -3468,6 +3564,8 @@ input UserScalarWhereInput {
   gmailId_not_starts_with: String
   gmailId_ends_with: String
   gmailId_not_ends_with: String
+  private: Boolean
+  private_not: Boolean
   confirmed: Boolean
   confirmed_not: Boolean
   online: Boolean
@@ -3525,7 +3623,10 @@ input UserUpdateDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3547,7 +3648,10 @@ input UserUpdateInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3568,6 +3672,7 @@ input UserUpdateManyDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  private: Boolean
   confirmed: Boolean
   online: Boolean
   role: UserRole
@@ -3593,9 +3698,21 @@ input UserUpdateManyMutationInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  private: Boolean
   confirmed: Boolean
   online: Boolean
   role: UserRole
+}
+
+input UserUpdateManyWithoutBlockedUsersInput {
+  create: [UserCreateWithoutBlockedUsersInput!]
+  delete: [UserWhereUniqueInput!]
+  connect: [UserWhereUniqueInput!]
+  disconnect: [UserWhereUniqueInput!]
+  update: [UserUpdateWithWhereUniqueWithoutBlockedUsersInput!]
+  upsert: [UserUpsertWithWhereUniqueWithoutBlockedUsersInput!]
+  deleteMany: [UserScalarWhereInput!]
+  updateMany: [UserUpdateManyWithWhereNestedInput!]
 }
 
 input UserUpdateManyWithoutChannelsInput {
@@ -3684,6 +3801,30 @@ input UserUpdateOneRequiredWithoutOwned_teamsInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateWithoutBlockedUsersDataInput {
+  email: String
+  notifications: NotificationUpdateManyWithoutAuthorInput
+  set_private: Boolean
+  username: String
+  password: String
+  gitHubId: String
+  facebookId: String
+  twitterId: String
+  gmailId: String
+  directMessages: CommentUpdateManyInput
+  avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  confirmed: Boolean
+  online: Boolean
+  friends: UserUpdateManyWithoutFriendsInput
+  friend_requests: UserUpdateManyWithoutFriend_requestsInput
+  role: UserRole
+  teams: TeamUpdateManyWithoutMembersInput
+  channels: ChannelUpdateManyWithoutMembersInput
+  owned_teams: TeamUpdateManyWithoutAuthorInput
+  owned_channels: ChannelUpdateManyWithoutAuthorInput
+}
+
 input UserUpdateWithoutChannelsDataInput {
   email: String
   notifications: NotificationUpdateManyWithoutAuthorInput
@@ -3694,7 +3835,10 @@ input UserUpdateWithoutChannelsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3715,7 +3859,10 @@ input UserUpdateWithoutFriend_requestsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3736,7 +3883,10 @@ input UserUpdateWithoutFriendsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friend_requests: UserUpdateManyWithoutFriend_requestsInput
@@ -3756,7 +3906,10 @@ input UserUpdateWithoutNotificationsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3778,7 +3931,10 @@ input UserUpdateWithoutOwned_channelsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3799,7 +3955,10 @@ input UserUpdateWithoutOwned_teamsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3820,7 +3979,10 @@ input UserUpdateWithoutTeamsDataInput {
   facebookId: String
   twitterId: String
   gmailId: String
+  directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
+  private: Boolean
+  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
   friends: UserUpdateManyWithoutFriendsInput
@@ -3834,6 +3996,11 @@ input UserUpdateWithoutTeamsDataInput {
 input UserUpdateWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
   data: UserUpdateDataInput!
+}
+
+input UserUpdateWithWhereUniqueWithoutBlockedUsersInput {
+  where: UserWhereUniqueInput!
+  data: UserUpdateWithoutBlockedUsersDataInput!
 }
 
 input UserUpdateWithWhereUniqueWithoutChannelsInput {
@@ -3880,6 +4047,12 @@ input UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput!
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithWhereUniqueWithoutBlockedUsersInput {
+  where: UserWhereUniqueInput!
+  update: UserUpdateWithoutBlockedUsersDataInput!
+  create: UserCreateWithoutBlockedUsersInput!
 }
 
 input UserUpsertWithWhereUniqueWithoutChannelsInput {
@@ -4024,7 +4197,15 @@ input UserWhereInput {
   gmailId_not_starts_with: String
   gmailId_ends_with: String
   gmailId_not_ends_with: String
+  directMessages_every: CommentWhereInput
+  directMessages_some: CommentWhereInput
+  directMessages_none: CommentWhereInput
   avatar_url: FileWhereInput
+  private: Boolean
+  private_not: Boolean
+  blockedUsers_every: UserWhereInput
+  blockedUsers_some: UserWhereInput
+  blockedUsers_none: UserWhereInput
   confirmed: Boolean
   confirmed_not: Boolean
   online: Boolean

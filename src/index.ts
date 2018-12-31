@@ -66,13 +66,15 @@ const server: ApolloServer = new ApolloServer({
 		path: '/graphql'
 	},
 	schema,
+	playground: true,
+	introspection: true,
 	context: ({ req, res }: any) => {
 		// console.log(req)
 		return {
 			req: req,
 			res: res,
 			session: req !== undefined ? req.session : req,
-			redis: redis,
+			redis,
 			db,
 			s3: s3Client,
 			stripe

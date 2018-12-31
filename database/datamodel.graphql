@@ -46,7 +46,10 @@ type User {
 	facebookId: String
 	twitterId: String
 	gmailId: String
+	directMessages: [Comment!]! @relation(name: "UserDirectMessage")
 	avatar_url: File!
+	private: Boolean! @default(value: false)
+	blockedUsers: [User!]! @relation(name: "BlockedUsers")
 	confirmed: Boolean! @default(value: false)
 	online: Boolean! @default(value: false)
 	friends: [User!]! @relation(name: "UserFriends")

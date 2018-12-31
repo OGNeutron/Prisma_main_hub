@@ -88,5 +88,14 @@ export const Mutation: MutationResolvers.Type = {
 	},
 	createOrder: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
+	},
+	blockUser: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	unblockUser: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
+	},
+	setProfilePrivacy: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
 	}
 }

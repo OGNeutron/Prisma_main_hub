@@ -652,6 +652,8 @@ export type UserOrderByInput =
   | "twitterId_DESC"
   | "gmailId_ASC"
   | "gmailId_DESC"
+  | "private_ASC"
+  | "private_DESC"
   | "confirmed_ASC"
   | "confirmed_DESC"
   | "online_ASC"
@@ -668,6 +670,20 @@ export type NotificationOrderByInput =
   | "id_DESC"
   | "message_ASC"
   | "message_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
+export type CommentOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "body_ASC"
+  | "body_DESC"
+  | "parentId_ASC"
+  | "parentId_DESC"
+  | "pageId_ASC"
+  | "pageId_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -714,20 +730,6 @@ export type MessageOrderByInput =
   | "url_DESC"
   | "filetype_ASC"
   | "filetype_DESC"
-  | "createdAt_ASC"
-  | "createdAt_DESC"
-  | "updatedAt_ASC"
-  | "updatedAt_DESC";
-
-export type CommentOrderByInput =
-  | "id_ASC"
-  | "id_DESC"
-  | "body_ASC"
-  | "body_DESC"
-  | "parentId_ASC"
-  | "parentId_DESC"
-  | "pageId_ASC"
-  | "pageId_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -946,7 +948,15 @@ export interface UserWhereInput {
   gmailId_not_starts_with?: String;
   gmailId_ends_with?: String;
   gmailId_not_ends_with?: String;
+  directMessages_every?: CommentWhereInput;
+  directMessages_some?: CommentWhereInput;
+  directMessages_none?: CommentWhereInput;
   avatar_url?: FileWhereInput;
+  private?: Boolean;
+  private_not?: Boolean;
+  blockedUsers_every?: UserWhereInput;
+  blockedUsers_some?: UserWhereInput;
+  blockedUsers_none?: UserWhereInput;
   confirmed?: Boolean;
   confirmed_not?: Boolean;
   online?: Boolean;
@@ -1027,6 +1037,121 @@ export interface NotificationWhereInput {
   AND?: NotificationWhereInput[] | NotificationWhereInput;
   OR?: NotificationWhereInput[] | NotificationWhereInput;
   NOT?: NotificationWhereInput[] | NotificationWhereInput;
+}
+
+export interface CommentWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  body?: String;
+  body_not?: String;
+  body_in?: String[] | String;
+  body_not_in?: String[] | String;
+  body_lt?: String;
+  body_lte?: String;
+  body_gt?: String;
+  body_gte?: String;
+  body_contains?: String;
+  body_not_contains?: String;
+  body_starts_with?: String;
+  body_not_starts_with?: String;
+  body_ends_with?: String;
+  body_not_ends_with?: String;
+  parentId?: ID_Input;
+  parentId_not?: ID_Input;
+  parentId_in?: ID_Input[] | ID_Input;
+  parentId_not_in?: ID_Input[] | ID_Input;
+  parentId_lt?: ID_Input;
+  parentId_lte?: ID_Input;
+  parentId_gt?: ID_Input;
+  parentId_gte?: ID_Input;
+  parentId_contains?: ID_Input;
+  parentId_not_contains?: ID_Input;
+  parentId_starts_with?: ID_Input;
+  parentId_not_starts_with?: ID_Input;
+  parentId_ends_with?: ID_Input;
+  parentId_not_ends_with?: ID_Input;
+  pageId?: ID_Input;
+  pageId_not?: ID_Input;
+  pageId_in?: ID_Input[] | ID_Input;
+  pageId_not_in?: ID_Input[] | ID_Input;
+  pageId_lt?: ID_Input;
+  pageId_lte?: ID_Input;
+  pageId_gt?: ID_Input;
+  pageId_gte?: ID_Input;
+  pageId_contains?: ID_Input;
+  pageId_not_contains?: ID_Input;
+  pageId_starts_with?: ID_Input;
+  pageId_not_starts_with?: ID_Input;
+  pageId_ends_with?: ID_Input;
+  pageId_not_ends_with?: ID_Input;
+  repliedTo?: UserWhereInput;
+  ratings?: RatingWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  replies_every?: CommentWhereInput;
+  replies_some?: CommentWhereInput;
+  replies_none?: CommentWhereInput;
+  author?: UserWhereInput;
+  AND?: CommentWhereInput[] | CommentWhereInput;
+  OR?: CommentWhereInput[] | CommentWhereInput;
+  NOT?: CommentWhereInput[] | CommentWhereInput;
+}
+
+export interface RatingWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  vote?: Int;
+  vote_not?: Int;
+  vote_in?: Int[] | Int;
+  vote_not_in?: Int[] | Int;
+  vote_lt?: Int;
+  vote_lte?: Int;
+  vote_gt?: Int;
+  vote_gte?: Int;
+  author_every?: UserWhereInput;
+  author_some?: UserWhereInput;
+  author_none?: UserWhereInput;
+  AND?: RatingWhereInput[] | RatingWhereInput;
+  OR?: RatingWhereInput[] | RatingWhereInput;
+  NOT?: RatingWhereInput[] | RatingWhereInput;
 }
 
 export interface FileWhereInput {
@@ -1400,121 +1525,6 @@ export type CommentWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface CommentWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  body?: String;
-  body_not?: String;
-  body_in?: String[] | String;
-  body_not_in?: String[] | String;
-  body_lt?: String;
-  body_lte?: String;
-  body_gt?: String;
-  body_gte?: String;
-  body_contains?: String;
-  body_not_contains?: String;
-  body_starts_with?: String;
-  body_not_starts_with?: String;
-  body_ends_with?: String;
-  body_not_ends_with?: String;
-  parentId?: ID_Input;
-  parentId_not?: ID_Input;
-  parentId_in?: ID_Input[] | ID_Input;
-  parentId_not_in?: ID_Input[] | ID_Input;
-  parentId_lt?: ID_Input;
-  parentId_lte?: ID_Input;
-  parentId_gt?: ID_Input;
-  parentId_gte?: ID_Input;
-  parentId_contains?: ID_Input;
-  parentId_not_contains?: ID_Input;
-  parentId_starts_with?: ID_Input;
-  parentId_not_starts_with?: ID_Input;
-  parentId_ends_with?: ID_Input;
-  parentId_not_ends_with?: ID_Input;
-  pageId?: ID_Input;
-  pageId_not?: ID_Input;
-  pageId_in?: ID_Input[] | ID_Input;
-  pageId_not_in?: ID_Input[] | ID_Input;
-  pageId_lt?: ID_Input;
-  pageId_lte?: ID_Input;
-  pageId_gt?: ID_Input;
-  pageId_gte?: ID_Input;
-  pageId_contains?: ID_Input;
-  pageId_not_contains?: ID_Input;
-  pageId_starts_with?: ID_Input;
-  pageId_not_starts_with?: ID_Input;
-  pageId_ends_with?: ID_Input;
-  pageId_not_ends_with?: ID_Input;
-  repliedTo?: UserWhereInput;
-  ratings?: RatingWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  replies_every?: CommentWhereInput;
-  replies_some?: CommentWhereInput;
-  replies_none?: CommentWhereInput;
-  author?: UserWhereInput;
-  AND?: CommentWhereInput[] | CommentWhereInput;
-  OR?: CommentWhereInput[] | CommentWhereInput;
-  NOT?: CommentWhereInput[] | CommentWhereInput;
-}
-
-export interface RatingWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  vote?: Int;
-  vote_not?: Int;
-  vote_in?: Int[] | Int;
-  vote_not_in?: Int[] | Int;
-  vote_lt?: Int;
-  vote_lte?: Int;
-  vote_gt?: Int;
-  vote_gte?: Int;
-  author_every?: UserWhereInput;
-  author_some?: UserWhereInput;
-  author_none?: UserWhereInput;
-  AND?: RatingWhereInput[] | RatingWhereInput;
-  OR?: RatingWhereInput[] | RatingWhereInput;
-  NOT?: RatingWhereInput[] | RatingWhereInput;
-}
-
 export type CustomerWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
@@ -1874,7 +1884,10 @@ export interface UserCreateInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -1897,6 +1910,52 @@ export interface NotificationCreateWithoutAuthorInput {
   message: String;
 }
 
+export interface CommentCreateManyInput {
+  create?: CommentCreateInput[] | CommentCreateInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+}
+
+export interface CommentCreateInput {
+  body: String;
+  parentId: ID_Input;
+  pageId: ID_Input;
+  repliedTo?: UserCreateOneInput;
+  ratings: RatingCreateOneInput;
+  replies?: CommentCreateManyWithoutRepliesInput;
+  author: UserCreateOneInput;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface RatingCreateOneInput {
+  create?: RatingCreateInput;
+  connect?: RatingWhereUniqueInput;
+}
+
+export interface RatingCreateInput {
+  vote: Int;
+  author?: UserCreateManyInput;
+}
+
+export interface CommentCreateManyWithoutRepliesInput {
+  create?:
+    | CommentCreateWithoutRepliesInput[]
+    | CommentCreateWithoutRepliesInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+}
+
+export interface CommentCreateWithoutRepliesInput {
+  body: String;
+  parentId: ID_Input;
+  pageId: ID_Input;
+  repliedTo?: UserCreateOneInput;
+  ratings: RatingCreateOneInput;
+  author: UserCreateOneInput;
+}
+
 export interface FileCreateOneInput {
   create?: FileCreateInput;
   connect?: FileWhereUniqueInput;
@@ -1909,6 +1968,37 @@ export interface FileCreateInput {
   key: String;
   ETag: String;
   url: String;
+}
+
+export interface UserCreateManyWithoutBlockedUsersInput {
+  create?:
+    | UserCreateWithoutBlockedUsersInput[]
+    | UserCreateWithoutBlockedUsersInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutBlockedUsersInput {
+  email: String;
+  notifications?: NotificationCreateManyWithoutAuthorInput;
+  set_private?: Boolean;
+  username: String;
+  password: String;
+  gitHubId?: String;
+  facebookId?: String;
+  twitterId?: String;
+  gmailId?: String;
+  directMessages?: CommentCreateManyInput;
+  avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  confirmed?: Boolean;
+  online?: Boolean;
+  friends?: UserCreateManyWithoutFriendsInput;
+  friend_requests?: UserCreateManyWithoutFriend_requestsInput;
+  role: UserRole;
+  teams?: TeamCreateManyWithoutMembersInput;
+  channels?: ChannelCreateManyWithoutMembersInput;
+  owned_teams?: TeamCreateManyWithoutAuthorInput;
+  owned_channels?: ChannelCreateManyWithoutAuthorInput;
 }
 
 export interface UserCreateManyWithoutFriendsInput {
@@ -1926,7 +2016,10 @@ export interface UserCreateWithoutFriendsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friend_requests?: UserCreateManyWithoutFriend_requestsInput;
@@ -1954,7 +2047,10 @@ export interface UserCreateWithoutFriend_requestsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -1995,7 +2091,10 @@ export interface UserCreateWithoutOwned_teamsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -2035,11 +2134,6 @@ export interface MessageCreateInput {
   author: UserCreateOneInput;
 }
 
-export interface UserCreateOneInput {
-  create?: UserCreateInput;
-  connect?: UserWhereUniqueInput;
-}
-
 export interface UserCreateOneWithoutOwned_channelsInput {
   create?: UserCreateWithoutOwned_channelsInput;
   connect?: UserWhereUniqueInput;
@@ -2055,7 +2149,10 @@ export interface UserCreateWithoutOwned_channelsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -2096,7 +2193,10 @@ export interface UserCreateWithoutTeamsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -2136,7 +2236,10 @@ export interface UserCreateWithoutChannelsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -2194,7 +2297,10 @@ export interface UserUpdateDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2283,6 +2389,210 @@ export interface NotificationUpdateManyDataInput {
   message?: String;
 }
 
+export interface CommentUpdateManyInput {
+  create?: CommentCreateInput[] | CommentCreateInput;
+  update?:
+    | CommentUpdateWithWhereUniqueNestedInput[]
+    | CommentUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | CommentUpsertWithWhereUniqueNestedInput[]
+    | CommentUpsertWithWhereUniqueNestedInput;
+  delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+  updateMany?:
+    | CommentUpdateManyWithWhereNestedInput[]
+    | CommentUpdateManyWithWhereNestedInput;
+}
+
+export interface CommentUpdateWithWhereUniqueNestedInput {
+  where: CommentWhereUniqueInput;
+  data: CommentUpdateDataInput;
+}
+
+export interface CommentUpdateDataInput {
+  body?: String;
+  parentId?: ID_Input;
+  pageId?: ID_Input;
+  repliedTo?: UserUpdateOneInput;
+  ratings?: RatingUpdateOneRequiredInput;
+  replies?: CommentUpdateManyWithoutRepliesInput;
+  author?: UserUpdateOneRequiredInput;
+}
+
+export interface UserUpdateOneInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface RatingUpdateOneRequiredInput {
+  create?: RatingCreateInput;
+  update?: RatingUpdateDataInput;
+  upsert?: RatingUpsertNestedInput;
+  connect?: RatingWhereUniqueInput;
+}
+
+export interface RatingUpdateDataInput {
+  vote?: Int;
+  author?: UserUpdateManyInput;
+}
+
+export interface RatingUpsertNestedInput {
+  update: RatingUpdateDataInput;
+  create: RatingCreateInput;
+}
+
+export interface CommentUpdateManyWithoutRepliesInput {
+  create?:
+    | CommentCreateWithoutRepliesInput[]
+    | CommentCreateWithoutRepliesInput;
+  delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  update?:
+    | CommentUpdateWithWhereUniqueWithoutRepliesInput[]
+    | CommentUpdateWithWhereUniqueWithoutRepliesInput;
+  upsert?:
+    | CommentUpsertWithWhereUniqueWithoutRepliesInput[]
+    | CommentUpsertWithWhereUniqueWithoutRepliesInput;
+  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+  updateMany?:
+    | CommentUpdateManyWithWhereNestedInput[]
+    | CommentUpdateManyWithWhereNestedInput;
+}
+
+export interface CommentUpdateWithWhereUniqueWithoutRepliesInput {
+  where: CommentWhereUniqueInput;
+  data: CommentUpdateWithoutRepliesDataInput;
+}
+
+export interface CommentUpdateWithoutRepliesDataInput {
+  body?: String;
+  parentId?: ID_Input;
+  pageId?: ID_Input;
+  repliedTo?: UserUpdateOneInput;
+  ratings?: RatingUpdateOneRequiredInput;
+  author?: UserUpdateOneRequiredInput;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface CommentUpsertWithWhereUniqueWithoutRepliesInput {
+  where: CommentWhereUniqueInput;
+  update: CommentUpdateWithoutRepliesDataInput;
+  create: CommentCreateWithoutRepliesInput;
+}
+
+export interface CommentScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  body?: String;
+  body_not?: String;
+  body_in?: String[] | String;
+  body_not_in?: String[] | String;
+  body_lt?: String;
+  body_lte?: String;
+  body_gt?: String;
+  body_gte?: String;
+  body_contains?: String;
+  body_not_contains?: String;
+  body_starts_with?: String;
+  body_not_starts_with?: String;
+  body_ends_with?: String;
+  body_not_ends_with?: String;
+  parentId?: ID_Input;
+  parentId_not?: ID_Input;
+  parentId_in?: ID_Input[] | ID_Input;
+  parentId_not_in?: ID_Input[] | ID_Input;
+  parentId_lt?: ID_Input;
+  parentId_lte?: ID_Input;
+  parentId_gt?: ID_Input;
+  parentId_gte?: ID_Input;
+  parentId_contains?: ID_Input;
+  parentId_not_contains?: ID_Input;
+  parentId_starts_with?: ID_Input;
+  parentId_not_starts_with?: ID_Input;
+  parentId_ends_with?: ID_Input;
+  parentId_not_ends_with?: ID_Input;
+  pageId?: ID_Input;
+  pageId_not?: ID_Input;
+  pageId_in?: ID_Input[] | ID_Input;
+  pageId_not_in?: ID_Input[] | ID_Input;
+  pageId_lt?: ID_Input;
+  pageId_lte?: ID_Input;
+  pageId_gt?: ID_Input;
+  pageId_gte?: ID_Input;
+  pageId_contains?: ID_Input;
+  pageId_not_contains?: ID_Input;
+  pageId_starts_with?: ID_Input;
+  pageId_not_starts_with?: ID_Input;
+  pageId_ends_with?: ID_Input;
+  pageId_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+  OR?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+  NOT?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+}
+
+export interface CommentUpdateManyWithWhereNestedInput {
+  where: CommentScalarWhereInput;
+  data: CommentUpdateManyDataInput;
+}
+
+export interface CommentUpdateManyDataInput {
+  body?: String;
+  parentId?: ID_Input;
+  pageId?: ID_Input;
+}
+
+export interface CommentUpsertWithWhereUniqueNestedInput {
+  where: CommentWhereUniqueInput;
+  update: CommentUpdateDataInput;
+  create: CommentCreateInput;
+}
+
 export interface FileUpdateOneRequiredInput {
   create?: FileCreateInput;
   update?: FileUpdateDataInput;
@@ -2302,6 +2612,54 @@ export interface FileUpdateDataInput {
 export interface FileUpsertNestedInput {
   update: FileUpdateDataInput;
   create: FileCreateInput;
+}
+
+export interface UserUpdateManyWithoutBlockedUsersInput {
+  create?:
+    | UserCreateWithoutBlockedUsersInput[]
+    | UserCreateWithoutBlockedUsersInput;
+  delete?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  connect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  disconnect?: UserWhereUniqueInput[] | UserWhereUniqueInput;
+  update?:
+    | UserUpdateWithWhereUniqueWithoutBlockedUsersInput[]
+    | UserUpdateWithWhereUniqueWithoutBlockedUsersInput;
+  upsert?:
+    | UserUpsertWithWhereUniqueWithoutBlockedUsersInput[]
+    | UserUpsertWithWhereUniqueWithoutBlockedUsersInput;
+  deleteMany?: UserScalarWhereInput[] | UserScalarWhereInput;
+  updateMany?:
+    | UserUpdateManyWithWhereNestedInput[]
+    | UserUpdateManyWithWhereNestedInput;
+}
+
+export interface UserUpdateWithWhereUniqueWithoutBlockedUsersInput {
+  where: UserWhereUniqueInput;
+  data: UserUpdateWithoutBlockedUsersDataInput;
+}
+
+export interface UserUpdateWithoutBlockedUsersDataInput {
+  email?: String;
+  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  set_private?: Boolean;
+  username?: String;
+  password?: String;
+  gitHubId?: String;
+  facebookId?: String;
+  twitterId?: String;
+  gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
+  avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  confirmed?: Boolean;
+  online?: Boolean;
+  friends?: UserUpdateManyWithoutFriendsInput;
+  friend_requests?: UserUpdateManyWithoutFriend_requestsInput;
+  role?: UserRole;
+  teams?: TeamUpdateManyWithoutMembersInput;
+  channels?: ChannelUpdateManyWithoutMembersInput;
+  owned_teams?: TeamUpdateManyWithoutAuthorInput;
+  owned_channels?: ChannelUpdateManyWithoutAuthorInput;
 }
 
 export interface UserUpdateManyWithoutFriendsInput {
@@ -2336,7 +2694,10 @@ export interface UserUpdateWithoutFriendsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friend_requests?: UserUpdateManyWithoutFriend_requestsInput;
@@ -2381,7 +2742,10 @@ export interface UserUpdateWithoutFriend_requestsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2441,7 +2805,10 @@ export interface UserUpdateWithoutOwned_teamsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2513,18 +2880,6 @@ export interface MessageUpdateDataInput {
   url?: String;
   filetype?: String;
   author?: UserUpdateOneRequiredInput;
-}
-
-export interface UserUpdateOneRequiredInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpsertNestedInput {
-  update: UserUpdateDataInput;
-  create: UserCreateInput;
 }
 
 export interface MessageUpsertWithWhereUniqueNestedInput {
@@ -2654,7 +3009,10 @@ export interface UserUpdateWithoutOwned_channelsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2729,7 +3087,10 @@ export interface UserUpdateWithoutTeamsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2803,7 +3164,10 @@ export interface UserUpdateWithoutChannelsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -2935,6 +3299,8 @@ export interface UserScalarWhereInput {
   gmailId_not_starts_with?: String;
   gmailId_ends_with?: String;
   gmailId_not_ends_with?: String;
+  private?: Boolean;
+  private_not?: Boolean;
   confirmed?: Boolean;
   confirmed_not?: Boolean;
   online?: Boolean;
@@ -2978,6 +3344,7 @@ export interface UserUpdateManyDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  private?: Boolean;
   confirmed?: Boolean;
   online?: Boolean;
   role?: UserRole;
@@ -3230,6 +3597,12 @@ export interface UserUpsertWithWhereUniqueWithoutFriendsInput {
   create: UserCreateWithoutFriendsInput;
 }
 
+export interface UserUpsertWithWhereUniqueWithoutBlockedUsersInput {
+  where: UserWhereUniqueInput;
+  update: UserUpdateWithoutBlockedUsersDataInput;
+  create: UserCreateWithoutBlockedUsersInput;
+}
+
 export interface UserUpsertWithWhereUniqueNestedInput {
   where: UserWhereUniqueInput;
   update: UserUpdateDataInput;
@@ -3242,42 +3615,6 @@ export interface ChannelUpdateManyMutationInput {
   public?: Boolean;
 }
 
-export interface CommentCreateInput {
-  body: String;
-  parentId: ID_Input;
-  pageId: ID_Input;
-  repliedTo?: UserCreateOneInput;
-  ratings: RatingCreateOneInput;
-  replies?: CommentCreateManyWithoutRepliesInput;
-  author: UserCreateOneInput;
-}
-
-export interface RatingCreateOneInput {
-  create?: RatingCreateInput;
-  connect?: RatingWhereUniqueInput;
-}
-
-export interface RatingCreateInput {
-  vote: Int;
-  author?: UserCreateManyInput;
-}
-
-export interface CommentCreateManyWithoutRepliesInput {
-  create?:
-    | CommentCreateWithoutRepliesInput[]
-    | CommentCreateWithoutRepliesInput;
-  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-}
-
-export interface CommentCreateWithoutRepliesInput {
-  body: String;
-  parentId: ID_Input;
-  pageId: ID_Input;
-  repliedTo?: UserCreateOneInput;
-  ratings: RatingCreateOneInput;
-  author: UserCreateOneInput;
-}
-
 export interface CommentUpdateInput {
   body?: String;
   parentId?: ID_Input;
@@ -3286,160 +3623,6 @@ export interface CommentUpdateInput {
   ratings?: RatingUpdateOneRequiredInput;
   replies?: CommentUpdateManyWithoutRepliesInput;
   author?: UserUpdateOneRequiredInput;
-}
-
-export interface UserUpdateOneInput {
-  create?: UserCreateInput;
-  update?: UserUpdateDataInput;
-  upsert?: UserUpsertNestedInput;
-  delete?: Boolean;
-  disconnect?: Boolean;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface RatingUpdateOneRequiredInput {
-  create?: RatingCreateInput;
-  update?: RatingUpdateDataInput;
-  upsert?: RatingUpsertNestedInput;
-  connect?: RatingWhereUniqueInput;
-}
-
-export interface RatingUpdateDataInput {
-  vote?: Int;
-  author?: UserUpdateManyInput;
-}
-
-export interface RatingUpsertNestedInput {
-  update: RatingUpdateDataInput;
-  create: RatingCreateInput;
-}
-
-export interface CommentUpdateManyWithoutRepliesInput {
-  create?:
-    | CommentCreateWithoutRepliesInput[]
-    | CommentCreateWithoutRepliesInput;
-  delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  update?:
-    | CommentUpdateWithWhereUniqueWithoutRepliesInput[]
-    | CommentUpdateWithWhereUniqueWithoutRepliesInput;
-  upsert?:
-    | CommentUpsertWithWhereUniqueWithoutRepliesInput[]
-    | CommentUpsertWithWhereUniqueWithoutRepliesInput;
-  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput;
-  updateMany?:
-    | CommentUpdateManyWithWhereNestedInput[]
-    | CommentUpdateManyWithWhereNestedInput;
-}
-
-export interface CommentUpdateWithWhereUniqueWithoutRepliesInput {
-  where: CommentWhereUniqueInput;
-  data: CommentUpdateWithoutRepliesDataInput;
-}
-
-export interface CommentUpdateWithoutRepliesDataInput {
-  body?: String;
-  parentId?: ID_Input;
-  pageId?: ID_Input;
-  repliedTo?: UserUpdateOneInput;
-  ratings?: RatingUpdateOneRequiredInput;
-  author?: UserUpdateOneRequiredInput;
-}
-
-export interface CommentUpsertWithWhereUniqueWithoutRepliesInput {
-  where: CommentWhereUniqueInput;
-  update: CommentUpdateWithoutRepliesDataInput;
-  create: CommentCreateWithoutRepliesInput;
-}
-
-export interface CommentScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  body?: String;
-  body_not?: String;
-  body_in?: String[] | String;
-  body_not_in?: String[] | String;
-  body_lt?: String;
-  body_lte?: String;
-  body_gt?: String;
-  body_gte?: String;
-  body_contains?: String;
-  body_not_contains?: String;
-  body_starts_with?: String;
-  body_not_starts_with?: String;
-  body_ends_with?: String;
-  body_not_ends_with?: String;
-  parentId?: ID_Input;
-  parentId_not?: ID_Input;
-  parentId_in?: ID_Input[] | ID_Input;
-  parentId_not_in?: ID_Input[] | ID_Input;
-  parentId_lt?: ID_Input;
-  parentId_lte?: ID_Input;
-  parentId_gt?: ID_Input;
-  parentId_gte?: ID_Input;
-  parentId_contains?: ID_Input;
-  parentId_not_contains?: ID_Input;
-  parentId_starts_with?: ID_Input;
-  parentId_not_starts_with?: ID_Input;
-  parentId_ends_with?: ID_Input;
-  parentId_not_ends_with?: ID_Input;
-  pageId?: ID_Input;
-  pageId_not?: ID_Input;
-  pageId_in?: ID_Input[] | ID_Input;
-  pageId_not_in?: ID_Input[] | ID_Input;
-  pageId_lt?: ID_Input;
-  pageId_lte?: ID_Input;
-  pageId_gt?: ID_Input;
-  pageId_gte?: ID_Input;
-  pageId_contains?: ID_Input;
-  pageId_not_contains?: ID_Input;
-  pageId_starts_with?: ID_Input;
-  pageId_not_starts_with?: ID_Input;
-  pageId_ends_with?: ID_Input;
-  pageId_not_ends_with?: ID_Input;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: CommentScalarWhereInput[] | CommentScalarWhereInput;
-  OR?: CommentScalarWhereInput[] | CommentScalarWhereInput;
-  NOT?: CommentScalarWhereInput[] | CommentScalarWhereInput;
-}
-
-export interface CommentUpdateManyWithWhereNestedInput {
-  where: CommentScalarWhereInput;
-  data: CommentUpdateManyDataInput;
-}
-
-export interface CommentUpdateManyDataInput {
-  body?: String;
-  parentId?: ID_Input;
-  pageId?: ID_Input;
 }
 
 export interface CommentUpdateManyMutationInput {
@@ -3514,7 +3697,10 @@ export interface UserCreateWithoutNotificationsInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentCreateManyInput;
   avatar_url: FileCreateOneInput;
+  private?: Boolean;
+  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserCreateManyWithoutFriendsInput;
@@ -3547,7 +3733,10 @@ export interface UserUpdateWithoutNotificationsDataInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -3921,7 +4110,10 @@ export interface UserUpdateInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  directMessages?: CommentUpdateManyInput;
   avatar_url?: FileUpdateOneRequiredInput;
+  private?: Boolean;
+  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
   confirmed?: Boolean;
   online?: Boolean;
   friends?: UserUpdateManyWithoutFriendsInput;
@@ -3942,6 +4134,7 @@ export interface UserUpdateManyMutationInput {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  private?: Boolean;
   confirmed?: Boolean;
   online?: Boolean;
   role?: UserRole;
@@ -4207,6 +4400,7 @@ export interface User {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  private: Boolean;
   confirmed: Boolean;
   online: Boolean;
   createdAt: DateTimeOutput;
@@ -4235,7 +4429,30 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   facebookId: () => Promise<String>;
   twitterId: () => Promise<String>;
   gmailId: () => Promise<String>;
+  directMessages: <T = FragmentableArray<Comment>>(
+    args?: {
+      where?: CommentWhereInput;
+      orderBy?: CommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   avatar_url: <T = FilePromise>() => T;
+  private: () => Promise<Boolean>;
+  blockedUsers: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   confirmed: () => Promise<Boolean>;
   online: () => Promise<Boolean>;
   friends: <T = FragmentableArray<User>>(
@@ -4332,7 +4549,30 @@ export interface UserSubscription
   facebookId: () => Promise<AsyncIterator<String>>;
   twitterId: () => Promise<AsyncIterator<String>>;
   gmailId: () => Promise<AsyncIterator<String>>;
+  directMessages: <T = Promise<AsyncIterator<CommentSubscription>>>(
+    args?: {
+      where?: CommentWhereInput;
+      orderBy?: CommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   avatar_url: <T = FileSubscription>() => T;
+  private: () => Promise<AsyncIterator<Boolean>>;
+  blockedUsers: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
   confirmed: () => Promise<AsyncIterator<Boolean>>;
   online: () => Promise<AsyncIterator<Boolean>>;
   friends: <T = Promise<AsyncIterator<UserSubscription>>>(
@@ -4425,6 +4665,102 @@ export interface NotificationSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   message: () => Promise<AsyncIterator<String>>;
   author: <T = UserSubscription>() => T;
+}
+
+export interface Comment {
+  id: ID_Output;
+  body: String;
+  parentId: ID_Output;
+  pageId: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface CommentPromise extends Promise<Comment>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  body: () => Promise<String>;
+  parentId: () => Promise<ID_Output>;
+  pageId: () => Promise<ID_Output>;
+  repliedTo: <T = UserPromise>() => T;
+  ratings: <T = RatingPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  replies: <T = FragmentableArray<Comment>>(
+    args?: {
+      where?: CommentWhereInput;
+      orderBy?: CommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  author: <T = UserPromise>() => T;
+}
+
+export interface CommentSubscription
+  extends Promise<AsyncIterator<Comment>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  body: () => Promise<AsyncIterator<String>>;
+  parentId: () => Promise<AsyncIterator<ID_Output>>;
+  pageId: () => Promise<AsyncIterator<ID_Output>>;
+  repliedTo: <T = UserSubscription>() => T;
+  ratings: <T = RatingSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  replies: <T = Promise<AsyncIterator<CommentSubscription>>>(
+    args?: {
+      where?: CommentWhereInput;
+      orderBy?: CommentOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  author: <T = UserSubscription>() => T;
+}
+
+export interface Rating {
+  id: ID_Output;
+  vote: Int;
+}
+
+export interface RatingPromise extends Promise<Rating>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  vote: () => Promise<Int>;
+  author: <T = FragmentableArray<User>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface RatingSubscription
+  extends Promise<AsyncIterator<Rating>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  vote: () => Promise<AsyncIterator<Int>>;
+  author: <T = Promise<AsyncIterator<UserSubscription>>>(
+    args?: {
+      where?: UserWhereInput;
+      orderBy?: UserOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
 }
 
 export interface File {
@@ -4674,102 +5010,6 @@ export interface AggregateChannelSubscription
   extends Promise<AsyncIterator<AggregateChannel>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
-}
-
-export interface Comment {
-  id: ID_Output;
-  body: String;
-  parentId: ID_Output;
-  pageId: ID_Output;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface CommentPromise extends Promise<Comment>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  body: () => Promise<String>;
-  parentId: () => Promise<ID_Output>;
-  pageId: () => Promise<ID_Output>;
-  repliedTo: <T = UserPromise>() => T;
-  ratings: <T = RatingPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-  replies: <T = FragmentableArray<Comment>>(
-    args?: {
-      where?: CommentWhereInput;
-      orderBy?: CommentOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  author: <T = UserPromise>() => T;
-}
-
-export interface CommentSubscription
-  extends Promise<AsyncIterator<Comment>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  body: () => Promise<AsyncIterator<String>>;
-  parentId: () => Promise<AsyncIterator<ID_Output>>;
-  pageId: () => Promise<AsyncIterator<ID_Output>>;
-  repliedTo: <T = UserSubscription>() => T;
-  ratings: <T = RatingSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  replies: <T = Promise<AsyncIterator<CommentSubscription>>>(
-    args?: {
-      where?: CommentWhereInput;
-      orderBy?: CommentOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-  author: <T = UserSubscription>() => T;
-}
-
-export interface Rating {
-  id: ID_Output;
-  vote: Int;
-}
-
-export interface RatingPromise extends Promise<Rating>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  vote: () => Promise<Int>;
-  author: <T = FragmentableArray<User>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
-}
-
-export interface RatingSubscription
-  extends Promise<AsyncIterator<Rating>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  vote: () => Promise<AsyncIterator<Int>>;
-  author: <T = Promise<AsyncIterator<UserSubscription>>>(
-    args?: {
-      where?: UserWhereInput;
-      orderBy?: UserOrderByInput;
-      skip?: Int;
-      after?: String;
-      before?: String;
-      first?: Int;
-      last?: Int;
-    }
-  ) => T;
 }
 
 export interface CommentConnection {
@@ -6301,6 +6541,7 @@ export interface UserPreviousValues {
   facebookId?: String;
   twitterId?: String;
   gmailId?: String;
+  private: Boolean;
   confirmed: Boolean;
   online: Boolean;
   createdAt: DateTimeOutput;
@@ -6320,6 +6561,7 @@ export interface UserPreviousValuesPromise
   facebookId: () => Promise<String>;
   twitterId: () => Promise<String>;
   gmailId: () => Promise<String>;
+  private: () => Promise<Boolean>;
   confirmed: () => Promise<Boolean>;
   online: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
@@ -6339,6 +6581,7 @@ export interface UserPreviousValuesSubscription
   facebookId: () => Promise<AsyncIterator<String>>;
   twitterId: () => Promise<AsyncIterator<String>>;
   gmailId: () => Promise<AsyncIterator<String>>;
+  private: () => Promise<AsyncIterator<Boolean>>;
   confirmed: () => Promise<AsyncIterator<Boolean>>;
   online: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
@@ -6363,6 +6606,11 @@ The `Boolean` scalar type represents `true` or `false`.
 export type Boolean = boolean;
 
 /*
+The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
+*/
+export type Int = number;
+
+/*
 DateTime scalar input type, allowing Date
 */
 export type DateTimeInput = Date | string;
@@ -6371,11 +6619,6 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
-
-/*
-The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
-*/
-export type Int = number;
 
 /*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 

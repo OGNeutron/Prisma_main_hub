@@ -86,3 +86,29 @@ export interface FriendRemoveResponse {
 export interface ProductsInput {
 	id: string[]
 }
+
+export interface MyUser {
+	id: string
+	email: string
+	set_private: boolean
+	username: string
+	gitHubId: string | null
+	facebookId: string | null
+	twitterId: string | null
+	gmailId: string | null
+	private: boolean
+	confirmed: boolean
+	online: boolean
+	createdAt: string
+	updatedAt: string
+}
+export interface ProfileResponse {}
+export interface ProfileError {
+	username: string | null
+	message: string | null
+	error: string | null
+}
+export interface DeleteCommentResponse {
+	id: string | null
+	parentId: string | null
+}

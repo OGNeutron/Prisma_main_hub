@@ -4,21 +4,25 @@
 import { Resolvers } from '../graphqlgen'
 
 import { Query } from './Query'
-import { User } from './User'
+import { MyUser } from './MyUser'
 import { Notification } from './Notification'
+import { User } from './User'
+import { Comment } from './Comment'
+import { Rating } from './Rating'
 import { File } from './File'
 import { Team } from './Team'
 import { Channel } from './Channel'
 import { Message } from './Message'
+import { ProfileResponse } from './ProfileResponse'
+import { ProfileError } from './ProfileError'
 import { CommentConnection } from './CommentConnection'
 import { PageInfo } from './PageInfo'
 import { CommentEdge } from './CommentEdge'
-import { Comment } from './Comment'
-import { Rating } from './Rating'
 import { AggregateComment } from './AggregateComment'
 import { Todo } from './Todo'
 import { Mutation } from './Mutation'
 import { FriendRemoveResponse } from './FriendRemoveResponse'
+import { DeleteCommentResponse } from './DeleteCommentResponse'
 import { LoginResponse } from './LoginResponse'
 import { RegisterResponse } from './RegisterResponse'
 import { ForgotPasswordResponse } from './ForgotPasswordResponse'
@@ -39,21 +43,25 @@ import { MessagePreviousValues } from './MessagePreviousValues'
 
 export const resolvers: Resolvers = {
 	Query,
-	User,
+	MyUser,
 	Notification,
+	User,
+	Comment,
+	Rating,
 	File,
 	Team,
 	Channel,
 	Message,
+	ProfileResponse,
+	ProfileError,
 	CommentConnection,
 	PageInfo,
 	CommentEdge,
-	Comment,
-	Rating,
 	AggregateComment,
 	Todo,
 	Mutation,
 	FriendRemoveResponse,
+	DeleteCommentResponse,
 	LoginResponse,
 	RegisterResponse,
 	ForgotPasswordResponse,
