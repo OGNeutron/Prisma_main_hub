@@ -8,5 +8,8 @@ export const ProfileError: ProfileErrorResolvers.Type = {
 
 	avatar_url: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
+	},
+	path: (parent, args, ctx) => {
+		throw new Error('Resolver not implemented')
 	}
 }

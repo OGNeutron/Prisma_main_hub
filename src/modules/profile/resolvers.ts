@@ -85,7 +85,7 @@ export const resolvers = {
 				if (blocked) {
 					const avatar_url = await db.user({ username }).avatar_url()
 					return {
-						error: {
+						errors: {
 							message: 'This user has blocked you',
 							username: profile.username,
 							avatar_url
@@ -107,7 +107,7 @@ export const resolvers = {
 							.user({ username })
 							.avatar_url()
 						return {
-							error: {
+							errors: {
 								message: 'Account is private',
 								username: profile.username,
 								avatar_url

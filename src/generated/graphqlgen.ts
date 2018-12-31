@@ -5485,7 +5485,7 @@ export namespace ProfileResponseResolvers {
 		info: GraphQLResolveInfo
 	) => MyUser | null | Promise<MyUser | null>
 
-	export type ErrorResolver = (
+	export type ErrorsResolver = (
 		parent: ProfileResponse,
 		args: {},
 		ctx: Context,
@@ -5500,7 +5500,7 @@ export namespace ProfileResponseResolvers {
 			info: GraphQLResolveInfo
 		) => MyUser | null | Promise<MyUser | null>
 
-		error: (
+		errors: (
 			parent: ProfileResponse,
 			args: {},
 			ctx: Context,
@@ -5547,6 +5547,13 @@ export namespace ProfileErrorResolvers {
 		info: GraphQLResolveInfo
 	) => string | null | Promise<string | null>
 
+	export type PathResolver = (
+		parent: ProfileError,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | null | Promise<string | null>
+
 	export interface Type {
 		username: (
 			parent: ProfileError,
@@ -5570,6 +5577,13 @@ export namespace ProfileErrorResolvers {
 		) => string | null | Promise<string | null>
 
 		error: (
+			parent: ProfileError,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | null | Promise<string | null>
+
+		path: (
 			parent: ProfileError,
 			args: {},
 			ctx: Context,

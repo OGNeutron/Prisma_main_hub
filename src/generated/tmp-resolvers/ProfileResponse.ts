@@ -9,7 +9,7 @@ export const ProfileResponse: ProfileResponseResolvers.Type = {
 	user: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
 	},
-	error: (parent, args, ctx) => {
+	errors: (parent, args, ctx) => {
 		throw new Error('Resolver not implemented')
 	}
 }
