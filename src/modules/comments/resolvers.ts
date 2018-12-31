@@ -10,7 +10,7 @@ import {
 } from '../../generated/graphqlgen'
 
 export const resolvers = {
-	Subsription: {
+	Subscription: {
 		newCommentSubscription: {
 			subscribe(
 				_: any,
