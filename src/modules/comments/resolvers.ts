@@ -3,9 +3,35 @@ import { ForbiddenError, ApolloError } from 'apollo-server'
 import { Context } from '../../tstypes'
 import { logger } from '../../utils/logger'
 import { INVALID_CREDENTIALS } from '../../constants'
-import { QueryResolvers, MutationResolvers } from '../../generated/graphqlgen'
+import {
+	QueryResolvers,
+	MutationResolvers,
+	SubscriptionResolvers
+} from '../../generated/graphqlgen'
 
 export const resolvers = {
+	Subsription: {
+		newCommentSubscription: {
+			subscribe(
+				_: any,
+				{ pageId }: SubscriptionResolvers.ArgsNewCommentSubscription,
+				{ db }: Context
+			) {
+				try {
+					return db.$subscribe.comment({
+						mutation_in: ['CREATED'],
+						node: {
+							pageId
+						}
+					})
+				} catch (error) {
+					return logger.error({ level: '5', message: error })
+				}
+			},
+			resolve: (payload: any) => payload
+		}
+	},
+
 	Query: {
 		async queryComment(
 			_: any,
@@ -56,7 +82,6 @@ export const resolvers = {
 				await db.deleteComment({
 					id: comment.id
 				})
-
 
 				return comment
 			} catch (error) {
@@ -152,102 +177,6 @@ export const resolvers = {
 						return new ApolloError('No such comment')
 					}
 					return comment
-				} else {
-					return new ForbiddenError(INVALID_CREDENTIALS)
-				}
-			} catch (error) {
-				return logger.error({ level: '5', message: error })
-			}
-		},
-		async createReply(
-			_: any,
-			{
-				// pageId,
-				body,
-				parentId,
-				repliedTo
-			}: MutationResolvers.ArgsCreateReply,
-			{ db, session }: Context
-		) {
-			try {
-				if (session.userId || session.decodedUser) {
-					const userID = session.userId
-					let comment: any
-					if (body) {
-						comment = await db.createComment({
-							body,
-							parentId,
-							pageId: '',
-							repliedTo: {
-								connect: {
-									id: repliedTo || ''
-								}
-							},
-							ratings: {
-								create: {
-									vote: 0
-								}
-							},
-							author: {
-								connect: {
-									id: userID
-								}
-							}
-						})
-					}
-
-					if (comment) {
-						await db.updateComment({
-							where: {
-								id: parentId
-							},
-							data: {
-								replies: {
-									connect: {
-										id: comment.id
-									}
-								}
-							}
-						})
-					}
-
-					return comment
-				}
-
-				return new ForbiddenError(INVALID_CREDENTIALS)
-			} catch (error) {
-				return logger.error({ level: '5', message: error })
-			}
-		},
-		async createComment(
-			_: any,
-			{ pageId, body, parentId }: MutationResolvers.ArgsCreateComment,
-			{ db, session }: Context
-		) {
-			try {
-				if (session.userId || session.decodedUser) {
-					const userID: string | undefined = session.userId
-
-					if (body) {
-						const comment = await db.createComment({
-							body,
-							parentId,
-							pageId,
-							ratings: {
-								create: {
-									vote: 0
-								}
-							},
-							author: {
-								connect: {
-									id: userID
-								}
-							}
-						})
-						return comment
-					} else {
-						return new ApolloError('Comment body required')
-					}
 				} else {
 					return new ForbiddenError(INVALID_CREDENTIALS)
 				}

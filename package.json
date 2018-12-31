@@ -18,7 +18,7 @@
 		"prisma-down": "docker-compose down",
 		"seed": "ts-node database/seed.ts",
 		"test": "jest --config jestconfig.json",
-		"graphql-generate": "rimraf ./src/generated/graphqlgen.ts && graphqlGen"
+		"graphql-generate": "graphqlGen"
 	},
 	"keywords": [],
 	"author": "",

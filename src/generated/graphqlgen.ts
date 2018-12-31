@@ -37,7 +37,9 @@ import {
 	NotificationSubscriptionPayload,
 	NotificationPreviousValues,
 	MessageSubscriptionPayload,
-	MessagePreviousValues
+	MessagePreviousValues,
+	CommentSubscriptionPayload,
+	CommentPreviousValues
 } from './prisma-client/index'
 import { Context } from '../tstypes/index'
 
@@ -7986,6 +7988,10 @@ export namespace SubscriptionResolvers {
 		channelId: string
 	}
 
+	export interface ArgsNewCommentSubscription {
+		pageId: string
+	}
+
 	export type FriendRequestSubscriptionResolver = {
 		subscribe: (
 			parent: undefined,
@@ -8054,6 +8060,23 @@ export namespace SubscriptionResolvers {
 			ctx: Context,
 			info: GraphQLResolveInfo
 		) => MessageSubscriptionPayload | Promise<MessageSubscriptionPayload>
+	}
+
+	export type NewCommentSubscriptionResolver = {
+		subscribe: (
+			parent: undefined,
+			args: ArgsNewCommentSubscription,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) =>
+			| AsyncIterator<CommentSubscriptionPayload>
+			| Promise<AsyncIterator<CommentSubscriptionPayload>>
+		resolve?: (
+			parent: undefined,
+			args: ArgsNewCommentSubscription,
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => CommentSubscriptionPayload | Promise<CommentSubscriptionPayload>
 	}
 
 	export interface Type {
@@ -8127,6 +8150,25 @@ export namespace SubscriptionResolvers {
 			) =>
 				| MessageSubscriptionPayload
 				| Promise<MessageSubscriptionPayload>
+		}
+
+		newCommentSubscription: {
+			subscribe: (
+				parent: undefined,
+				args: ArgsNewCommentSubscription,
+				ctx: Context,
+				info: GraphQLResolveInfo
+			) =>
+				| AsyncIterator<CommentSubscriptionPayload>
+				| Promise<AsyncIterator<CommentSubscriptionPayload>>
+			resolve?: (
+				parent: undefined,
+				args: ArgsNewCommentSubscription,
+				ctx: Context,
+				info: GraphQLResolveInfo
+			) =>
+				| CommentSubscriptionPayload
+				| Promise<CommentSubscriptionPayload>
 		}
 	}
 }
@@ -8732,6 +8774,175 @@ export namespace MessagePreviousValuesResolvers {
 	}
 }
 
+export namespace CommentSubscriptionPayloadResolvers {
+	export const defaultResolvers = {
+		mutation: (parent: CommentSubscriptionPayload) => parent.mutation,
+		node: (parent: CommentSubscriptionPayload) => parent.node,
+		updatedFields: (parent: CommentSubscriptionPayload) =>
+			parent.updatedFields,
+		previousValues: (parent: CommentSubscriptionPayload) =>
+			parent.previousValues
+	}
+
+	export type MutationResolver = (
+		parent: CommentSubscriptionPayload,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => MutationType | Promise<MutationType>
+
+	export type NodeResolver = (
+		parent: CommentSubscriptionPayload,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => Comment | null | Promise<Comment | null>
+
+	export type UpdatedFieldsResolver = (
+		parent: CommentSubscriptionPayload,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string[] | Promise<string[]>
+
+	export type PreviousValuesResolver = (
+		parent: CommentSubscriptionPayload,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => CommentPreviousValues | null | Promise<CommentPreviousValues | null>
+
+	export interface Type {
+		mutation: (
+			parent: CommentSubscriptionPayload,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => MutationType | Promise<MutationType>
+
+		node: (
+			parent: CommentSubscriptionPayload,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => Comment | null | Promise<Comment | null>
+
+		updatedFields: (
+			parent: CommentSubscriptionPayload,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string[] | Promise<string[]>
+
+		previousValues: (
+			parent: CommentSubscriptionPayload,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) =>
+			| CommentPreviousValues
+			| null
+			| Promise<CommentPreviousValues | null>
+	}
+}
+
+export namespace CommentPreviousValuesResolvers {
+	export const defaultResolvers = {
+		id: (parent: CommentPreviousValues) => parent.id,
+		body: (parent: CommentPreviousValues) => parent.body,
+		parentId: (parent: CommentPreviousValues) => parent.parentId,
+		pageId: (parent: CommentPreviousValues) => parent.pageId,
+		createdAt: (parent: CommentPreviousValues) => parent.createdAt,
+		updatedAt: (parent: CommentPreviousValues) => parent.updatedAt
+	}
+
+	export type IdResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type BodyResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type ParentIdResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type PageIdResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type CreatedAtResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export type UpdatedAtResolver = (
+		parent: CommentPreviousValues,
+		args: {},
+		ctx: Context,
+		info: GraphQLResolveInfo
+	) => string | Promise<string>
+
+	export interface Type {
+		id: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		body: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		parentId: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		pageId: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		createdAt: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+
+		updatedAt: (
+			parent: CommentPreviousValues,
+			args: {},
+			ctx: Context,
+			info: GraphQLResolveInfo
+		) => string | Promise<string>
+	}
+}
+
 export interface Resolvers {
 	Query: QueryResolvers.Type
 	MyUser: MyUserResolvers.Type
@@ -8770,4 +8981,6 @@ export interface Resolvers {
 	NotificationPreviousValues: NotificationPreviousValuesResolvers.Type
 	MessageSubscriptionPayload: MessageSubscriptionPayloadResolvers.Type
 	MessagePreviousValues: MessagePreviousValuesResolvers.Type
+	CommentSubscriptionPayload: CommentSubscriptionPayloadResolvers.Type
+	CommentPreviousValues: CommentPreviousValuesResolvers.Type
 }

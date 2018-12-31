@@ -24,5 +24,10 @@ export const Subscription: SubscriptionResolvers.Type = {
 		subscribe: (parent, args, ctx) => {
 			throw new Error('Resolver not implemented')
 		}
+	},
+	newCommentSubscription: {
+		subscribe: (parent, args, ctx) => {
+			throw new Error('Resolver not implemented')
+		}
 	}
 }

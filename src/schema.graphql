@@ -55,6 +55,7 @@ type Subscription {
 	friendSubscription(id: ID!): UserSubscriptionPayload!
 	NotificationSubscription(id: ID!): NotificationSubscriptionPayload!
 	messageSubscription(channelId: ID!): MessageSubscriptionPayload!
+	newCommentSubscription(pageId: ID!): CommentSubscriptionPayload!
 }
 
 type DeleteCommentResponse {

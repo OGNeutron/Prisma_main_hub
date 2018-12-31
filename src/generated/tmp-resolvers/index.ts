@@ -40,6 +40,8 @@ import { NotificationSubscriptionPayload } from './NotificationSubscriptionPaylo
 import { NotificationPreviousValues } from './NotificationPreviousValues'
 import { MessageSubscriptionPayload } from './MessageSubscriptionPayload'
 import { MessagePreviousValues } from './MessagePreviousValues'
+import { CommentSubscriptionPayload } from './CommentSubscriptionPayload'
+import { CommentPreviousValues } from './CommentPreviousValues'
 
 export const resolvers: Resolvers = {
 	Query,
@@ -78,5 +80,7 @@ export const resolvers: Resolvers = {
 	NotificationSubscriptionPayload,
 	NotificationPreviousValues,
 	MessageSubscriptionPayload,
-	MessagePreviousValues
+	MessagePreviousValues,
+	CommentSubscriptionPayload,
+	CommentPreviousValues
 }
