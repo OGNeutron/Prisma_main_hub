@@ -1,6 +1,8 @@
 # import * from "./generated/prisma.graphql"
 # import * from "./modules/profile/profile.schema.graphql"
 
+scalar Upload
+
 type ForgotPasswordResponse {
 	ok: Boolean!
 	result: String!
@@ -109,4 +111,10 @@ type Mutation {
 	blockUser(id: ID!): MyUser
 	unblockUser(id: ID!): MyUser
 	setProfilePrivacy(bool: Boolean!): MyUser
+	updateProfile(
+		username: String
+		oldPassword: String
+		newPassword: String
+		avatar: Upload
+	): File
 }
