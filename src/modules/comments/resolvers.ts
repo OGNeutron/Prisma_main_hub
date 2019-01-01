@@ -14,21 +14,33 @@ export const resolvers = {
 		newCommentSubscription: {
 			subscribe(
 				_: any,
-				{ pageId }: SubscriptionResolvers.ArgsNewCommentSubscription,
-				{ db }: Context
+				args: SubscriptionResolvers.ArgsNewCommentSubscription,
+				ctx: Context
 			) {
 				try {
-					return db.$subscribe.comment({
+					return ctx.db.$subscribe.comment({
 						mutation_in: ['CREATED'],
 						node: {
-							pageId
+							AND: [
+								{
+									author: {
+										id_not: ctx.session.userId
+									}
+								},
+								{
+									pageId: args.pageId
+								}
+							]
 						}
 					})
 				} catch (error) {
 					return logger.error({ level: '5', message: error })
 				}
 			},
-			resolve: (payload: any) => payload
+			resolve: (payload: any) => {
+				console.log('COMMENT PAYLOAD', payload)
+				return payload
+			}
 		}
 	},
 
@@ -39,7 +51,7 @@ export const resolvers = {
 			{ db }: Context
 		) {
 			try {
-				const comment = await db.commentsConnection({
+				return await db.commentsConnection({
 					where: {
 						pageId: parentId
 					},
@@ -47,10 +59,6 @@ export const resolvers = {
 					first: limit || undefined,
 					orderBy: 'createdAt_DESC'
 				})
-
-				console.log(comment)
-
-				return comment
 			} catch (error) {
 				return logger.error({ level: '5', message: error })
 			}
