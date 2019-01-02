@@ -3,12 +3,13 @@ import { logger } from '../../../utils/logger'
 import { ApolloError } from 'apollo-server'
 import { MutationResolvers } from '../../../generated/graphqlgen'
 import { processUpload } from '../../../utils/helperFunctions'
+import { comparePassword, hashPassword } from 'scotts_utilities'
 
 export const resolvers = {
 	Mutation: {
 		async updateProfile(
 			_: any,
-			{ avatar }: any,
+			{ avatar, username, newPassword, oldPassword }: any,
 			{ db, session, s3 }: Context
 		) {
 			try {
@@ -41,7 +42,53 @@ export const resolvers = {
 					}
 				})
 
-				return avatarResponse
+				if (username) {
+					await db.updateUser({
+						where: {
+							id: session.userId
+						},
+						data: {
+							username
+						}
+					})
+				}
+
+				if (newPassword & oldPassword) {
+					try {
+						let userP = await db.user({
+							id: session.userId
+						})
+
+						const valid = comparePassword(
+							oldPassword,
+							userP.password
+						)
+
+						if (valid) {
+							let hashedPassword: string = await hashPassword(
+								newPassword,
+								10
+							)
+
+							await db.updateUser({
+								where: {
+									id: session.userId
+								},
+								data: {
+									password: hashedPassword
+								}
+							})
+						}
+					} catch (error) {
+						logger.error({ level: '5', message: error.message })
+						throw new ApolloError(error)
+					}
+				}
+
+				return {
+					avatar: avatarResponse,
+					username
+				}
 			} catch (error) {
 				logger.error({ level: '5', message: error.message })
 				throw new ApolloError(error)

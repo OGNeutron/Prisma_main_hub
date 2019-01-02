@@ -41,6 +41,11 @@ type FriendRemoveResponse {
 	user: User
 }
 
+type UpdateProfileResponse {
+	avatar: File
+	username: String
+}
+
 type Query {
 	currentUser: MyUser
 	getProfile(username: String!): ProfileResponse
@@ -116,5 +121,5 @@ type Mutation {
 		oldPassword: String
 		newPassword: String
 		avatar: Upload
-	): File
+	): UpdateProfileResponse
 }

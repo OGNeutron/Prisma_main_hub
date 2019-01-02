@@ -35,7 +35,7 @@ const s3Client: S3 = new S3({
 	}
 })
 
-const db: Prisma = new Prisma({
+export const db: Prisma = new Prisma({
 	endpoint:
 		process.env.NODE_ENV !== 'production'
 			? 'http://localhost:4466/prismadb/dev'

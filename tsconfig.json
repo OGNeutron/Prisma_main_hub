@@ -16,10 +16,10 @@
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"allowSyntheticDefaultImports": false,
+		"allowSyntheticDefaultImports": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true
 	},
-	"exclude": ["node_modules"],
+	"exclude": ["./node_modules", "./src/generated/graphqlGen/tmp-resolvers"],
 	"include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }

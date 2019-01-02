@@ -2,7 +2,8 @@ import * as passport from 'passport'
 import { Strategy as GitHubStrategy } from 'passport-github'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
-import { prisma } from '../generated/prisma-client'
+import { User } from '../generated/prisma-client'
+import { db } from '../index'
 
 interface CreateUserArgs {
 	email: string
@@ -33,7 +34,8 @@ const createUser = async ({
 	twitterId,
 	facebookId
 }: CreateUserArgs) => {
-	return await prisma.createUser({
+	// try {
+	return await db.createUser({
 		email: email,
 		username: username,
 		password: '',
@@ -53,6 +55,9 @@ const createUser = async ({
 			}
 		}
 	})
+	// } catch (error) {
+	// 	return console.error(error)
+	// }
 }
 
 export const setupPassport = () => {
@@ -66,7 +71,9 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				console.log('PROFILE', profile)
-				let user = await prisma.user({ email: profile.emails[0].value })
+				let user: User = await db.user({
+					email: profile.emails[0].value
+				})
 
 				if (!user) {
 					user = await createUser({
@@ -77,7 +84,7 @@ export const setupPassport = () => {
 						githubId: profile.id
 					})
 				} else if (user.gitHubId == null) {
-					user = await prisma.updateUser({
+					user = await db.updateUser({
 						where: {
 							id: user.id
 						},
@@ -101,7 +108,7 @@ export const setupPassport = () => {
 				includeEmail: true
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
-				let user = await prisma.user({ email: profile.emails[0].value })
+				let user = await db.user({ email: profile.emails[0].value })
 
 				if (!user) {
 					user = await createUser({
@@ -112,7 +119,7 @@ export const setupPassport = () => {
 						twitterId: profile.id
 					})
 				} else if (user.twitterId == null) {
-					user = await prisma.updateUser({
+					user = await db.updateUser({
 						where: {
 							id: user.id
 						},
@@ -136,7 +143,7 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				console.log('PROFILE', profile)
-				let user = await prisma.user({ email: profile.emails[0].value })
+				let user = await db.user({ email: profile.emails[0].value })
 
 				if (!user) {
 					user = await createUser({
@@ -147,7 +154,7 @@ export const setupPassport = () => {
 						facebookId: profile.id
 					})
 				} else if (user.facebookId == null) {
-					user = await prisma.updateUser({
+					user = await db.updateUser({
 						where: {
 							id: user.id
 						},

@@ -65,10 +65,11 @@ export const resolvers = {
 			{ db, req }: Context
 		): Promise<any> {
 			try {
+				const formattedEmail = email.toLowerCase()
 				const isValid: yup.ValidateOptions = await schema.validate(
 					{
 						username,
-						email,
+						email: formattedEmail,
 						password
 					},
 					{ abortEarly: false }

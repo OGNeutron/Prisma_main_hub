@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import * as passport from 'passport'
 import { prisma } from '../generated/prisma-client'
+import { db } from '..'
 
 const router: Router = Router()
 
@@ -20,7 +21,7 @@ router.get(
 
 				console.log(req.session)
 
-				const user = await prisma.user({ email: req.user.user.email })
+				const user = await db.user({ email: req.user.user.email })
 
 				await prisma.updateUser({
 					where: {
@@ -57,7 +58,7 @@ router.get(
 
 				console.log(req.session)
 
-				const user = await prisma.user({ email: req.user.user.email })
+				const user = await db.user({ email: req.user.user.email })
 
 				await prisma.updateUser({
 					where: {
@@ -91,7 +92,7 @@ router.get(
 				req.session.accessToken = req.user.accessToken
 				req.session.refreshToken = req.user.refreshToken
 
-				const user = await prisma.user({ email: req.user.user.email })
+				const user = await db.user({ email: req.user.user.email })
 
 				await prisma.updateUser({
 					where: {
