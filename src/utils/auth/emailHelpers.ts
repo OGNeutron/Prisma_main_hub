@@ -1,6 +1,8 @@
 import { Redis } from 'ioredis'
 import { createToken } from 'scotts_utilities'
 
+import * as sgTransport from 'nodemailer-sendgrid-transport'
+
 import { createTransport } from 'nodemailer'
 import { FORGOT_PASSWORD_PREFIX } from '../../constants'
 import { logger } from '../logger'
@@ -73,21 +75,25 @@ const generateResetPasswordLink = async (
 }
 
 const setup = () => {
-	return createTransport(
-		// sgTransport({
-		//   auth: {
-		//     api_key: process.env.SENDGRID_API
-		//   }
-		// })
-		{
+	if (process.env.NODE_ENV === 'production') {
+		return createTransport(
+			sgTransport({
+				auth: {
+					api_key: process.env.SENDGRID_PASSWORD,
+					api_user: process.env.SENDGRID_USERNAME
+				}
+			})
+		)
+	} else {
+		return createTransport({
 			host: process.env.EMAIL_HOST || 'smtp.mailtrap.io',
 			port: process.env.EMAIL_PORT || 2525,
 			auth: {
 				user: process.env.EMAIL_USER || '984c1182cd3546',
 				pass: process.env.EMAIL_PASS || 'c468fcdc66d05b'
 			}
-		} as any
-	)
+		} as any)
+	}
 }
 
 export const sendConfirmationEmail = async (
