@@ -21,16 +21,9 @@ export const resolvers = {
 					return ctx.db.$subscribe.comment({
 						mutation_in: ['CREATED'],
 						node: {
-							AND: [
-								{
-									author: {
-										id_not: ctx.session.userId
-									}
-								},
-								{
-									pageId: args.pageId
-								}
-							]
+							AND: {
+								pageId: args.pageId
+							}
 						}
 					})
 				} catch (error) {

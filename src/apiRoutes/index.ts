@@ -7,21 +7,27 @@ import { logger } from '../utils/logger'
 
 const router: Router = Router()
 
+const {
+	PRODUCTION_CLIENT_URL = 'https://inspiring-euler-247a1c.netlify.com',
+	DEVELOPMENT_CLIENT_URL = 'http://localhost:1234'
+} = process.env
+
+const url =
+	process.env.NODE_ENV === 'production'
+		? PRODUCTION_CLIENT_URL
+		: DEVELOPMENT_CLIENT_URL
+
 router.get('/auth/github', passport.authenticate('github', { session: false }))
 
 router.get(
 	'/oauth/github',
 	passport.authenticate('github', { session: false }),
 	async (req: Request, res: Response) => {
-		console.log('USER', req.user)
-
 		if (req.user.user.id) {
 			if (req.session) {
 				req.session.userId = req.user.user.id
 				req.session.accessToken = req.user.accessToken
 				req.session.refreshToken = req.user.refreshToken
-
-				console.log(req.session)
 
 				const user = await db.user({ email: req.user.user.email })
 
@@ -32,12 +38,10 @@ router.get(
 					data: { online: true }
 				})
 
-				res.redirect(
-					`${process.env.CLIENT_URL}/profile/${user.username}`
-				)
+				res.redirect(`${url}/profile/${user.username}`)
 			}
 		} else {
-			res.redirect(`${process.env.CLIENT_URL}/auth/login`)
+			res.redirect(`${url}/auth/login`)
 		}
 	}
 )
@@ -52,13 +56,10 @@ router.get(
 	passport.authenticate('twitter', { session: false }),
 	async (req, res) => {
 		if (req.user.user.id) {
-			console.log('USER', req.user)
 			if (req.session) {
 				req.session.userId = req.user.user.id
 				req.session.accessToken = req.user.accessToken
 				req.session.refreshToken = req.user.refreshToken
-
-				console.log(req.session)
 
 				const user = await db.user({ email: req.user.user.email })
 
@@ -69,12 +70,10 @@ router.get(
 					data: { online: true }
 				})
 
-				res.redirect(
-					`${process.env.CLIENT_URL}/profile/${user.username}`
-				)
+				res.redirect(`${url}/profile/${user.username}`)
 			}
 		} else {
-			res.redirect(`${process.env.CLIENT_URL}/auth/login`)
+			res.redirect(`${url}/auth/login`)
 		}
 	}
 )
@@ -97,21 +96,17 @@ router.get(
 
 					const user = await db.user({ email: req.user.user.email })
 
-					await prisma.updateUser({
+					await db.updateUser({
 						where: {
 							email: req.user.user.email
 						},
 						data: { online: true }
 					})
 
-					console.log('USER', user)
-
-					return res.redirect(
-						`${process.env.CLIENT_URL}/profile/${user.username}`
-					)
+					return res.redirect(`${url}/profile/${user.username}`)
 				}
 			} else {
-				res.redirect(`${process.env.CLIENT_URL}/auth/login`)
+				res.redirect(`${url}/auth/login`)
 			}
 		} catch (error) {
 			logger.error({ level: '5', message: error })

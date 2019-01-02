@@ -63,17 +63,18 @@ const { schema } = applyMiddleware(makeSchema, ShieldMiddleware)
 
 const server: ApolloServer = new ApolloServer({
 	subscriptions: {
-		path: '/graphql'
+		path: '/graphql',
+		onConnect(connectionParams: any, __: any, _: any) {
+			console.log('CONNECTIONPARAMS', connectionParams)
+			// console.log(webSocket)
+			// console.log('CONTEXT', context)
+		}
 	},
 	schema,
 	playground: true,
 	introspection: true,
 
-	context: ({ req, res, connection }: any) => {
-		console.log('CONNECTION', connection)
-		if (connection) {
-			return connection.context
-		}
+	context: ({ req, res }: any) => {
 		return {
 			req: req,
 			res: res,
@@ -113,6 +114,8 @@ httpServer.on('listening', async () => {
 	if (enviroment === 'test') {
 		redis.flushall()
 	}
+
+	// if (!host)
 
 	const messages: string[] = [
 		`Running on: http://localhost:${PORT}${server.graphqlPath}`,

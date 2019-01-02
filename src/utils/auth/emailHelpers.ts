@@ -9,6 +9,16 @@ import { logger } from '../logger'
 
 const from = 'Experimental website <scottberry91@gmail.com>'
 
+const {
+	PRODUCTION_CLIENT_URL = 'https://inspiring-euler-247a1c.netlify.com',
+	DEVELOPMENT_CLIENT_URL = 'http://localhost:1234'
+} = process.env
+
+const client =
+	process.env.NODE_ENV === 'production'
+		? PRODUCTION_CLIENT_URL
+		: DEVELOPMENT_CLIENT_URL
+
 interface EmailArgs {
 	id: string
 	username: string
@@ -33,8 +43,7 @@ const generateConfirmationUrl = async (
 			{ expiresIn: '24h' }
 		)
 
-		const link: string = `${process.env.CLIENT_URL ||
-			url}/auth/confirmation?t=${token}`
+		const link: string = `${client || url}/auth/confirmation?t=${token}`
 
 		return link
 	} catch (error) {
@@ -54,8 +63,7 @@ const generateResetPasswordLink = async (
 			{ expiresIn: '24h' }
 		)
 
-		const link: string = `${process.env.CLIENT_URL ||
-			url}/auth/reset_password?t=${token}`
+		const link: string = `${client || url}/auth/reset_password?t=${token}`
 
 		return link
 	} catch (error) {
