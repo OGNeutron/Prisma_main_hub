@@ -4,6 +4,8 @@ import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { User } from '../generated/prisma-client'
 import { db } from '../index'
+import { logger } from '../utils/logger'
+import { ApolloError } from 'apollo-server'
 
 interface CreateUserArgs {
 	email: string
@@ -16,7 +18,8 @@ interface CreateUserArgs {
 }
 
 const {
-	SERVER_ENDPOINT = 'http://localhost:2000',
+	PRODUCTION_SERVER_ENDPOINT,
+	DEVELOPMENT_SERVER_ENDPOINT = 'http://localhost:2000',
 	GITHUB_CLIENT_ID,
 	GITHUB_CLIENT_SECRET,
 	TWITTER_CONSUMER_KEY,
@@ -66,35 +69,42 @@ export const setupPassport = () => {
 			{
 				clientID: GITHUB_CLIENT_ID as string,
 				clientSecret: GITHUB_CLIENT_SECRET as string,
-				callbackURL: `${SERVER_ENDPOINT}/api/v1/oauth/github`,
+				callbackURL:
+					process.env.NODE_ENV === 'production'
+						? `${PRODUCTION_SERVER_ENDPOINT}/api/v1/oauth/github`
+						: `${DEVELOPMENT_SERVER_ENDPOINT}/api/v1/oauth/github`,
 				scope: ['user:email']
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
-				console.log('PROFILE', profile)
-				let user: User = await db.user({
-					email: profile.emails[0].value
-				})
+				try {
+					let user: User = await db.user({
+						email: profile.emails[0].value
+					})
 
-				if (!user) {
-					user = await createUser({
-						email: profile.emails[0].value,
-						username: profile.username,
-						avatar: profile._json.avatar_url,
-						confirmed: true,
-						githubId: profile.id
-					})
-				} else if (user.gitHubId == null) {
-					user = await db.updateUser({
-						where: {
-							id: user.id
-						},
-						data: {
-							gitHubId: profile.id
-						}
-					})
+					if (!user) {
+						user = await createUser({
+							email: profile.emails[0].value,
+							username: profile.username,
+							avatar: profile._json.avatar_url,
+							confirmed: true,
+							githubId: profile.id
+						})
+					} else if (user.gitHubId == null) {
+						user = await db.updateUser({
+							where: {
+								id: user.id
+							},
+							data: {
+								gitHubId: profile.id
+							}
+						})
+					}
+
+					return cb(null, { user, accessToken, refreshToken })
+				} catch (error) {
+					logger.error({ level: '5', message: error })
+					return new ApolloError(error)
 				}
-
-				cb(null, { user, accessToken, refreshToken })
 			}
 		)
 	)
@@ -104,7 +114,10 @@ export const setupPassport = () => {
 			{
 				consumerKey: TWITTER_CONSUMER_KEY as string,
 				consumerSecret: TWITTER_CONSUMER_SECRET as string,
-				callbackURL: `http://127.0.0.1:2000/api/v1/auth/twitter/callback`,
+				callbackURL:
+					process.env.NODE_ENV === 'production'
+						? `${PRODUCTION_SERVER_ENDPOINT}/api/v1/auth/twitter/callback`
+						: `${DEVELOPMENT_SERVER_ENDPOINT}/api/v1/auth/twitter/callback`,
 				includeEmail: true
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
@@ -138,32 +151,39 @@ export const setupPassport = () => {
 			{
 				clientID: FACEBOOK_CLIENT_ID as string,
 				clientSecret: FACEBOOK_SECRET as string,
-				callbackURL: `${SERVER_ENDPOINT}/api/v1/auth/facebook/callback`,
+				callbackURL:
+					process.env.NODE_ENV === 'production'
+						? `${PRODUCTION_SERVER_ENDPOINT}/api/v1/auth/facebook/callback`
+						: `${DEVELOPMENT_SERVER_ENDPOINT}/api/v1/auth/facebook/callback`,
 				profileFields: ['id', 'email', 'name', 'picture']
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
-				console.log('PROFILE', profile)
-				let user = await db.user({ email: profile.emails[0].value })
+				try {
+					let user = await db.user({ email: profile.emails[0].value })
 
-				if (!user) {
-					user = await createUser({
-						email: profile.emails[0].value,
-						username: profile.name.givenName,
-						avatar: profile._json.picture.data.url,
-						confirmed: true,
-						facebookId: profile.id
-					})
-				} else if (user.facebookId == null) {
-					user = await db.updateUser({
-						where: {
-							id: user.id
-						},
-						data: {
+					if (!user) {
+						user = await createUser({
+							email: profile.emails[0].value,
+							username: profile.name.givenName,
+							avatar: profile._json.picture.data.url,
+							confirmed: true,
 							facebookId: profile.id
-						}
-					})
+						})
+					} else if (user.facebookId == null) {
+						user = await db.updateUser({
+							where: {
+								id: user.id
+							},
+							data: {
+								facebookId: profile.id
+							}
+						})
+					}
+					return cb(null, { user, accessToken, refreshToken })
+				} catch (error) {
+					logger.error({ level: '5', message: error })
+					return new ApolloError(error)
 				}
-				return cb(null, { user, accessToken, refreshToken })
 			}
 		)
 	)

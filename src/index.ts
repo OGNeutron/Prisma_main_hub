@@ -68,8 +68,12 @@ const server: ApolloServer = new ApolloServer({
 	schema,
 	playground: true,
 	introspection: true,
-	context: ({ req, res }: any) => {
-		// console.log(req)
+
+	context: ({ req, res, connection }: any) => {
+		console.log('CONNECTION', connection)
+		if (connection) {
+			return connection.context
+		}
 		return {
 			req: req,
 			res: res,
@@ -104,7 +108,7 @@ httpServer.listen(normalisePort(PORT))
 server.installSubscriptionHandlers(httpServer)
 
 httpServer.on('listening', async () => {
-	const enviroment = process.env.NODE_ENV as string
+	const enviroment = process.env.NODE_ENV
 
 	if (enviroment === 'test') {
 		redis.flushall()
