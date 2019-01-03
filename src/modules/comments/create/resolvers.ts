@@ -91,7 +91,8 @@ export const resolvers = {
 								}
 							}
 						})
-						console.log("COMMENT", comment)
+
+						console.log('COMMENT', comment)
 						return comment
 					} else {
 						return new ApolloError('Comment body required')

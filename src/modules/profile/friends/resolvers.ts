@@ -145,6 +145,11 @@ export const resolvers = {
 				if (requester) {
 					await db.createNotification({
 						message: `Friend request from ${requester.username}`,
+						friend_requests: {
+							connect: {
+								id: requester.id
+							}
+						},
 						author: {
 							connect: {
 								id: requestedId

@@ -112,3 +112,7 @@ export interface DeleteCommentResponse {
 	id: string | null
 	parentId: string | null
 }
+
+export interface UpdateProfileResponse {
+	username: string | null
+}

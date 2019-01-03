@@ -1033,6 +1033,10 @@ export interface NotificationWhereInput {
   message_not_starts_with?: String;
   message_ends_with?: String;
   message_not_ends_with?: String;
+  comments?: CommentWhereInput;
+  messages?: MessageWhereInput;
+  friend_requests?: UserWhereInput;
+  friend?: UserWhereInput;
   author?: UserWhereInput;
   AND?: NotificationWhereInput[] | NotificationWhereInput;
   OR?: NotificationWhereInput[] | NotificationWhereInput;
@@ -1152,6 +1156,99 @@ export interface RatingWhereInput {
   AND?: RatingWhereInput[] | RatingWhereInput;
   OR?: RatingWhereInput[] | RatingWhereInput;
   NOT?: RatingWhereInput[] | RatingWhereInput;
+}
+
+export interface MessageWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  body?: String;
+  body_not?: String;
+  body_in?: String[] | String;
+  body_not_in?: String[] | String;
+  body_lt?: String;
+  body_lte?: String;
+  body_gt?: String;
+  body_gte?: String;
+  body_contains?: String;
+  body_not_contains?: String;
+  body_starts_with?: String;
+  body_not_starts_with?: String;
+  body_ends_with?: String;
+  body_not_ends_with?: String;
+  parentId?: ID_Input;
+  parentId_not?: ID_Input;
+  parentId_in?: ID_Input[] | ID_Input;
+  parentId_not_in?: ID_Input[] | ID_Input;
+  parentId_lt?: ID_Input;
+  parentId_lte?: ID_Input;
+  parentId_gt?: ID_Input;
+  parentId_gte?: ID_Input;
+  parentId_contains?: ID_Input;
+  parentId_not_contains?: ID_Input;
+  parentId_starts_with?: ID_Input;
+  parentId_not_starts_with?: ID_Input;
+  parentId_ends_with?: ID_Input;
+  parentId_not_ends_with?: ID_Input;
+  url?: String;
+  url_not?: String;
+  url_in?: String[] | String;
+  url_not_in?: String[] | String;
+  url_lt?: String;
+  url_lte?: String;
+  url_gt?: String;
+  url_gte?: String;
+  url_contains?: String;
+  url_not_contains?: String;
+  url_starts_with?: String;
+  url_not_starts_with?: String;
+  url_ends_with?: String;
+  url_not_ends_with?: String;
+  filetype?: String;
+  filetype_not?: String;
+  filetype_in?: String[] | String;
+  filetype_not_in?: String[] | String;
+  filetype_lt?: String;
+  filetype_lte?: String;
+  filetype_gt?: String;
+  filetype_gte?: String;
+  filetype_contains?: String;
+  filetype_not_contains?: String;
+  filetype_starts_with?: String;
+  filetype_not_starts_with?: String;
+  filetype_ends_with?: String;
+  filetype_not_ends_with?: String;
+  author?: UserWhereInput;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: MessageWhereInput[] | MessageWhereInput;
+  OR?: MessageWhereInput[] | MessageWhereInput;
+  NOT?: MessageWhereInput[] | MessageWhereInput;
 }
 
 export interface FileWhereInput {
@@ -1426,99 +1523,6 @@ export interface ChannelWhereInput {
   AND?: ChannelWhereInput[] | ChannelWhereInput;
   OR?: ChannelWhereInput[] | ChannelWhereInput;
   NOT?: ChannelWhereInput[] | ChannelWhereInput;
-}
-
-export interface MessageWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  body?: String;
-  body_not?: String;
-  body_in?: String[] | String;
-  body_not_in?: String[] | String;
-  body_lt?: String;
-  body_lte?: String;
-  body_gt?: String;
-  body_gte?: String;
-  body_contains?: String;
-  body_not_contains?: String;
-  body_starts_with?: String;
-  body_not_starts_with?: String;
-  body_ends_with?: String;
-  body_not_ends_with?: String;
-  parentId?: ID_Input;
-  parentId_not?: ID_Input;
-  parentId_in?: ID_Input[] | ID_Input;
-  parentId_not_in?: ID_Input[] | ID_Input;
-  parentId_lt?: ID_Input;
-  parentId_lte?: ID_Input;
-  parentId_gt?: ID_Input;
-  parentId_gte?: ID_Input;
-  parentId_contains?: ID_Input;
-  parentId_not_contains?: ID_Input;
-  parentId_starts_with?: ID_Input;
-  parentId_not_starts_with?: ID_Input;
-  parentId_ends_with?: ID_Input;
-  parentId_not_ends_with?: ID_Input;
-  url?: String;
-  url_not?: String;
-  url_in?: String[] | String;
-  url_not_in?: String[] | String;
-  url_lt?: String;
-  url_lte?: String;
-  url_gt?: String;
-  url_gte?: String;
-  url_contains?: String;
-  url_not_contains?: String;
-  url_starts_with?: String;
-  url_not_starts_with?: String;
-  url_ends_with?: String;
-  url_not_ends_with?: String;
-  filetype?: String;
-  filetype_not?: String;
-  filetype_in?: String[] | String;
-  filetype_not_in?: String[] | String;
-  filetype_lt?: String;
-  filetype_lte?: String;
-  filetype_gt?: String;
-  filetype_gte?: String;
-  filetype_contains?: String;
-  filetype_not_contains?: String;
-  filetype_starts_with?: String;
-  filetype_not_starts_with?: String;
-  filetype_ends_with?: String;
-  filetype_not_ends_with?: String;
-  author?: UserWhereInput;
-  createdAt?: DateTimeInput;
-  createdAt_not?: DateTimeInput;
-  createdAt_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
-  createdAt_lt?: DateTimeInput;
-  createdAt_lte?: DateTimeInput;
-  createdAt_gt?: DateTimeInput;
-  createdAt_gte?: DateTimeInput;
-  updatedAt?: DateTimeInput;
-  updatedAt_not?: DateTimeInput;
-  updatedAt_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
-  updatedAt_lt?: DateTimeInput;
-  updatedAt_lte?: DateTimeInput;
-  updatedAt_gt?: DateTimeInput;
-  updatedAt_gte?: DateTimeInput;
-  AND?: MessageWhereInput[] | MessageWhereInput;
-  OR?: MessageWhereInput[] | MessageWhereInput;
-  NOT?: MessageWhereInput[] | MessageWhereInput;
 }
 
 export type CommentWhereUniqueInput = AtLeastOne<{
@@ -1876,7 +1880,7 @@ export interface UserCreateManyInput {
 
 export interface UserCreateInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -1899,20 +1903,23 @@ export interface UserCreateInput {
   owned_channels?: ChannelCreateManyWithoutAuthorInput;
 }
 
-export interface NotificationCreateManyWithoutAuthorInput {
-  create?:
-    | NotificationCreateWithoutAuthorInput[]
-    | NotificationCreateWithoutAuthorInput;
+export interface NotificationCreateManyInput {
+  create?: NotificationCreateInput[] | NotificationCreateInput;
   connect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
 }
 
-export interface NotificationCreateWithoutAuthorInput {
-  message: String;
+export interface NotificationCreateInput {
+  message?: String;
+  comments?: CommentCreateOneInput;
+  messages?: MessageCreateOneInput;
+  friend_requests?: UserCreateOneInput;
+  friend?: UserCreateOneInput;
+  author: UserCreateOneInput;
 }
 
-export interface CommentCreateManyInput {
-  create?: CommentCreateInput[] | CommentCreateInput;
-  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+export interface CommentCreateOneInput {
+  create?: CommentCreateInput;
+  connect?: CommentWhereUniqueInput;
 }
 
 export interface CommentCreateInput {
@@ -1956,6 +1963,24 @@ export interface CommentCreateWithoutRepliesInput {
   author: UserCreateOneInput;
 }
 
+export interface MessageCreateOneInput {
+  create?: MessageCreateInput;
+  connect?: MessageWhereUniqueInput;
+}
+
+export interface MessageCreateInput {
+  body: String;
+  parentId: ID_Input;
+  url: String;
+  filetype: String;
+  author: UserCreateOneInput;
+}
+
+export interface CommentCreateManyInput {
+  create?: CommentCreateInput[] | CommentCreateInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+}
+
 export interface FileCreateOneInput {
   create?: FileCreateInput;
   connect?: FileWhereUniqueInput;
@@ -1979,7 +2004,7 @@ export interface UserCreateManyWithoutBlockedUsersInput {
 
 export interface UserCreateWithoutBlockedUsersInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2008,7 +2033,7 @@ export interface UserCreateManyWithoutFriendsInput {
 
 export interface UserCreateWithoutFriendsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2039,7 +2064,7 @@ export interface UserCreateManyWithoutFriend_requestsInput {
 
 export interface UserCreateWithoutFriend_requestsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2083,7 +2108,7 @@ export interface UserCreateOneWithoutOwned_teamsInput {
 
 export interface UserCreateWithoutOwned_teamsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2126,14 +2151,6 @@ export interface MessageCreateManyInput {
   connect?: MessageWhereUniqueInput[] | MessageWhereUniqueInput;
 }
 
-export interface MessageCreateInput {
-  body: String;
-  parentId: ID_Input;
-  url: String;
-  filetype: String;
-  author: UserCreateOneInput;
-}
-
 export interface UserCreateOneWithoutOwned_channelsInput {
   create?: UserCreateWithoutOwned_channelsInput;
   connect?: UserWhereUniqueInput;
@@ -2141,7 +2158,7 @@ export interface UserCreateOneWithoutOwned_channelsInput {
 
 export interface UserCreateWithoutOwned_channelsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2185,7 +2202,7 @@ export interface UserCreateManyWithoutTeamsInput {
 
 export interface UserCreateWithoutTeamsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2228,7 +2245,7 @@ export interface UserCreateManyWithoutChannelsInput {
 
 export interface UserCreateWithoutChannelsInput {
   email: String;
-  notifications?: NotificationCreateManyWithoutAuthorInput;
+  notifications?: NotificationCreateManyInput;
   set_private?: Boolean;
   username: String;
   password: String;
@@ -2289,7 +2306,7 @@ export interface UserUpdateWithWhereUniqueNestedInput {
 
 export interface UserUpdateDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -2312,103 +2329,44 @@ export interface UserUpdateDataInput {
   owned_channels?: ChannelUpdateManyWithoutAuthorInput;
 }
 
-export interface NotificationUpdateManyWithoutAuthorInput {
-  create?:
-    | NotificationCreateWithoutAuthorInput[]
-    | NotificationCreateWithoutAuthorInput;
+export interface NotificationUpdateManyInput {
+  create?: NotificationCreateInput[] | NotificationCreateInput;
+  update?:
+    | NotificationUpdateWithWhereUniqueNestedInput[]
+    | NotificationUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | NotificationUpsertWithWhereUniqueNestedInput[]
+    | NotificationUpsertWithWhereUniqueNestedInput;
   delete?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
   connect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
   disconnect?: NotificationWhereUniqueInput[] | NotificationWhereUniqueInput;
-  update?:
-    | NotificationUpdateWithWhereUniqueWithoutAuthorInput[]
-    | NotificationUpdateWithWhereUniqueWithoutAuthorInput;
-  upsert?:
-    | NotificationUpsertWithWhereUniqueWithoutAuthorInput[]
-    | NotificationUpsertWithWhereUniqueWithoutAuthorInput;
   deleteMany?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
   updateMany?:
     | NotificationUpdateManyWithWhereNestedInput[]
     | NotificationUpdateManyWithWhereNestedInput;
 }
 
-export interface NotificationUpdateWithWhereUniqueWithoutAuthorInput {
+export interface NotificationUpdateWithWhereUniqueNestedInput {
   where: NotificationWhereUniqueInput;
-  data: NotificationUpdateWithoutAuthorDataInput;
+  data: NotificationUpdateDataInput;
 }
 
-export interface NotificationUpdateWithoutAuthorDataInput {
+export interface NotificationUpdateDataInput {
   message?: String;
+  comments?: CommentUpdateOneInput;
+  messages?: MessageUpdateOneInput;
+  friend_requests?: UserUpdateOneInput;
+  friend?: UserUpdateOneInput;
+  author?: UserUpdateOneRequiredInput;
 }
 
-export interface NotificationUpsertWithWhereUniqueWithoutAuthorInput {
-  where: NotificationWhereUniqueInput;
-  update: NotificationUpdateWithoutAuthorDataInput;
-  create: NotificationCreateWithoutAuthorInput;
-}
-
-export interface NotificationScalarWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  message?: String;
-  message_not?: String;
-  message_in?: String[] | String;
-  message_not_in?: String[] | String;
-  message_lt?: String;
-  message_lte?: String;
-  message_gt?: String;
-  message_gte?: String;
-  message_contains?: String;
-  message_not_contains?: String;
-  message_starts_with?: String;
-  message_not_starts_with?: String;
-  message_ends_with?: String;
-  message_not_ends_with?: String;
-  AND?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
-  OR?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
-  NOT?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
-}
-
-export interface NotificationUpdateManyWithWhereNestedInput {
-  where: NotificationScalarWhereInput;
-  data: NotificationUpdateManyDataInput;
-}
-
-export interface NotificationUpdateManyDataInput {
-  message?: String;
-}
-
-export interface CommentUpdateManyInput {
-  create?: CommentCreateInput[] | CommentCreateInput;
-  update?:
-    | CommentUpdateWithWhereUniqueNestedInput[]
-    | CommentUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | CommentUpsertWithWhereUniqueNestedInput[]
-    | CommentUpsertWithWhereUniqueNestedInput;
-  delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
-  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput;
-  updateMany?:
-    | CommentUpdateManyWithWhereNestedInput[]
-    | CommentUpdateManyWithWhereNestedInput;
-}
-
-export interface CommentUpdateWithWhereUniqueNestedInput {
-  where: CommentWhereUniqueInput;
-  data: CommentUpdateDataInput;
+export interface CommentUpdateOneInput {
+  create?: CommentCreateInput;
+  update?: CommentUpdateDataInput;
+  upsert?: CommentUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: CommentWhereUniqueInput;
 }
 
 export interface CommentUpdateDataInput {
@@ -2587,6 +2545,104 @@ export interface CommentUpdateManyDataInput {
   pageId?: ID_Input;
 }
 
+export interface CommentUpsertNestedInput {
+  update: CommentUpdateDataInput;
+  create: CommentCreateInput;
+}
+
+export interface MessageUpdateOneInput {
+  create?: MessageCreateInput;
+  update?: MessageUpdateDataInput;
+  upsert?: MessageUpsertNestedInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: MessageWhereUniqueInput;
+}
+
+export interface MessageUpdateDataInput {
+  body?: String;
+  parentId?: ID_Input;
+  url?: String;
+  filetype?: String;
+  author?: UserUpdateOneRequiredInput;
+}
+
+export interface MessageUpsertNestedInput {
+  update: MessageUpdateDataInput;
+  create: MessageCreateInput;
+}
+
+export interface NotificationUpsertWithWhereUniqueNestedInput {
+  where: NotificationWhereUniqueInput;
+  update: NotificationUpdateDataInput;
+  create: NotificationCreateInput;
+}
+
+export interface NotificationScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  message?: String;
+  message_not?: String;
+  message_in?: String[] | String;
+  message_not_in?: String[] | String;
+  message_lt?: String;
+  message_lte?: String;
+  message_gt?: String;
+  message_gte?: String;
+  message_contains?: String;
+  message_not_contains?: String;
+  message_starts_with?: String;
+  message_not_starts_with?: String;
+  message_ends_with?: String;
+  message_not_ends_with?: String;
+  AND?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
+  OR?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
+  NOT?: NotificationScalarWhereInput[] | NotificationScalarWhereInput;
+}
+
+export interface NotificationUpdateManyWithWhereNestedInput {
+  where: NotificationScalarWhereInput;
+  data: NotificationUpdateManyDataInput;
+}
+
+export interface NotificationUpdateManyDataInput {
+  message?: String;
+}
+
+export interface CommentUpdateManyInput {
+  create?: CommentCreateInput[] | CommentCreateInput;
+  update?:
+    | CommentUpdateWithWhereUniqueNestedInput[]
+    | CommentUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | CommentUpsertWithWhereUniqueNestedInput[]
+    | CommentUpsertWithWhereUniqueNestedInput;
+  delete?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  connect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  disconnect?: CommentWhereUniqueInput[] | CommentWhereUniqueInput;
+  deleteMany?: CommentScalarWhereInput[] | CommentScalarWhereInput;
+  updateMany?:
+    | CommentUpdateManyWithWhereNestedInput[]
+    | CommentUpdateManyWithWhereNestedInput;
+}
+
+export interface CommentUpdateWithWhereUniqueNestedInput {
+  where: CommentWhereUniqueInput;
+  data: CommentUpdateDataInput;
+}
+
 export interface CommentUpsertWithWhereUniqueNestedInput {
   where: CommentWhereUniqueInput;
   update: CommentUpdateDataInput;
@@ -2640,7 +2696,7 @@ export interface UserUpdateWithWhereUniqueWithoutBlockedUsersInput {
 
 export interface UserUpdateWithoutBlockedUsersDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -2686,7 +2742,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriendsInput {
 
 export interface UserUpdateWithoutFriendsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -2734,7 +2790,7 @@ export interface UserUpdateWithWhereUniqueWithoutFriend_requestsInput {
 
 export interface UserUpdateWithoutFriend_requestsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -2797,7 +2853,7 @@ export interface UserUpdateOneRequiredWithoutOwned_teamsInput {
 
 export interface UserUpdateWithoutOwned_teamsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -2872,14 +2928,6 @@ export interface MessageUpdateManyInput {
 export interface MessageUpdateWithWhereUniqueNestedInput {
   where: MessageWhereUniqueInput;
   data: MessageUpdateDataInput;
-}
-
-export interface MessageUpdateDataInput {
-  body?: String;
-  parentId?: ID_Input;
-  url?: String;
-  filetype?: String;
-  author?: UserUpdateOneRequiredInput;
 }
 
 export interface MessageUpsertWithWhereUniqueNestedInput {
@@ -3001,7 +3049,7 @@ export interface UserUpdateOneRequiredWithoutOwned_channelsInput {
 
 export interface UserUpdateWithoutOwned_channelsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -3079,7 +3127,7 @@ export interface UserUpdateWithWhereUniqueWithoutTeamsInput {
 
 export interface UserUpdateWithoutTeamsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -3156,7 +3204,7 @@ export interface UserUpdateWithWhereUniqueWithoutChannelsInput {
 
 export interface UserUpdateWithoutChannelsDataInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -3678,79 +3726,13 @@ export interface MessageUpdateManyMutationInput {
   filetype?: String;
 }
 
-export interface NotificationCreateInput {
-  message: String;
-  author: UserCreateOneWithoutNotificationsInput;
-}
-
-export interface UserCreateOneWithoutNotificationsInput {
-  create?: UserCreateWithoutNotificationsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutNotificationsInput {
-  email: String;
-  set_private?: Boolean;
-  username: String;
-  password: String;
-  gitHubId?: String;
-  facebookId?: String;
-  twitterId?: String;
-  gmailId?: String;
-  directMessages?: CommentCreateManyInput;
-  avatar_url: FileCreateOneInput;
-  private?: Boolean;
-  blockedUsers?: UserCreateManyWithoutBlockedUsersInput;
-  confirmed?: Boolean;
-  online?: Boolean;
-  friends?: UserCreateManyWithoutFriendsInput;
-  friend_requests?: UserCreateManyWithoutFriend_requestsInput;
-  role: UserRole;
-  teams?: TeamCreateManyWithoutMembersInput;
-  channels?: ChannelCreateManyWithoutMembersInput;
-  owned_teams?: TeamCreateManyWithoutAuthorInput;
-  owned_channels?: ChannelCreateManyWithoutAuthorInput;
-}
-
 export interface NotificationUpdateInput {
   message?: String;
-  author?: UserUpdateOneRequiredWithoutNotificationsInput;
-}
-
-export interface UserUpdateOneRequiredWithoutNotificationsInput {
-  create?: UserCreateWithoutNotificationsInput;
-  update?: UserUpdateWithoutNotificationsDataInput;
-  upsert?: UserUpsertWithoutNotificationsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutNotificationsDataInput {
-  email?: String;
-  set_private?: Boolean;
-  username?: String;
-  password?: String;
-  gitHubId?: String;
-  facebookId?: String;
-  twitterId?: String;
-  gmailId?: String;
-  directMessages?: CommentUpdateManyInput;
-  avatar_url?: FileUpdateOneRequiredInput;
-  private?: Boolean;
-  blockedUsers?: UserUpdateManyWithoutBlockedUsersInput;
-  confirmed?: Boolean;
-  online?: Boolean;
-  friends?: UserUpdateManyWithoutFriendsInput;
-  friend_requests?: UserUpdateManyWithoutFriend_requestsInput;
-  role?: UserRole;
-  teams?: TeamUpdateManyWithoutMembersInput;
-  channels?: ChannelUpdateManyWithoutMembersInput;
-  owned_teams?: TeamUpdateManyWithoutAuthorInput;
-  owned_channels?: ChannelUpdateManyWithoutAuthorInput;
-}
-
-export interface UserUpsertWithoutNotificationsInput {
-  update: UserUpdateWithoutNotificationsDataInput;
-  create: UserCreateWithoutNotificationsInput;
+  comments?: CommentUpdateOneInput;
+  messages?: MessageUpdateOneInput;
+  friend_requests?: UserUpdateOneInput;
+  friend?: UserUpdateOneInput;
+  author?: UserUpdateOneRequiredInput;
 }
 
 export interface NotificationUpdateManyMutationInput {
@@ -4102,7 +4084,7 @@ export interface TodoProjectUpdateManyMutationInput {
 
 export interface UserUpdateInput {
   email?: String;
-  notifications?: NotificationUpdateManyWithoutAuthorInput;
+  notifications?: NotificationUpdateManyInput;
   set_private?: Boolean;
   username?: String;
   password?: String;
@@ -4648,7 +4630,7 @@ export interface UserSubscription
 
 export interface Notification {
   id: ID_Output;
-  message: String;
+  message?: String;
 }
 
 export interface NotificationPromise
@@ -4656,6 +4638,10 @@ export interface NotificationPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   message: () => Promise<String>;
+  comments: <T = CommentPromise>() => T;
+  messages: <T = MessagePromise>() => T;
+  friend_requests: <T = UserPromise>() => T;
+  friend: <T = UserPromise>() => T;
   author: <T = UserPromise>() => T;
 }
 
@@ -4664,6 +4650,10 @@ export interface NotificationSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   message: () => Promise<AsyncIterator<String>>;
+  comments: <T = CommentSubscription>() => T;
+  messages: <T = MessageSubscription>() => T;
+  friend_requests: <T = UserSubscription>() => T;
+  friend: <T = UserSubscription>() => T;
   author: <T = UserSubscription>() => T;
 }
 
@@ -4761,6 +4751,40 @@ export interface RatingSubscription
       last?: Int;
     }
   ) => T;
+}
+
+export interface Message {
+  id: ID_Output;
+  body: String;
+  parentId: ID_Output;
+  url: String;
+  filetype: String;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface MessagePromise extends Promise<Message>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  body: () => Promise<String>;
+  parentId: () => Promise<ID_Output>;
+  url: () => Promise<String>;
+  filetype: () => Promise<String>;
+  author: <T = UserPromise>() => T;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface MessageSubscription
+  extends Promise<AsyncIterator<Message>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  body: () => Promise<AsyncIterator<String>>;
+  parentId: () => Promise<AsyncIterator<ID_Output>>;
+  url: () => Promise<AsyncIterator<String>>;
+  filetype: () => Promise<AsyncIterator<String>>;
+  author: <T = UserSubscription>() => T;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface File {
@@ -4899,40 +4923,6 @@ export interface TeamSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   confirmed: () => Promise<AsyncIterator<Boolean>>;
   online: () => Promise<AsyncIterator<Boolean>>;
-}
-
-export interface Message {
-  id: ID_Output;
-  body: String;
-  parentId: ID_Output;
-  url: String;
-  filetype: String;
-  createdAt: DateTimeOutput;
-  updatedAt: DateTimeOutput;
-}
-
-export interface MessagePromise extends Promise<Message>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  body: () => Promise<String>;
-  parentId: () => Promise<ID_Output>;
-  url: () => Promise<String>;
-  filetype: () => Promise<String>;
-  author: <T = UserPromise>() => T;
-  createdAt: () => Promise<DateTimeOutput>;
-  updatedAt: () => Promise<DateTimeOutput>;
-}
-
-export interface MessageSubscription
-  extends Promise<AsyncIterator<Message>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  body: () => Promise<AsyncIterator<String>>;
-  parentId: () => Promise<AsyncIterator<ID_Output>>;
-  url: () => Promise<AsyncIterator<String>>;
-  filetype: () => Promise<AsyncIterator<String>>;
-  author: <T = UserSubscription>() => T;
-  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
-  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
 export interface ChannelConnection {
@@ -6174,7 +6164,7 @@ export interface NotificationSubscriptionPayloadSubscription
 
 export interface NotificationPreviousValues {
   id: ID_Output;
-  message: String;
+  message?: String;
 }
 
 export interface NotificationPreviousValuesPromise
@@ -6601,11 +6591,6 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1. 
 */
 export type Int = number;
@@ -6619,6 +6604,11 @@ export type DateTimeInput = Date | string;
 DateTime scalar output type, which is always a string
 */
 export type DateTimeOutput = string;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 /*
 The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). 
@@ -6701,6 +6691,6 @@ export const models: Model[] = [
 export const Prisma = makePrismaClientClass<ClientConstructor<Prisma>>({
   typeDefs,
   models,
-  endpoint: `https://prisma-server-2df74d7228.herokuapp.com/Prisma_backend/dev`
+  endpoint: `http://localhost:4466/prismadb/dev`
 });
 export const prisma = new Prisma();

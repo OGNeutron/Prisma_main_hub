@@ -31,14 +31,18 @@ type Rating {
 
 type Notification {
 	id: ID! @unique
-	message: String!
-	author: User!
+	message: String
+	comments: Comment
+	messages: Message
+	friend_requests: User @relation(name: "FriendRequestNotifcation")
+	friend: User @relation(name: "FriendNotification")
+	author: User! @relation(name: "NotificationAuthor")
 }
 
 type User {
 	id: ID! @unique
 	email: String! @unique
-	notifications: [Notification!]!
+	notifications: [Notification!]! @relation(name: "UserNotification")
 	set_private: Boolean! @default(value: true)
 	username: String! @unique
 	password: String!

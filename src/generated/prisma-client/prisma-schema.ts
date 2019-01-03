@@ -470,6 +470,11 @@ input CommentCreateManyWithoutRepliesInput {
   connect: [CommentWhereUniqueInput!]
 }
 
+input CommentCreateOneInput {
+  create: CommentCreateInput
+  connect: CommentWhereUniqueInput
+}
+
 input CommentCreateWithoutRepliesInput {
   body: String!
   parentId: ID!
@@ -663,6 +668,15 @@ input CommentUpdateManyWithWhereNestedInput {
   data: CommentUpdateManyDataInput!
 }
 
+input CommentUpdateOneInput {
+  create: CommentCreateInput
+  update: CommentUpdateDataInput
+  upsert: CommentUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: CommentWhereUniqueInput
+}
+
 input CommentUpdateWithoutRepliesDataInput {
   body: String
   parentId: ID
@@ -680,6 +694,11 @@ input CommentUpdateWithWhereUniqueNestedInput {
 input CommentUpdateWithWhereUniqueWithoutRepliesInput {
   where: CommentWhereUniqueInput!
   data: CommentUpdateWithoutRepliesDataInput!
+}
+
+input CommentUpsertNestedInput {
+  update: CommentUpdateDataInput!
+  create: CommentCreateInput!
 }
 
 input CommentUpsertWithWhereUniqueNestedInput {
@@ -1213,6 +1232,11 @@ input MessageCreateManyInput {
   connect: [MessageWhereUniqueInput!]
 }
 
+input MessageCreateOneInput {
+  create: MessageCreateInput
+  connect: MessageWhereUniqueInput
+}
+
 type MessageEdge {
   node: Message!
   cursor: String!
@@ -1401,9 +1425,23 @@ input MessageUpdateManyWithWhereNestedInput {
   data: MessageUpdateManyDataInput!
 }
 
+input MessageUpdateOneInput {
+  create: MessageCreateInput
+  update: MessageUpdateDataInput
+  upsert: MessageUpsertNestedInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: MessageWhereUniqueInput
+}
+
 input MessageUpdateWithWhereUniqueNestedInput {
   where: MessageWhereUniqueInput!
   data: MessageUpdateDataInput!
+}
+
+input MessageUpsertNestedInput {
+  update: MessageUpdateDataInput!
+  create: MessageCreateInput!
 }
 
 input MessageUpsertWithWhereUniqueNestedInput {
@@ -1602,7 +1640,11 @@ interface Node {
 
 type Notification {
   id: ID!
-  message: String!
+  message: String
+  comments: Comment
+  messages: Message
+  friend_requests: User
+  friend: User
   author: User!
 }
 
@@ -1613,17 +1655,17 @@ type NotificationConnection {
 }
 
 input NotificationCreateInput {
-  message: String!
-  author: UserCreateOneWithoutNotificationsInput!
+  message: String
+  comments: CommentCreateOneInput
+  messages: MessageCreateOneInput
+  friend_requests: UserCreateOneInput
+  friend: UserCreateOneInput
+  author: UserCreateOneInput!
 }
 
-input NotificationCreateManyWithoutAuthorInput {
-  create: [NotificationCreateWithoutAuthorInput!]
+input NotificationCreateManyInput {
+  create: [NotificationCreateInput!]
   connect: [NotificationWhereUniqueInput!]
-}
-
-input NotificationCreateWithoutAuthorInput {
-  message: String!
 }
 
 type NotificationEdge {
@@ -1644,7 +1686,7 @@ enum NotificationOrderByInput {
 
 type NotificationPreviousValues {
   id: ID!
-  message: String!
+  message: String
 }
 
 input NotificationScalarWhereInput {
@@ -1699,28 +1741,41 @@ input NotificationSubscriptionWhereInput {
   NOT: [NotificationSubscriptionWhereInput!]
 }
 
+input NotificationUpdateDataInput {
+  message: String
+  comments: CommentUpdateOneInput
+  messages: MessageUpdateOneInput
+  friend_requests: UserUpdateOneInput
+  friend: UserUpdateOneInput
+  author: UserUpdateOneRequiredInput
+}
+
 input NotificationUpdateInput {
   message: String
-  author: UserUpdateOneRequiredWithoutNotificationsInput
+  comments: CommentUpdateOneInput
+  messages: MessageUpdateOneInput
+  friend_requests: UserUpdateOneInput
+  friend: UserUpdateOneInput
+  author: UserUpdateOneRequiredInput
 }
 
 input NotificationUpdateManyDataInput {
   message: String
 }
 
-input NotificationUpdateManyMutationInput {
-  message: String
-}
-
-input NotificationUpdateManyWithoutAuthorInput {
-  create: [NotificationCreateWithoutAuthorInput!]
+input NotificationUpdateManyInput {
+  create: [NotificationCreateInput!]
+  update: [NotificationUpdateWithWhereUniqueNestedInput!]
+  upsert: [NotificationUpsertWithWhereUniqueNestedInput!]
   delete: [NotificationWhereUniqueInput!]
   connect: [NotificationWhereUniqueInput!]
   disconnect: [NotificationWhereUniqueInput!]
-  update: [NotificationUpdateWithWhereUniqueWithoutAuthorInput!]
-  upsert: [NotificationUpsertWithWhereUniqueWithoutAuthorInput!]
   deleteMany: [NotificationScalarWhereInput!]
   updateMany: [NotificationUpdateManyWithWhereNestedInput!]
+}
+
+input NotificationUpdateManyMutationInput {
+  message: String
 }
 
 input NotificationUpdateManyWithWhereNestedInput {
@@ -1728,19 +1783,15 @@ input NotificationUpdateManyWithWhereNestedInput {
   data: NotificationUpdateManyDataInput!
 }
 
-input NotificationUpdateWithoutAuthorDataInput {
-  message: String
+input NotificationUpdateWithWhereUniqueNestedInput {
+  where: NotificationWhereUniqueInput!
+  data: NotificationUpdateDataInput!
 }
 
-input NotificationUpdateWithWhereUniqueWithoutAuthorInput {
+input NotificationUpsertWithWhereUniqueNestedInput {
   where: NotificationWhereUniqueInput!
-  data: NotificationUpdateWithoutAuthorDataInput!
-}
-
-input NotificationUpsertWithWhereUniqueWithoutAuthorInput {
-  where: NotificationWhereUniqueInput!
-  update: NotificationUpdateWithoutAuthorDataInput!
-  create: NotificationCreateWithoutAuthorInput!
+  update: NotificationUpdateDataInput!
+  create: NotificationCreateInput!
 }
 
 input NotificationWhereInput {
@@ -1772,6 +1823,10 @@ input NotificationWhereInput {
   message_not_starts_with: String
   message_ends_with: String
   message_not_ends_with: String
+  comments: CommentWhereInput
+  messages: MessageWhereInput
+  friend_requests: UserWhereInput
+  friend: UserWhereInput
   author: UserWhereInput
   AND: [NotificationWhereInput!]
   OR: [NotificationWhereInput!]
@@ -3122,7 +3177,7 @@ type UserConnection {
 
 input UserCreateInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3180,11 +3235,6 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutNotificationsInput {
-  create: UserCreateWithoutNotificationsInput
-  connect: UserWhereUniqueInput
-}
-
 input UserCreateOneWithoutOwned_channelsInput {
   create: UserCreateWithoutOwned_channelsInput
   connect: UserWhereUniqueInput
@@ -3197,7 +3247,7 @@ input UserCreateOneWithoutOwned_teamsInput {
 
 input UserCreateWithoutBlockedUsersInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3221,7 +3271,7 @@ input UserCreateWithoutBlockedUsersInput {
 
 input UserCreateWithoutChannelsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3245,7 +3295,7 @@ input UserCreateWithoutChannelsInput {
 
 input UserCreateWithoutFriend_requestsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3269,7 +3319,7 @@ input UserCreateWithoutFriend_requestsInput {
 
 input UserCreateWithoutFriendsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3283,30 +3333,6 @@ input UserCreateWithoutFriendsInput {
   blockedUsers: UserCreateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
-  friend_requests: UserCreateManyWithoutFriend_requestsInput
-  role: UserRole!
-  teams: TeamCreateManyWithoutMembersInput
-  channels: ChannelCreateManyWithoutMembersInput
-  owned_teams: TeamCreateManyWithoutAuthorInput
-  owned_channels: ChannelCreateManyWithoutAuthorInput
-}
-
-input UserCreateWithoutNotificationsInput {
-  email: String!
-  set_private: Boolean
-  username: String!
-  password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
-  gmailId: String
-  directMessages: CommentCreateManyInput
-  avatar_url: FileCreateOneInput!
-  private: Boolean
-  blockedUsers: UserCreateManyWithoutBlockedUsersInput
-  confirmed: Boolean
-  online: Boolean
-  friends: UserCreateManyWithoutFriendsInput
   friend_requests: UserCreateManyWithoutFriend_requestsInput
   role: UserRole!
   teams: TeamCreateManyWithoutMembersInput
@@ -3317,7 +3343,7 @@ input UserCreateWithoutNotificationsInput {
 
 input UserCreateWithoutOwned_channelsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3341,7 +3367,7 @@ input UserCreateWithoutOwned_channelsInput {
 
 input UserCreateWithoutOwned_teamsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3365,7 +3391,7 @@ input UserCreateWithoutOwned_teamsInput {
 
 input UserCreateWithoutTeamsInput {
   email: String!
-  notifications: NotificationCreateManyWithoutAuthorInput
+  notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
@@ -3615,7 +3641,7 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3640,7 +3666,7 @@ input UserUpdateDataInput {
 
 input UserUpdateInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3780,13 +3806,6 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
-input UserUpdateOneRequiredWithoutNotificationsInput {
-  create: UserCreateWithoutNotificationsInput
-  update: UserUpdateWithoutNotificationsDataInput
-  upsert: UserUpsertWithoutNotificationsInput
-  connect: UserWhereUniqueInput
-}
-
 input UserUpdateOneRequiredWithoutOwned_channelsInput {
   create: UserCreateWithoutOwned_channelsInput
   update: UserUpdateWithoutOwned_channelsDataInput
@@ -3803,7 +3822,7 @@ input UserUpdateOneRequiredWithoutOwned_teamsInput {
 
 input UserUpdateWithoutBlockedUsersDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3827,7 +3846,7 @@ input UserUpdateWithoutBlockedUsersDataInput {
 
 input UserUpdateWithoutChannelsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3851,7 +3870,7 @@ input UserUpdateWithoutChannelsDataInput {
 
 input UserUpdateWithoutFriend_requestsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3875,7 +3894,7 @@ input UserUpdateWithoutFriend_requestsDataInput {
 
 input UserUpdateWithoutFriendsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3889,30 +3908,6 @@ input UserUpdateWithoutFriendsDataInput {
   blockedUsers: UserUpdateManyWithoutBlockedUsersInput
   confirmed: Boolean
   online: Boolean
-  friend_requests: UserUpdateManyWithoutFriend_requestsInput
-  role: UserRole
-  teams: TeamUpdateManyWithoutMembersInput
-  channels: ChannelUpdateManyWithoutMembersInput
-  owned_teams: TeamUpdateManyWithoutAuthorInput
-  owned_channels: ChannelUpdateManyWithoutAuthorInput
-}
-
-input UserUpdateWithoutNotificationsDataInput {
-  email: String
-  set_private: Boolean
-  username: String
-  password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
-  gmailId: String
-  directMessages: CommentUpdateManyInput
-  avatar_url: FileUpdateOneRequiredInput
-  private: Boolean
-  blockedUsers: UserUpdateManyWithoutBlockedUsersInput
-  confirmed: Boolean
-  online: Boolean
-  friends: UserUpdateManyWithoutFriendsInput
   friend_requests: UserUpdateManyWithoutFriend_requestsInput
   role: UserRole
   teams: TeamUpdateManyWithoutMembersInput
@@ -3923,7 +3918,7 @@ input UserUpdateWithoutNotificationsDataInput {
 
 input UserUpdateWithoutOwned_channelsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3947,7 +3942,7 @@ input UserUpdateWithoutOwned_channelsDataInput {
 
 input UserUpdateWithoutOwned_teamsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -3971,7 +3966,7 @@ input UserUpdateWithoutOwned_teamsDataInput {
 
 input UserUpdateWithoutTeamsDataInput {
   email: String
-  notifications: NotificationUpdateManyWithoutAuthorInput
+  notifications: NotificationUpdateManyInput
   set_private: Boolean
   username: String
   password: String
@@ -4026,11 +4021,6 @@ input UserUpdateWithWhereUniqueWithoutTeamsInput {
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
-}
-
-input UserUpsertWithoutNotificationsInput {
-  update: UserUpdateWithoutNotificationsDataInput!
-  create: UserCreateWithoutNotificationsInput!
 }
 
 input UserUpsertWithoutOwned_channelsInput {

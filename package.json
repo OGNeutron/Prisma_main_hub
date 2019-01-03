@@ -14,7 +14,6 @@
 		"build": "cross-env npm run delete-build && tsc && npm run copy-graphql",
 		"build:cmd": "build.bat",
 		"build:bash": "build.sh",
-		"docker:build": "docker build -t prismabackend .",
 		"gen-schema-types": "ts-node src/scripts/createTypes.ts",
 		"prisma-deploy": "prisma deploy",
 		"prisma-up": "docker-compose up -d",

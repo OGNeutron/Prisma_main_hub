@@ -2,6 +2,8 @@
 
 npm run build
 npm run copy-graphql
-npm run docker:build
+
+docker build -t prismabackend .
+
 heroku container:pull web
 heroku container:push web

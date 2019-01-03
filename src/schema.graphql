@@ -55,6 +55,7 @@ type Query {
 	showTeams(authorId: ID!): [Team!]
 	showChannel(channelId: ID!): Channel!
 	fetchTodos: [Todo!]
+	fetchNotifications: [Notification!]
 }
 
 type Subscription {

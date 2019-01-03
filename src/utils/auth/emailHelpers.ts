@@ -1,7 +1,8 @@
 import { Redis } from 'ioredis'
 import { createToken } from 'scotts_utilities'
 
-import * as sgTransport from 'nodemailer-sendgrid-transport'
+// @ts-ignore
+import sgTransport from 'nodemailer-sendgrid-transport'
 
 import { createTransport } from 'nodemailer'
 import { FORGOT_PASSWORD_PREFIX } from '../../constants'
