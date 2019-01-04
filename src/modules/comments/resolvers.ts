@@ -31,7 +31,6 @@ export const resolvers = {
 				}
 			},
 			resolve: (payload: any) => {
-				console.log('COMMENT PAYLOAD', payload)
 				return payload
 			}
 		}
@@ -73,8 +72,6 @@ export const resolvers = {
 						id
 					})
 					.author()
-
-				console.log('COMMENT', comment)
 
 				if (!comment) {
 					return new ApolloError(INVALID_CREDENTIALS)

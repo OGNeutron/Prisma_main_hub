@@ -1,8 +1,7 @@
 import { Redis } from 'ioredis'
 import { createToken } from 'scotts_utilities'
 
-// @ts-ignore
-import sgTransport from 'nodemailer-sendgrid-transport'
+const sgTransport = require('nodemailer-sendgrid-transport')
 
 import { createTransport } from 'nodemailer'
 import { FORGOT_PASSWORD_PREFIX } from '../../constants'
@@ -149,11 +148,8 @@ export const sendResetPasswordEmail = async (
 			`
 		}
 
-		console.log('EMAIL', email)
-
 		transport.sendMail(email)
 	} catch (error) {
-		console.log('BIG ERROR', error)
 		logger.error({ level: '5', message: error })
 	}
 }

@@ -5,11 +5,7 @@ import { logger } from '../../utils/logger'
 
 export const resolvers = {
 	Mutation: {
-		async createOrder(
-			_: any,
-			args: any,
-			{ session, db, stripe }: Context
-		) {
+		async createOrder(_: any, args: any, { session, db, stripe }: Context) {
 			try {
 				const customer = await db.customers({
 					where: {

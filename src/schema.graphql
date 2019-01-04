@@ -3,6 +3,8 @@
 
 scalar Upload
 
+directive @auth on FIELD_DEFINITION
+
 type ForgotPasswordResponse {
 	ok: Boolean!
 	result: String!
@@ -46,8 +48,13 @@ type UpdateProfileResponse {
 	username: String
 }
 
+type DeleteNotificationResponse {
+	ok: Boolean
+	errors: Error
+}
+
 type Query {
-	currentUser: MyUser
+	currentUser: MyUser @auth
 	getProfile(username: String!): ProfileResponse
 	queryComment(parentId: ID!, limit: Int, offset: Int): CommentConnection!
 	queryUsers: [MyUser!]
@@ -123,4 +130,5 @@ type Mutation {
 		newPassword: String
 		avatar: Upload
 	): UpdateProfileResponse
+	deleteNotification(id: ID!): DeleteNotificationResponse
 }

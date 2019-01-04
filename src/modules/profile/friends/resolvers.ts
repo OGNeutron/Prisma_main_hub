@@ -103,25 +103,37 @@ export const resolvers = {
 					})
 					.friends()
 
-				console.log(requested)
+				const friend_requests = await db
+					.user({ id: requestedId })
+					.friend_requests()
 
 				if (requested && friends) {
 					const found = friends.find(
 						(fr: User) => fr.id === requestedId
 					)
 
-					console.log('FOUND', found)
-
 					if (found !== undefined) {
 						return {
 							ok: false,
 							errors: [
 								{
-									path: 'friend_request',
+									path: 'friend',
 									message: 'Already a friend'
 								}
 							]
 						}
+					}
+				}
+
+				if (friend_requests.some(fr => fr.id === session.userId)) {
+					return {
+						ok: false,
+						errors: [
+							{
+								path: 'friend_request',
+								message: 'Already a friend request'
+							}
+						]
 					}
 				}
 
@@ -182,8 +194,6 @@ export const resolvers = {
 			{ db, session }: Context
 		) {
 			try {
-				console.log(requestedId)
-
 				await db.updateUser({
 					where: {
 						id: session.userId
@@ -222,8 +232,6 @@ export const resolvers = {
 						}
 					})
 				}
-
-				console.log('THIS FAR')
 
 				await db.updateUser({
 					where: {

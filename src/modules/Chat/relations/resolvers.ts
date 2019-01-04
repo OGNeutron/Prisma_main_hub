@@ -46,7 +46,6 @@ export const resolvers = {
 		},
 		author(parent: any, _: any, { db }: Context) {
 			try {
-				console.log('author')
 				return db.team({ id: parent.id })['author']()
 			} catch (error) {
 				return logger.error({ level: '5', message: error.message })

@@ -12,9 +12,6 @@ export const resolvers = {
 			{ userId, channelId }: MutationResolvers.ArgsRemoveChannelMember,
 			{ db, session }: Context
 		) {
-			console.log('USERID', userId)
-			console.log('CHANNELID', channelId)
-
 			try {
 				const channel = await db.channel({
 					id: channelId
@@ -25,8 +22,6 @@ export const resolvers = {
 						id: channelId
 					})
 					.author()
-
-				console.log('CHANNEL', channel)
 
 				if (channel != undefined) {
 					if (

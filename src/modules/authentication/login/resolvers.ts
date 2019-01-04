@@ -70,8 +70,6 @@ export const resolvers = {
 						user
 					)
 
-					console.log(token)
-
 					session.userId = user.id
 					if (req.sessionID) {
 						await redis.lpush(

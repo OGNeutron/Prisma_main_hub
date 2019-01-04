@@ -37,14 +37,13 @@ export const resolvers = {
 				{ db }: Context
 			) {
 				try {
+					console.log('CONNECTING')
 					return db.$subscribe.user({
 						mutation_in: ['CREATED', 'UPDATED'],
 						node: {
 							id
 						}
 					})
-
-					return
 				} catch (error) {
 					logger.error({ level: '5', message: error })
 					return error

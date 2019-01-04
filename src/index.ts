@@ -22,6 +22,8 @@ import { logger } from './utils/logger'
 import ApiRouter from './apiRoutes'
 import { setupPassport } from './passport'
 import { ShieldMiddleware } from './middleware/graphql/shield'
+
+import CustomDirectives from './directives'
 // import { graphqlMiddleware } from './middleware/graphql/graphql-middleware';
 // import { Prisma } from './generated/prisma-client';
 
@@ -48,7 +50,8 @@ const typeDefs: string = importSchema(path.join(__dirname, './schema.graphql'))
 
 const makeSchema = makeExecutableSchema({
 	typeDefs,
-	resolvers: genResolvers(path.join(__dirname, '/**/resolvers.?s'))
+	resolvers: genResolvers(path.join(__dirname, '/**/resolvers.?s')),
+	schemaDirectives: CustomDirectives
 })
 
 const app = express()
@@ -66,8 +69,6 @@ const server: ApolloServer = new ApolloServer({
 		path: '/graphql',
 		onConnect(connectionParams: any, __: any, _: any) {
 			console.log('CONNECTIONPARAMS', connectionParams)
-			// console.log(webSocket)
-			// console.log('CONTEXT', context)
 		}
 	},
 	schema,

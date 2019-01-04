@@ -123,7 +123,6 @@ export const resolvers = {
 			{ db, session }: Context
 		) {
 			try {
-				console.log('ID', id)
 				return db.updateUser({
 					where: {
 						id: session.userId

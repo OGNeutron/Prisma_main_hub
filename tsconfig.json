@@ -18,7 +18,8 @@
 		"noFallthroughCasesInSwitch": true,
 		"allowSyntheticDefaultImports": true,
 		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true
+		"experimentalDecorators": true,
+		"declaration": true
 	},
 	"exclude": ["./node_modules", "./src/generated/graphqlGen/tmp-resolvers"],
 	"include": ["./src/**/*.tsx", "./src/**/*.ts"]

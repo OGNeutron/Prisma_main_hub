@@ -7,7 +7,7 @@ const isAuthenticated = rule()(
 
 export const ShieldMiddleware = shield({
 	Query: {
-		currentUser: isAuthenticated,
+		// currentUser: isAuthenticated,
 		getProfile: isAuthenticated,
 		showTeam: isAuthenticated,
 		showTeams: isAuthenticated,

@@ -34,8 +34,6 @@ export const resolvers = {
 					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
-				console.log(decoded)
-
 				const user = await db.updateUser({
 					where: { id: decoded.id },
 					data: {
