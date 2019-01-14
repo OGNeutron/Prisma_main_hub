@@ -66,10 +66,10 @@ const { schema } = applyMiddleware(makeSchema, ShieldMiddleware)
 
 const server: ApolloServer = new ApolloServer({
 	subscriptions: {
-		path: '/graphql',
-		onConnect(connectionParams: any, __: any, _: any) {
-			console.log('CONNECTIONPARAMS', connectionParams)
-		}
+		path: '/graphql'
+		// onConnect(connectionParams: any, __: any, _: any) {
+		// 	console.log('CONNECTIONPARAMS', connectionParams)
+		// }
 	},
 	schema,
 	playground: true,

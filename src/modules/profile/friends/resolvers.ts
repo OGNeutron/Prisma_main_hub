@@ -225,6 +225,11 @@ export const resolvers = {
 						message: `Friend request accepted from ${
 							requestedUser.username
 						}`,
+						friend: {
+							connect: {
+								id: requestedId
+							}
+						},
 						author: {
 							connect: {
 								id: requestedUser.id

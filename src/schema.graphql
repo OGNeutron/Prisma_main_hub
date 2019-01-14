@@ -131,4 +131,5 @@ type Mutation {
 		avatar: Upload
 	): UpdateProfileResponse
 	deleteNotification(id: ID!): DeleteNotificationResponse
+	removeTeamMember(userId: ID!, teamId: ID!): Team
 }

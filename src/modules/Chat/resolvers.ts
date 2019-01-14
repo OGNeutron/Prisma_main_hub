@@ -50,6 +50,12 @@ export const resolvers = {
 					id: teamId
 				})
 
+				const generalChannel = await db
+					.team({
+						id: teamId
+					})
+					.channels()
+
 				const author = await db
 					.team({
 						id: teamId
@@ -68,7 +74,7 @@ export const resolvers = {
 				console.log('USER', user)
 
 				if (user && team) {
-					return await db.updateTeam({
+					const response = await db.updateTeam({
 						data: {
 							members: {
 								connect: {
@@ -80,6 +86,20 @@ export const resolvers = {
 							id: team.id
 						}
 					})
+
+					await db.createNotification({
+						message: `${author.username} has added to team ${
+							team.slug
+						}/${generalChannel[0].slug}`,
+
+						author: {
+							connect: {
+								id: userId
+							}
+						}
+					})
+
+					return response
 				} else {
 					return new ApolloError('Error: Unable to perform action')
 				}
@@ -112,7 +132,7 @@ export const resolvers = {
 					})
 
 					if (user) {
-						return await db.updateChannel({
+						const response = await db.updateChannel({
 							where: {
 								id: channelId
 							},
@@ -124,6 +144,17 @@ export const resolvers = {
 								}
 							}
 						})
+
+						await db.createNotification({
+							message: `You have been added to ${channel.name}`,
+							author: {
+								connect: {
+									id: user.id
+								}
+							}
+						})
+
+						return response
 					} else {
 						throw new ApolloError('Error: no such member')
 					}

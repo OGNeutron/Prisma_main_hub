@@ -9,7 +9,7 @@ const router: Router = Router()
 
 const {
 	PRODUCTION_CLIENT_URL = 'https://inspiring-euler-247a1c.netlify.com',
-	DEVELOPMENT_CLIENT_URL = 'http://localhost:1234'
+	DEVELOPMENT_CLIENT_URL = 'http://localhost:5000'
 } = process.env
 
 const url =
@@ -82,7 +82,6 @@ router.get(
 	'/auth/facebook',
 	passport.authenticate('facebook', { session: false })
 )
-
 
 router.get(
 	'/auth/facebook/callback',

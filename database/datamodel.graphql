@@ -34,6 +34,7 @@ type Notification {
 	message: String
 	comments: Comment
 	messages: Message
+	team: Team
 	friend_requests: User @relation(name: "FriendRequestNotifcation")
 	friend: User @relation(name: "FriendNotification")
 	author: User! @relation(name: "NotificationAuthor")
@@ -118,6 +119,10 @@ type Team {
 	online: Boolean! @default(value: false)
 }
 
+type TeamSetting {
+	id: ID! @unique
+}
+
 type Todo {
 	id: ID! @unique
 	body: String!
@@ -162,9 +167,3 @@ type Product {
 	createdAt: DateTime!
 	updatedAt: DateTime!
 }
-
-# type Subscription {
-# 	id: ID! @unique
-# 	createdAt: DateTime!
-# 	updatedAt: DateTime!
-# }

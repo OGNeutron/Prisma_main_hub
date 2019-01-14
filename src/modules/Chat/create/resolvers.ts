@@ -51,6 +51,16 @@ export const resolvers = {
 					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
+				const member = db.team({ id: teamId }).members({
+					where: {
+						id: session.userId
+					}
+				})
+
+				if (member) {
+					throw new ForbiddenError(INVALID_CREDENTIALS)
+				}
+
 				const channel = await db.createChannel({
 					name,
 					slug: `${sluggify(name)}-${shortid()}`,

@@ -1,1 +1,5 @@
-export const resolvers = {}
+export const resolvers = {
+	// Mutation: {
+	//     createDirectMessage(_: any, {})
+	// }
+}

@@ -71,6 +71,7 @@ export const resolvers = {
 					)
 
 					session.userId = user.id
+					session.user_role = user.role
 					if (req.sessionID) {
 						await redis.lpush(
 							`${USER_SESSION_ID_PREFIX}${user.id}`,
