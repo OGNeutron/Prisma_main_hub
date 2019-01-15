@@ -35,6 +35,7 @@ type Notification {
 	comments: Comment
 	messages: Message
 	team: Team
+	channel: Channel
 	friend_requests: User @relation(name: "FriendRequestNotifcation")
 	friend: User @relation(name: "FriendNotification")
 	author: User! @relation(name: "NotificationAuthor")
@@ -99,6 +100,7 @@ type Channel {
 	moderators: [User!]! @relation(name: "ChannelModerators")
 	public: Boolean @default(value: true)
 	messages: [Message!]!
+	teamId: ID!
 	members: [User!]! @relation(name: "ChannelMembers")
 	author: User! @relation(name: "AuthorChannel")
 	createdAt: DateTime!
@@ -121,6 +123,7 @@ type Team {
 
 type TeamSetting {
 	id: ID! @unique
+	cankick: Boolean!
 }
 
 type Todo {

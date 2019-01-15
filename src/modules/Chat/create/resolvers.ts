@@ -1,6 +1,6 @@
 import { sluggify } from 'scotts_utilities'
 import * as shortid from 'shortid'
-import { ForbiddenError } from 'apollo-server-express'
+import { ForbiddenError, ApolloError } from 'apollo-server-express'
 
 import { logger } from '../../../utils/logger'
 import { MutationResolvers } from '../../../generated/graphqlgen'
@@ -14,32 +14,67 @@ export const resolvers = {
 			{ body, channelId }: MutationResolvers.ArgsCreateMessage,
 			{ db, session }: Context
 		) {
-			const newMessage = await db.createMessage({
-				body,
-				parentId: channelId,
-				url: '',
-				filetype: '',
-				author: {
-					connect: {
-						id: session.userId
-					}
-				}
-			})
+			try {
+				const channelAuthor = await db
+					.channel({
+						id: channelId
+					})
+					.author()
 
-			await db.updateChannel({
-				where: {
-					id: channelId
-				},
-				data: {
-					messages: {
-						connect: {
-							id: newMessage.id
+				const channelMember = await db
+					.channel({
+						id: channelId
+					})
+					.members({
+						where: {
+							id: session.userId
 						}
-					}
-				}
-			})
+					})
 
-			return newMessage
+				const member = channelMember[0]
+				console.log('working', member)
+
+				if (
+					(member !== undefined &&
+						member.id !== undefined &&
+						member.id === session.userId) ||
+					channelAuthor.id === session.userId
+				) {
+					console.log('author', channelAuthor)
+					const newMessage = await db.createMessage({
+						body,
+						parentId: channelId,
+						url: '',
+						filetype: '',
+						author: {
+							connect: {
+								id: session.userId
+							}
+						}
+					})
+
+					console.log('NEW', newMessage)
+
+					await db.updateChannel({
+						where: {
+							id: channelId
+						},
+						data: {
+							messages: {
+								connect: {
+									id: newMessage.id
+								}
+							}
+						}
+					})
+
+					return newMessage
+				} else {
+					throw new ApolloError(INVALID_CREDENTIALS)
+				}
+			} catch (error) {
+				return logger.error({ level: '5', message: error.message })
+			}
 		},
 		async createChannel(
 			_: any,
@@ -57,19 +92,24 @@ export const resolvers = {
 					}
 				})
 
-				if (member) {
+				if (!member) {
 					throw new ForbiddenError(INVALID_CREDENTIALS)
 				}
 
 				const channel = await db.createChannel({
 					name,
 					slug: `${sluggify(name)}-${shortid()}`,
+					teamId,
 					author: {
 						connect: {
 							id: session.userId
 						}
 					}
 				})
+
+				if (!channel.id) {
+					throw new ApolloError('No Channel')
+				}
 
 				await db.updateTeam({
 					data: {
@@ -96,22 +136,35 @@ export const resolvers = {
 			{ db, session }: Context
 		) {
 			try {
-				return await db.createTeam({
+				const team = await db.createTeam({
 					name: `${name}`,
 					slug: `${sluggify(name)}-${shortid()}`,
 					author: {
 						connect: {
 							id: session.userId
 						}
+					}
+				})
+
+				const generalChannel = await db.createChannel({
+					name: `General`,
+					slug: `general-${shortid()}`,
+					teamId: team.id,
+					author: {
+						connect: {
+							id: session.userId
+						}
+					}
+				})
+
+				return db.updateTeam({
+					where: {
+						id: team.id
 					},
-					channels: {
-						create: {
-							name: `General`,
-							slug: `general-${shortid()}`,
-							author: {
-								connect: {
-									id: session.userId
-								}
+					data: {
+						channels: {
+							connect: {
+								id: generalChannel.id
 							}
 						}
 					}

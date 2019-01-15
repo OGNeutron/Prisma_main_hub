@@ -87,11 +87,34 @@ export const resolvers = {
 						}
 					})
 
+					const general = await db.channels({
+						where: {
+							teamId
+						}
+					})
+
+					await db.updateChannel({
+						where: {
+							id: general[0].id
+						},
+						data: {
+							members: {
+								connect: {
+									id: user.id
+								}
+							}
+						}
+					})
+
 					await db.createNotification({
 						message: `${author.username} has added to team ${
 							team.slug
 						}/${generalChannel[0].slug}`,
-
+						team: {
+							connect: {
+								id: team.id
+							}
+						},
 						author: {
 							connect: {
 								id: userId
@@ -145,8 +168,22 @@ export const resolvers = {
 							}
 						})
 
+						const team = await db.team({
+							id: channel.teamId
+						})
+
 						await db.createNotification({
 							message: `You have been added to ${channel.name}`,
+							channel: {
+								connect: {
+									id: channel.id
+								}
+							},
+							team: {
+								connect: {
+									id: team.id
+								}
+							},
 							author: {
 								connect: {
 									id: user.id
