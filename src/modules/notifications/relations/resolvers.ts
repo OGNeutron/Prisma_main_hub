@@ -4,6 +4,22 @@ import { ApolloError } from 'apollo-server'
 
 export const resolvers = {
 	Notification: {
+        team(parent: any, _: any, { db }: Context) {
+			try {
+				return db.notification({ id: parent.id }).team()
+			} catch (error) {
+				logger.error({ level: '5', message: error })
+				return new ApolloError(error)
+			}
+        },
+        channel(parent: any, _: any, { db }: Context) {
+			try {
+				return db.notification({ id: parent.id }).channel()
+			} catch (error) {
+				logger.error({ level: '5', message: error })
+				return new ApolloError(error)
+			}
+		},
 		author(parent: any, _: any, { db }: Context) {
 			try {
 				return db.notification({ id: parent.id }).author()
