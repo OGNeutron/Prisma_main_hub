@@ -157,7 +157,7 @@ export const resolvers = {
 					}
 				})
 
-				return db.updateTeam({
+				const updateTeam = await db.updateTeam({
 					where: {
 						id: team.id
 					},
@@ -169,6 +169,8 @@ export const resolvers = {
 						}
 					}
 				})
+
+				return updateTeam
 			} catch (error) {
 				return logger.error({ level: '5', message: error.message })
 			}

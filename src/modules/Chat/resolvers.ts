@@ -107,9 +107,16 @@ export const resolvers = {
 					})
 
 					await db.createNotification({
-						message: `${author.username} has added to team ${
-							team.slug
-						}/${generalChannel[0].slug}`,
+						message: `${
+							author.username
+						} has added you to chat team ${team.slug}/${
+							generalChannel[0].slug
+						}`,
+						channel: {
+							connect: {
+								id: general[0].id
+							}
+						},
 						team: {
 							connect: {
 								id: team.id
