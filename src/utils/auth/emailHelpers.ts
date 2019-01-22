@@ -109,7 +109,7 @@ export const sendConfirmationEmail = async (
 			to: user.email,
 			subject: 'Thanks for signing up',
 			html: `
-            <h1>Welcome to our website</h1>
+            <h1>Welcome, please click link to confirm</h1>
 
             <a href="${emailUrl}">Confirmation Link</p>
         `

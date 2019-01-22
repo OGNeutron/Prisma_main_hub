@@ -121,6 +121,7 @@ export const setupPassport = () => {
 				includeEmail: true
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
+				console.log('PROFILE', profile)
 				let user = await db.user({ email: profile.emails[0].value })
 
 				if (!user) {
