@@ -65,8 +65,9 @@ type User {
 	role: UserRole!
 	teams: [Team!]! @relation(name: "TeamMembers")
 	channels: [Channel!]! @relation(name: "ChannelMembers")
-	owned_teams: [Team!]! @relation(name: "TeamAuthor")
-	owned_channels: [Channel!]! @relation(name: "AuthorChannel")
+	owned_teams: [Team!]! @relation(name: "TeamAuthor", onDelete: CASCADE)
+	owned_channels: [Channel!]!
+		@relation(name: "AuthorChannel", onDelete: CASCADE)
 }
 
 type Comment {

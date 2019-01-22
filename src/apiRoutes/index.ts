@@ -17,11 +17,11 @@ const url =
 		? PRODUCTION_CLIENT_URL
 		: DEVELOPMENT_CLIENT_URL
 
-router.get('/auth/github', passport.authenticate('github', { session: false }))
+router.get('/auth/github', passport.authenticate('github', { session: false, scope: ['email'] }))
 
 router.get(
 	'/oauth/github',
-	passport.authenticate('github', { session: false }),
+	passport.authenticate('github', { session: false, scope: ['email'] }),
 	async (req: Request, res: Response) => {
 		if (req.user.user.id) {
 			if (req.session) {
@@ -48,12 +48,12 @@ router.get(
 
 router.get(
 	'/auth/twitter',
-	passport.authenticate('twitter', { session: false })
+	passport.authenticate('twitter', { session: false, scope: ['email'] })
 )
 
 router.get(
 	'/auth/twitter/callback',
-	passport.authenticate('twitter', { session: false }),
+	passport.authenticate('twitter', { session: false, scope: ['email'] }),
 	async (req, res) => {
 		if (req.user.user.id) {
 			if (req.session) {
@@ -80,12 +80,12 @@ router.get(
 
 router.get(
 	'/auth/facebook',
-	passport.authenticate('facebook', { session: false })
+	passport.authenticate('facebook', { session: false, scope: ['email'] })
 )
 
 router.get(
 	'/auth/facebook/callback',
-	passport.authenticate('facebook', { session: false }),
+	passport.authenticate('facebook', { session: false, scope: ['email'] }),
 	async (req, res) => {
 		try {
 			if (req.user.user.id) {

@@ -160,13 +160,14 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				try {
+					console.log('PROFILE', profile)
 					let user = await db.user({ email: profile.emails[0].value })
 
 					if (!user) {
 						user = await createUser({
 							email: profile.emails[0].value,
 							username: profile.name.givenName,
-							avatar: profile._json.picture.data.url,
+							avatar: profile.photos[0].value,
 							confirmed: true,
 							facebookId: profile.id
 						})
