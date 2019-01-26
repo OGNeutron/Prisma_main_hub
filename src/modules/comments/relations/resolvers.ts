@@ -37,10 +37,16 @@ export const resolvers = {
 				return logger.error({ level: '5', message: error })
 			}
 		},
-		repliedTo(parent: any, _: any, { db }: Context) {
+		async repliedTo(parent: any, _: any, { db }: Context) {
 			try {
-				return db.comment({ id: parent.id }).repliedTo()
+				console.log('PARENT', parent)
+
+				const response = await db.comment({ id: parent.id }).repliedTo()
+
+				console.log('RESPONSE', response)
+				return response
 			} catch (error) {
+				console.log('ERROR', error)
 				return logger.error({ level: '5', message: error })
 			}
 		}

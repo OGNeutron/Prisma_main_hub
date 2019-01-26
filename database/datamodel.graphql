@@ -43,14 +43,14 @@ type Notification {
 
 type User {
 	id: ID! @unique
-	email: String! @unique
+	email: String @unique
 	notifications: [Notification!]! @relation(name: "UserNotification")
 	set_private: Boolean! @default(value: true)
 	username: String! @unique
 	password: String!
-	gitHubId: String
-	facebookId: String
-	twitterId: String
+	gitHubId: ID @unique
+	facebookId: ID @unique
+	twitterId: ID @unique
 	gmailId: String
 	directMessages: [Comment!]! @relation(name: "UserDirectMessage")
 	avatar_url: File!

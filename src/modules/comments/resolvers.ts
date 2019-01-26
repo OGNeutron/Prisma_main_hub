@@ -48,7 +48,7 @@ export const resolvers = {
 						pageId: parentId
 					},
 					skip: offset || 0,
-					first: limit || undefined,
+					first: limit || 10,
 					orderBy: 'createdAt_DESC'
 				})
 			} catch (error) {

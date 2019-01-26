@@ -1,4 +1,4 @@
-# endpoint: http://localhost:4466/prismadb/dev
+# endpoint: http://localhost:4466/prismadb/sdev
 endpoint: https://prisma-server-2df74d7228.herokuapp.com/Prisma_backend/dev
 datamodel: datamodel.graphql
 

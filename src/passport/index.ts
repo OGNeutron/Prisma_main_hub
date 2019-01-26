@@ -2,7 +2,6 @@ import * as passport from 'passport'
 import { Strategy as GitHubStrategy } from 'passport-github'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
 import { Strategy as FacebookStrategy } from 'passport-facebook'
-import { User } from '../generated/prisma-client'
 import { db } from '../index'
 import { logger } from '../utils/logger'
 import { ApolloError } from 'apollo-server'
@@ -77,11 +76,15 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				try {
-					let user: User = await db.user({
-						email: profile.emails[0].value
+					let user: any = await db.users({
+						where: { email: profile.emails[0].value }
 					})
 
-					if (!user) {
+					if (
+						user !== undefined &&
+						user[0].gitHubId == null &&
+						profile.id !== null
+					) {
 						user = await createUser({
 							email: profile.emails[0].value,
 							username: profile.username,
@@ -89,14 +92,26 @@ export const setupPassport = () => {
 							confirmed: true,
 							githubId: profile.id
 						})
-					} else if (user.gitHubId == null) {
+					} else if (
+						user !== undefined &&
+						user[0].gitHubId == null &&
+						profile.id !== null
+					) {
 						user = await db.updateUser({
 							where: {
-								id: user.id
+								id: user[0].id
 							},
 							data: {
 								gitHubId: profile.id
 							}
+						})
+					}
+
+					if (Array.isArray(user)) {
+						return cb(null, {
+							user: user[0],
+							accessToken,
+							refreshToken
 						})
 					}
 
@@ -121,28 +136,66 @@ export const setupPassport = () => {
 				includeEmail: true
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
-				console.log('PROFILE', profile)
-				let user = await db.user({ email: profile.emails[0].value })
+				try {
+					let user
+					let email
 
-				if (!user) {
-					user = await createUser({
-						email: profile.emails[0].value,
-						username: profile.username,
-						avatar: profile.photos[0].value,
-						confirmed: true,
-						twitterId: profile.id
-					})
-				} else if (user.twitterId == null) {
-					user = await db.updateUser({
-						where: {
-							id: user.id
-						},
-						data: {
+					if (
+						profile.emails !== undefined &&
+						profile.emails[0].value !== undefined
+					) {
+						email = profile.emails[0].value
+					}
+
+					if (profile.id !== null) {
+						user = await db.users({
+							where: { twitterId: profile.id }
+						})
+					}
+
+					if (
+						user !== undefined &&
+						user.length == 0 &&
+						profile.id !== null
+					) {
+						user = await createUser({
+							email:
+								email !== undefined || email !== null
+									? email
+									: '',
+							username: profile.username,
+							avatar: profile.photos[0].value,
+							confirmed: true,
 							twitterId: profile.id
-						}
-					})
+						})
+					} else if (
+						user !== undefined &&
+						user[0].twitterId == null &&
+						profile.id !== null
+					) {
+						user = await db.updateUser({
+							where: {
+								id: user[0].id
+							},
+							data: {
+								twitterId: profile.id
+							}
+						})
+					}
+
+					if (Array.isArray(user)) {
+						return cb(null, {
+							user: user[0],
+							accessToken,
+							refreshToken
+						})
+					}
+
+					return cb(null, { user, accessToken, refreshToken })
+				} catch (error) {
+					logger.error({ level: '5', message: error })
+					return new ApolloError(error)
 				}
-				return cb(null, { user, accessToken, refreshToken })
 			}
 		)
 	)
@@ -160,27 +213,62 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				try {
-					console.log('PROFILE', profile)
-					let user = await db.user({ email: profile.emails[0].value })
+					let user
+					let email
 
-					if (!user) {
+					if (
+						profile.emails !== undefined &&
+						profile.emails[0].value !== undefined
+					) {
+						email = profile.emails[0].value
+					}
+
+					if (profile.id !== null) {
+						user = await db.users({
+							where: { facebookId: profile.id }
+						})
+					}
+
+					if (
+						user !== undefined &&
+						user.length == 0 &&
+						profile.id !== null
+					) {
 						user = await createUser({
-							email: profile.emails[0].value,
+							email:
+								email !== undefined || email !== null
+									? email
+									: '',
 							username: profile.name.givenName,
 							avatar: profile.photos[0].value,
 							confirmed: true,
 							facebookId: profile.id
 						})
-					} else if (user.facebookId == null) {
+					} else if (
+						user !== undefined &&
+						user[0].facebookId == null &&
+						profile.id !== null
+					) {
 						user = await db.updateUser({
 							where: {
-								id: user.id
+								id: user[0].id
 							},
 							data: {
 								facebookId: profile.id
 							}
 						})
 					}
+
+					console.log('FACEBOOK_USER', user)
+
+					if (Array.isArray(user)) {
+						return cb(null, {
+							user: user[0],
+							accessToken,
+							refreshToken
+						})
+					}
+
 					return cb(null, { user, accessToken, refreshToken })
 				} catch (error) {
 					logger.error({ level: '5', message: error })

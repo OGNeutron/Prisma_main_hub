@@ -2,8 +2,6 @@ import { Router, Request, Response } from 'express'
 import * as passport from 'passport'
 import { prisma } from '../generated/prisma-client'
 import { db } from '..'
-import { ApolloError } from 'apollo-server'
-import { logger } from '../utils/logger'
 
 const router: Router = Router()
 
@@ -17,11 +15,11 @@ const url =
 		? PRODUCTION_CLIENT_URL
 		: DEVELOPMENT_CLIENT_URL
 
-router.get('/auth/github', passport.authenticate('github', { session: false, scope: ['email'] }))
+router.get('/auth/github', passport.authenticate('github', { session: false }))
 
 router.get(
 	'/oauth/github',
-	passport.authenticate('github', { session: false, scope: ['email'] }),
+	passport.authenticate('github', { session: false }),
 	async (req: Request, res: Response) => {
 		if (req.user.user.id) {
 			if (req.session) {
@@ -29,16 +27,16 @@ router.get(
 				req.session.accessToken = req.user.accessToken
 				req.session.refreshToken = req.user.refreshToken
 
-				const user = await db.user({ email: req.user.user.email })
+				const user = await db.user({ id: req.user.user.id })
 
 				await prisma.updateUser({
 					where: {
-						email: req.user.user.email
+						id: req.user.user.id
 					},
 					data: { online: true }
 				})
 
-				res.redirect(`${url}/profile/${user.username}`)
+				return res.redirect(`${url}/profile/${user.username}`)
 			}
 		} else {
 			res.redirect(`${url}/auth/login`)
@@ -48,27 +46,31 @@ router.get(
 
 router.get(
 	'/auth/twitter',
-	passport.authenticate('twitter', { session: false, scope: ['email'] })
+	passport.authenticate('twitter', { session: false })
 )
 
 router.get(
 	'/auth/twitter/callback',
-	passport.authenticate('twitter', { session: false, scope: ['email'] }),
+	passport.authenticate('twitter', { session: false }),
 	async (req, res) => {
+		console.log('BEGINNING', req.user)
 		if (req.user.user.id) {
 			if (req.session) {
 				req.session.userId = req.user.user.id
 				req.session.accessToken = req.user.accessToken
 				req.session.refreshToken = req.user.refreshToken
 
-				const user = await db.user({ email: req.user.user.email })
+				const user = await db.user({ id: req.user.user.id })
 
 				await prisma.updateUser({
 					where: {
-						email: req.user.user.email
+						id: req.user.user.id
 					},
 					data: { online: true }
 				})
+
+				console.log('USER_TWITTER', req.user)
+				console.log('SESSION_TWITTER', req.session)
 
 				res.redirect(`${url}/profile/${user.username}`)
 			}
@@ -80,37 +82,36 @@ router.get(
 
 router.get(
 	'/auth/facebook',
-	passport.authenticate('facebook', { session: false, scope: ['email'] })
+	passport.authenticate('facebook', { session: false })
 )
 
 router.get(
 	'/auth/facebook/callback',
-	passport.authenticate('facebook', { session: false, scope: ['email'] }),
+	passport.authenticate('facebook', { session: false }),
 	async (req, res) => {
-		try {
-			if (req.user.user.id) {
-				if (req.session) {
-					req.session.userId = req.user.user.id
-					req.session.accessToken = req.user.accessToken
-					req.session.refreshToken = req.user.refreshToken
+		if (req.user.user.id) {
+			if (req.session) {
+				req.session.userId = req.user.user.id
+				req.session.accessToken = req.user.accessToken
+				req.session.refreshToken = req.user.refreshToken
 
-					const user = await db.user({ email: req.user.user.email })
+				const user = await db.user({ id: req.user.user.id })
 
-					await db.updateUser({
-						where: {
-							email: req.user.user.email
-						},
-						data: { online: true }
-					})
+				await db.updateUser({
+					where: {
+						id: req.user.user.id
+					},
+					data: { online: true }
+				})
 
-					return res.redirect(`${url}/profile/${user.username}`)
-				}
-			} else {
-				res.redirect(`${url}/auth/login`)
+				console.log('USER_FACEBOOK', req.user)
+				console.log('SESSION', req.session)
+
+				res.redirect(`${url}/profile/${user.username}`)
 			}
-		} catch (error) {
-			logger.error({ level: '5', message: error })
-			return new ApolloError(error)
+		} else {
+			res.redirect(`${url}/auth/login`)
+			return
 		}
 	}
 )

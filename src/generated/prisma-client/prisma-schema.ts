@@ -3345,14 +3345,14 @@ input TodoWhereUniqueInput {
 
 type User {
   id: ID!
-  email: String!
+  email: String
   notifications(where: NotificationWhereInput, orderBy: NotificationOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Notification!]
   set_private: Boolean!
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
   avatar_url: File!
@@ -3378,14 +3378,14 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3448,14 +3448,14 @@ input UserCreateOneWithoutOwned_teamsInput {
 }
 
 input UserCreateWithoutBlockedUsersInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3472,14 +3472,14 @@ input UserCreateWithoutBlockedUsersInput {
 }
 
 input UserCreateWithoutChannelsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3496,14 +3496,14 @@ input UserCreateWithoutChannelsInput {
 }
 
 input UserCreateWithoutFriend_requestsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3520,14 +3520,14 @@ input UserCreateWithoutFriend_requestsInput {
 }
 
 input UserCreateWithoutFriendsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3544,14 +3544,14 @@ input UserCreateWithoutFriendsInput {
 }
 
 input UserCreateWithoutOwned_channelsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3568,14 +3568,14 @@ input UserCreateWithoutOwned_channelsInput {
 }
 
 input UserCreateWithoutOwned_teamsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3592,14 +3592,14 @@ input UserCreateWithoutOwned_teamsInput {
 }
 
 input UserCreateWithoutTeamsInput {
-  email: String!
+  email: String
   notifications: NotificationCreateManyInput
   set_private: Boolean
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentCreateManyInput
   avatar_url: FileCreateOneInput!
@@ -3655,13 +3655,13 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  email: String!
+  email: String
   set_private: Boolean!
   username: String!
   password: String!
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   private: Boolean!
   confirmed: Boolean!
@@ -3736,48 +3736,48 @@ input UserScalarWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
-  gitHubId: String
-  gitHubId_not: String
-  gitHubId_in: [String!]
-  gitHubId_not_in: [String!]
-  gitHubId_lt: String
-  gitHubId_lte: String
-  gitHubId_gt: String
-  gitHubId_gte: String
-  gitHubId_contains: String
-  gitHubId_not_contains: String
-  gitHubId_starts_with: String
-  gitHubId_not_starts_with: String
-  gitHubId_ends_with: String
-  gitHubId_not_ends_with: String
-  facebookId: String
-  facebookId_not: String
-  facebookId_in: [String!]
-  facebookId_not_in: [String!]
-  facebookId_lt: String
-  facebookId_lte: String
-  facebookId_gt: String
-  facebookId_gte: String
-  facebookId_contains: String
-  facebookId_not_contains: String
-  facebookId_starts_with: String
-  facebookId_not_starts_with: String
-  facebookId_ends_with: String
-  facebookId_not_ends_with: String
-  twitterId: String
-  twitterId_not: String
-  twitterId_in: [String!]
-  twitterId_not_in: [String!]
-  twitterId_lt: String
-  twitterId_lte: String
-  twitterId_gt: String
-  twitterId_gte: String
-  twitterId_contains: String
-  twitterId_not_contains: String
-  twitterId_starts_with: String
-  twitterId_not_starts_with: String
-  twitterId_ends_with: String
-  twitterId_not_ends_with: String
+  gitHubId: ID
+  gitHubId_not: ID
+  gitHubId_in: [ID!]
+  gitHubId_not_in: [ID!]
+  gitHubId_lt: ID
+  gitHubId_lte: ID
+  gitHubId_gt: ID
+  gitHubId_gte: ID
+  gitHubId_contains: ID
+  gitHubId_not_contains: ID
+  gitHubId_starts_with: ID
+  gitHubId_not_starts_with: ID
+  gitHubId_ends_with: ID
+  gitHubId_not_ends_with: ID
+  facebookId: ID
+  facebookId_not: ID
+  facebookId_in: [ID!]
+  facebookId_not_in: [ID!]
+  facebookId_lt: ID
+  facebookId_lte: ID
+  facebookId_gt: ID
+  facebookId_gte: ID
+  facebookId_contains: ID
+  facebookId_not_contains: ID
+  facebookId_starts_with: ID
+  facebookId_not_starts_with: ID
+  facebookId_ends_with: ID
+  facebookId_not_ends_with: ID
+  twitterId: ID
+  twitterId_not: ID
+  twitterId_in: [ID!]
+  twitterId_not_in: [ID!]
+  twitterId_lt: ID
+  twitterId_lte: ID
+  twitterId_gt: ID
+  twitterId_gte: ID
+  twitterId_contains: ID
+  twitterId_not_contains: ID
+  twitterId_starts_with: ID
+  twitterId_not_starts_with: ID
+  twitterId_ends_with: ID
+  twitterId_not_ends_with: ID
   gmailId: String
   gmailId_not: String
   gmailId_in: [String!]
@@ -3847,9 +3847,9 @@ input UserUpdateDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -3872,9 +3872,9 @@ input UserUpdateInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -3896,9 +3896,9 @@ input UserUpdateManyDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   private: Boolean
   confirmed: Boolean
@@ -3922,9 +3922,9 @@ input UserUpdateManyMutationInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   private: Boolean
   confirmed: Boolean
@@ -4028,9 +4028,9 @@ input UserUpdateWithoutBlockedUsersDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4052,9 +4052,9 @@ input UserUpdateWithoutChannelsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4076,9 +4076,9 @@ input UserUpdateWithoutFriend_requestsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4100,9 +4100,9 @@ input UserUpdateWithoutFriendsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4124,9 +4124,9 @@ input UserUpdateWithoutOwned_channelsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4148,9 +4148,9 @@ input UserUpdateWithoutOwned_teamsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4172,9 +4172,9 @@ input UserUpdateWithoutTeamsDataInput {
   set_private: Boolean
   username: String
   password: String
-  gitHubId: String
-  facebookId: String
-  twitterId: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
   gmailId: String
   directMessages: CommentUpdateManyInput
   avatar_url: FileUpdateOneRequiredInput
@@ -4333,48 +4333,48 @@ input UserWhereInput {
   password_not_starts_with: String
   password_ends_with: String
   password_not_ends_with: String
-  gitHubId: String
-  gitHubId_not: String
-  gitHubId_in: [String!]
-  gitHubId_not_in: [String!]
-  gitHubId_lt: String
-  gitHubId_lte: String
-  gitHubId_gt: String
-  gitHubId_gte: String
-  gitHubId_contains: String
-  gitHubId_not_contains: String
-  gitHubId_starts_with: String
-  gitHubId_not_starts_with: String
-  gitHubId_ends_with: String
-  gitHubId_not_ends_with: String
-  facebookId: String
-  facebookId_not: String
-  facebookId_in: [String!]
-  facebookId_not_in: [String!]
-  facebookId_lt: String
-  facebookId_lte: String
-  facebookId_gt: String
-  facebookId_gte: String
-  facebookId_contains: String
-  facebookId_not_contains: String
-  facebookId_starts_with: String
-  facebookId_not_starts_with: String
-  facebookId_ends_with: String
-  facebookId_not_ends_with: String
-  twitterId: String
-  twitterId_not: String
-  twitterId_in: [String!]
-  twitterId_not_in: [String!]
-  twitterId_lt: String
-  twitterId_lte: String
-  twitterId_gt: String
-  twitterId_gte: String
-  twitterId_contains: String
-  twitterId_not_contains: String
-  twitterId_starts_with: String
-  twitterId_not_starts_with: String
-  twitterId_ends_with: String
-  twitterId_not_ends_with: String
+  gitHubId: ID
+  gitHubId_not: ID
+  gitHubId_in: [ID!]
+  gitHubId_not_in: [ID!]
+  gitHubId_lt: ID
+  gitHubId_lte: ID
+  gitHubId_gt: ID
+  gitHubId_gte: ID
+  gitHubId_contains: ID
+  gitHubId_not_contains: ID
+  gitHubId_starts_with: ID
+  gitHubId_not_starts_with: ID
+  gitHubId_ends_with: ID
+  gitHubId_not_ends_with: ID
+  facebookId: ID
+  facebookId_not: ID
+  facebookId_in: [ID!]
+  facebookId_not_in: [ID!]
+  facebookId_lt: ID
+  facebookId_lte: ID
+  facebookId_gt: ID
+  facebookId_gte: ID
+  facebookId_contains: ID
+  facebookId_not_contains: ID
+  facebookId_starts_with: ID
+  facebookId_not_starts_with: ID
+  facebookId_ends_with: ID
+  facebookId_not_ends_with: ID
+  twitterId: ID
+  twitterId_not: ID
+  twitterId_in: [ID!]
+  twitterId_not_in: [ID!]
+  twitterId_lt: ID
+  twitterId_lte: ID
+  twitterId_gt: ID
+  twitterId_gte: ID
+  twitterId_contains: ID
+  twitterId_not_contains: ID
+  twitterId_starts_with: ID
+  twitterId_not_starts_with: ID
+  twitterId_ends_with: ID
+  twitterId_not_ends_with: ID
   gmailId: String
   gmailId_not: String
   gmailId_in: [String!]
@@ -4449,5 +4449,8 @@ input UserWhereUniqueInput {
   id: ID
   email: String
   username: String
+  gitHubId: ID
+  facebookId: ID
+  twitterId: ID
 }
 `

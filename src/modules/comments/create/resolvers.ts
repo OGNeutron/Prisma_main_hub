@@ -80,6 +80,11 @@ export const resolvers = {
 							body,
 							parentId,
 							pageId,
+							repliedTo: {
+								connect: {
+									id: userID
+								}
+							},
 							ratings: {
 								create: {
 									vote: 0
@@ -91,6 +96,8 @@ export const resolvers = {
 								}
 							}
 						})
+
+						console.log('COMMENT_CREATED', comment)
 
 						return comment
 					} else {

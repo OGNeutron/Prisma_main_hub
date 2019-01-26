@@ -9,6 +9,7 @@ export const resolvers: ResolverMap = {
 		async currentUser(_: any, __: any, { session, db }): Promise<any> {
 			try {
 				let userId
+				console.log('CURRENT_USER_SESSION', session)
 				if (session) {
 					if (session.decodedUser) {
 						userId = session.decodedUser
