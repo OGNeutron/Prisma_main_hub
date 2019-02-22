@@ -1,18 +1,17 @@
-import * as yup from 'yup'
-import { decode } from 'jsonwebtoken'
-
-import { Context } from '../../../tstypes'
 import { ForbiddenError } from 'apollo-server'
+import { decode } from 'jsonwebtoken'
+import { hashPassword } from 'scotts_utilities'
+import * as yup from 'yup'
 import {
-	INVALID_CREDENTIALS,
-	FORGOT_PASSWORD_PREFIX,
 	EXPIRED_KEY_ERROR,
+	FORGOT_PASSWORD_PREFIX,
+	INVALID_CREDENTIALS,
 	PASSWORD_SUCCESSFULLY_CHANGED
 } from '../../../constants'
+import { MutationResolvers } from '../../../generated/graphqlgen'
+import { Context } from '../../../tstypes'
 import { sendResetPasswordEmail } from '../../../utils/auth/emailHelpers'
 import { logger } from '../../../utils/logger'
-import { hashPassword } from 'scotts_utilities'
-import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const schema = yup.object().shape({
 	newPassword: yup.string().required()
@@ -34,7 +33,15 @@ export const resolvers = {
 					return new ForbiddenError(INVALID_CREDENTIALS)
 				} else {
 					const url = req.get('origin') as string
-					await sendResetPasswordEmail(user, redis, url)
+					await sendResetPasswordEmail(
+						{
+							username: user.username,
+							id: user.id,
+							email: user.email as string
+						},
+						redis,
+						url
+					)
 					return {
 						ok: true,
 						result: `Email sent to ${user.email}`

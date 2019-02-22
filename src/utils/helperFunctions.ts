@@ -1,7 +1,12 @@
+import * as cloudinary from 'cloudinary'
 import { Response } from 'express'
-import { v4 as uuid } from 'uuid'
-import { S3 } from 'aws-sdk'
-import { stringType } from 'aws-sdk/clients/iam'
+import * as uuid from 'uuid/v4'
+
+cloudinary.config({
+	cloud_name: process.env.CLOUD_NAME,
+	api_key: process.env.CLOUD_API_KEY,
+	api_secret: process.env.CLOUD_API_SECRET
+})
 
 export const respond = (
 	res: Response,
@@ -15,14 +20,14 @@ export const respond = (
 	})
 }
 
-interface IProcessUpload {
-	filename: stringType
-	mimetype: stringType
-	encoding: stringType
-	key: string
-	url: string
-	Etag: string
-}
+// interface IProcessUpload {
+// 	filename: stringType
+// 	mimetype: stringType
+// 	encoding: stringType
+// 	key: string
+// 	url: string
+// 	Etag: string
+// }
 
 export const filteredBody = (body: any, whitelist: []) => {
 	const items: any = {}
@@ -45,38 +50,52 @@ export const filteredBody = (body: any, whitelist: []) => {
 // 	return response
 // }
 
-export const processUpload = async (
-	s3: S3,
-	picture: string,
-	folder: string
-): Promise<IProcessUpload> => {
-	const {
-		createReadStream,
-		filename,
-		mimetype,
-		encoding
-	}: any = await picture
-	const key = folder + '/' + uuid() + '-' + filename
+export const processUpload = async (picture: string, folder: string) => {
+	const myPicture: any = await picture
+	const key = folder + '/' + uuid() + '-' + myPicture.filename
 
-	const stream = createReadStream()
+	console.log('STREAM', myPicture, key)
 
-	const response = await s3
-		.upload({
-			Bucket: process.env.AWS_BUCKET || 'mainhubbucket',
-			Key: key,
-			ACL: 'public-read',
-			Body: stream
-		})
-		.promise()
+	let res: any
 
-	return {
-		filename,
-		mimetype,
-		encoding,
-		key: response.Key,
-		url: response.Location,
-		Etag: response.ETag
-	}
+	const streamLoad = cloudinary.v2.uploader.upload_stream(function(
+		error: any,
+		result: any
+	) {
+		if (result) {
+			res = {
+				filename: myPicture.filename,
+				mimitype: myPicture.mimetype,
+				encoding: myPicture.encoding,
+				key: result.key,
+				url: result.secure_url,
+				Etag: result.etag
+			}
+			return {
+				filename: myPicture.filename,
+				mimitype: myPicture.mimetype,
+				encoding: myPicture.encoding,
+				key: result.key,
+				url: result.secure_url,
+				Etag: result.etag
+			}
+		} else {
+			throw Error(error)
+		}
+	})
+
+	myPicture.createReadStream().pipe(streamLoad)
+
+	const response = new Promise((resolve, _) => {
+		// const chunks: any[] = []
+		setInterval(() => {
+			if (res) {
+				return resolve(res)
+			}
+		}, 50)
+	})
+
+	return await response
 }
 
 // export class FetchError extends Error {

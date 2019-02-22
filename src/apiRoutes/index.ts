@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express'
+import { Request, Response, Router } from 'express'
 import * as passport from 'passport'
-import { prisma } from '../generated/prisma-client'
 import { db } from '..'
+import { prisma } from '../generated/prisma-client'
 
 const router: Router = Router()
 
@@ -53,7 +53,6 @@ router.get(
 	'/auth/twitter/callback',
 	passport.authenticate('twitter', { session: false }),
 	async (req, res) => {
-		console.log('BEGINNING', req.user)
 		if (req.user.user.id) {
 			if (req.session) {
 				req.session.userId = req.user.user.id
@@ -68,9 +67,6 @@ router.get(
 					},
 					data: { online: true }
 				})
-
-				console.log('USER_TWITTER', req.user)
-				console.log('SESSION_TWITTER', req.session)
 
 				res.redirect(`${url}/profile/${user.username}`)
 			}
@@ -103,9 +99,6 @@ router.get(
 					},
 					data: { online: true }
 				})
-
-				console.log('USER_FACEBOOK', req.user)
-				console.log('SESSION', req.session)
 
 				res.redirect(`${url}/profile/${user.username}`)
 			}

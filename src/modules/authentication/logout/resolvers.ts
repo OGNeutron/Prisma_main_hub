@@ -1,10 +1,9 @@
 import { ForbiddenError } from 'apollo-server'
-
-import { Context } from '../../../tstypes'
 import { INVALID_CREDENTIALS } from '../../../constants'
+import { MutationResolvers } from '../../../generated/graphqlgen'
+import { Context } from '../../../tstypes'
 import { removeAllUsersSessions } from '../../../utils/auth/helperFunctions'
 import { logger } from '../../../utils/logger'
-import { MutationResolvers } from '../../../generated/graphqlgen'
 
 export const resolvers = {
 	Mutation: {
@@ -17,7 +16,7 @@ export const resolvers = {
 				let userId
 				if (session) {
 					if (session.decodedUser) {
-						userId = session.decodedUser
+						userId = session.decodedUser.id
 					} else {
 						userId = session.userId
 					}

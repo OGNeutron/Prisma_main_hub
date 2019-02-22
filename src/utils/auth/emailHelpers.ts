@@ -13,7 +13,7 @@ const from = 'Experimental website <scottberry91@gmail.com>'
 
 const {
 	PRODUCTION_CLIENT_URL = 'https://inspiring-euler-247a1c.netlify.com',
-	DEVELOPMENT_CLIENT_URL = 'http://localhost:1234'
+	DEVELOPMENT_CLIENT_URL = 'http://localhost:5000'
 } = process.env
 
 const client =

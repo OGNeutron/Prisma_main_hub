@@ -1,8 +1,7 @@
+import { S3 } from 'aws-sdk'
 import { Request, Response } from 'express'
 import { Redis } from 'ioredis'
-import { S3 } from 'aws-sdk'
 import * as Stripe from 'stripe'
-
 import { Prisma } from '../generated/prisma-client'
 
 export interface IExpressTypes {
@@ -17,11 +16,12 @@ export interface ProcessEnv {
 export interface User {
 	id: string
 	username: string
+	email: string
 }
 
 export interface Session extends Express.Session {
 	userId?: string
-	decodedUser?: string
+	decodedUser?: User
 }
 
 export interface Context {

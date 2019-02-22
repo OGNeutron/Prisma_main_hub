@@ -1,19 +1,21 @@
-import { Context } from '../../../tstypes'
-import { logger } from '../../../utils/logger'
 import { ApolloError } from 'apollo-server'
-import { MutationResolvers } from '../../../generated/graphqlgen'
-import { processUpload } from '../../../utils/helperFunctions'
 import { comparePassword, hashPassword } from 'scotts_utilities'
+import { MutationResolvers } from '../../../generated/graphqlgen'
+import { Context } from '../../../tstypes'
+import { processUpload } from '../../../utils/helperFunctions'
+import { logger } from '../../../utils/logger'
 
 export const resolvers = {
 	Mutation: {
 		async updateProfile(
 			_: any,
 			{ avatar, username, newPassword, oldPassword }: any,
-			{ db, session, s3 }: Context
+			{ db, session }: Context
 		) {
 			try {
-				const response: any = await processUpload(s3, avatar, 'avatars')
+				const response: any = await processUpload(avatar, 'avatars')
+
+				console.log('IMAGE RESPONSE', response)
 
 				if (!response) {
 					return new ApolloError('Error with uploading image')
@@ -22,11 +24,6 @@ export const resolvers = {
 				const userImage = await db
 					.user({ id: session.userId })
 					.avatar_url()
-
-				await s3.deleteObject({
-					Bucket: process.env.AWS_BUCKET as string,
-					Key: userImage.key
-				})
 
 				const avatarResponse: any = await db.updateFile({
 					where: {

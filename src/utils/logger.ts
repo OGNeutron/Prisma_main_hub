@@ -1,5 +1,5 @@
-import * as winston from "winston";
 import * as logform from "logform";
+import * as winston from "winston";
 
 const { combine, timestamp, label, printf } = logform.format;
 

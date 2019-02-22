@@ -1,39 +1,30 @@
-import { verify } from "jsonwebtoken";
-import { Request } from "express";
-import { logger } from "../logger";
+import { Request, Response } from 'express'
+import { verify } from 'jsonwebtoken'
+import { logger } from '../logger'
 
-export const addUser = (_: any, req: Request, next: Function): any => {
-  let token;
-  const secret = process.env.JWT_SECRET as string;
-  let userId: string | undefined;
+export const addUser = (req: Request, _: Response, next: Function): any => {
+	let token
+	const secret = process.env.JWT_SECRET as string
 
-  if (req.headers != undefined) {
-    if (req.headers["x-token"]) {
-      token = req.headers["x-token"];
-    }
-  }
+	if (req.headers != undefined) {
+		if (req.headers['x-token']) {
+			token = req.headers['x-token']
+		}
+	}
 
-  if (req.session) {
-    if (req.session.userId != undefined) {
-      userId = req.session.userId;
-    }
-  }
+	if (token != undefined) {
+		try {
+			// @ts-ignore
+			const user = verify(token as string, secret)
+			console.log('WORKING')
 
-  if (userId) {
-    next();
-  }
+			if (req.session) {
+				// req.session.decodedUser = user
+			}
+		} catch (error) {
+			logger.log({ level: '0', message: error })
+		}
+	}
 
-  if (token != undefined) {
-    try {
-      const user = verify(token as string, secret);
-
-      if (req.session) {
-        req.session.decodedUser = user;
-      }
-    } catch (error) {
-      logger.log({ level: "0", message: error });
-    }
-  }
-
-  next();
-};
+	next()
+}

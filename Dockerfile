@@ -1,7 +1,7 @@
 FROM mhart/alpine-node:latest
 WORKDIR /usr/app
 COPY package*.json ./
-RUN npm install --production
+RUN npm install --quiet --production
 # RUN npm audit fix
 COPY ./dist .
 # RUN npm run build

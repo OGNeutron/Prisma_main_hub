@@ -1,12 +1,9 @@
+import { ApolloError, AuthenticationError, ForbiddenError } from 'apollo-server'
+import { comparePassword, createToken, logger } from 'scotts_utilities'
 import * as yup from 'yup'
-
-import { comparePassword, createToken } from 'scotts_utilities'
-import { ForbiddenError, ApolloError, AuthenticationError } from 'apollo-server'
-
-import { Context } from '../../../tstypes'
 import { INVALID_CREDENTIALS, USER_SESSION_ID_PREFIX } from '../../../constants'
-import { logger } from '../../../utils/logger'
 import { MutationResolvers } from '../../../generated/graphqlgen'
+import { Context } from '../../../tstypes'
 
 const loginSchema: yup.ObjectSchema<{}> = yup.object().shape({
 	email: yup
@@ -33,6 +30,7 @@ export const resolvers = {
 					const user = await db.user({
 						email
 					})
+					console.log('USER', email, password)
 
 					if (!user) {
 						throw new AuthenticationError(INVALID_CREDENTIALS)
@@ -89,7 +87,7 @@ export const resolvers = {
 					throw new AuthenticationError(INVALID_CREDENTIALS)
 				}
 			} catch (error) {
-				logger.error({ level: '5', message: error })
+				logger('Login').error({ level: '5', message: error })
 				return error
 			}
 		}

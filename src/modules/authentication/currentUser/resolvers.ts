@@ -1,7 +1,6 @@
 import { ForbiddenError } from 'apollo-server'
-
-import { ResolverMap } from '../../../tstypes'
 import { INVALID_CREDENTIALS } from '../../../constants'
+import { ResolverMap } from '../../../tstypes'
 import { logger } from '../../../utils/logger'
 
 export const resolvers: ResolverMap = {
@@ -9,10 +8,9 @@ export const resolvers: ResolverMap = {
 		async currentUser(_: any, __: any, { session, db }): Promise<any> {
 			try {
 				let userId
-				console.log('CURRENT_USER_SESSION', session)
 				if (session) {
 					if (session.decodedUser) {
-						userId = session.decodedUser
+						userId = session.decodedUser.id
 					} else if (session.userId) {
 						userId = session.userId
 					}

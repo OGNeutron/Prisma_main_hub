@@ -1,10 +1,10 @@
+import { ApolloError } from 'apollo-server'
 import * as passport from 'passport'
+import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { Strategy as GitHubStrategy } from 'passport-github'
 import { Strategy as TwitterStrategy } from 'passport-twitter'
-import { Strategy as FacebookStrategy } from 'passport-facebook'
 import { db } from '../index'
 import { logger } from '../utils/logger'
-import { ApolloError } from 'apollo-server'
 
 interface CreateUserArgs {
 	email: string
@@ -63,6 +63,8 @@ const createUser = async ({
 }
 
 export const setupPassport = () => {
+	console.log('PRODUCTION_SERVER_ENDPOINT', PRODUCTION_SERVER_ENDPOINT)
+	console.log('DEVELOPMENT_SERVER_ENDPOINT', DEVELOPMENT_SERVER_ENDPOINT)
 	passport.use(
 		new GitHubStrategy(
 			{
@@ -76,15 +78,27 @@ export const setupPassport = () => {
 			},
 			async (accessToken, refreshToken, profile: any, cb) => {
 				try {
-					let user: any = await db.users({
+					let user
+					const resp = await db.users({
 						where: { email: profile.emails[0].value }
 					})
 
+					console.log('RESPONSE', resp)
+
 					if (
-						user !== undefined &&
-						user[0].gitHubId == null &&
-						profile.id !== null
+						resp !== undefined &&
+						resp[0] !== undefined &&
+						resp[0].id !== undefined
 					) {
+						user = await db.user({
+							id: resp[0].id
+						})
+					}
+
+					console.log('USER_ONE', user)
+
+					if (!user) {
+						console.log('WORKING')
 						user = await createUser({
 							email: profile.emails[0].value,
 							username: profile.username,
@@ -92,14 +106,16 @@ export const setupPassport = () => {
 							confirmed: true,
 							githubId: profile.id
 						})
-					} else if (
+					}
+
+					if (
 						user !== undefined &&
-						user[0].gitHubId == null &&
-						profile.id !== null
+						user.gitHubId === undefined &&
+						profile.id
 					) {
 						user = await db.updateUser({
 							where: {
-								id: user[0].id
+								id: user.id
 							},
 							data: {
 								gitHubId: profile.id
@@ -107,16 +123,11 @@ export const setupPassport = () => {
 						})
 					}
 
-					if (Array.isArray(user)) {
-						return cb(null, {
-							user: user[0],
-							accessToken,
-							refreshToken
-						})
-					}
+					console.log('USER_TWO', user)
 
 					return cb(null, { user, accessToken, refreshToken })
 				} catch (error) {
+					console.log('MASSIVE ERROR', error)
 					logger.error({ level: '5', message: error })
 					return new ApolloError(error)
 				}

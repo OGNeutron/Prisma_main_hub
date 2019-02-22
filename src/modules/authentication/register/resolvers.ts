@@ -1,12 +1,11 @@
-import * as yup from 'yup'
 import { AuthenticationError, ForbiddenError } from 'apollo-server'
-import { hashPassword, decodeToken } from 'scotts_utilities'
-
+import { decodeToken, hashPassword } from 'scotts_utilities'
+import * as yup from 'yup'
+import { INVALID_CREDENTIALS } from '../../../constants'
+import { MutationResolvers } from '../../../generated/graphqlgen'
 import { Context } from '../../../tstypes'
 import { sendConfirmationEmail } from '../../../utils/auth/emailHelpers'
-import { INVALID_CREDENTIALS } from '../../../constants'
 import { logger } from '../../../utils/logger'
-import { MutationResolvers } from '../../../generated/graphqlgen'
 
 const schema: yup.ObjectSchema<{}> = yup.object().shape({
 	username: yup.string().required(),
@@ -99,7 +98,14 @@ export const resolvers = {
 
 					const url: string = req.get('origin') as string
 
-					sendConfirmationEmail(user, url)
+					sendConfirmationEmail(
+						{
+							id: user.id,
+							email: user.email as string,
+							username: user.username
+						},
+						url
+					)
 
 					return {
 						__typename: 'RegisterResponse',

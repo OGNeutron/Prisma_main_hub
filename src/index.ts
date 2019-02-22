@@ -1,29 +1,26 @@
-import 'dotenv/config'
-
-import * as express from 'express'
-import * as http from 'http'
-import * as path from 'path'
-//Replace it someday
-import * as Stripe from 'stripe'
-
 import { ApolloServer } from 'apollo-server-express'
 import { S3 } from 'aws-sdk'
-import { platform, arch } from 'os'
-import { makeExecutableSchema } from 'graphql-tools'
+import 'dotenv/config'
+import * as express from 'express'
 import { importSchema } from 'graphql-import'
 import { applyMiddleware } from 'graphql-middleware'
-import { consolePrint, normalisePort, genResolvers } from 'scotts_utilities'
-
-import { redis } from './redis'
+import { makeExecutableSchema } from 'graphql-tools'
+import * as http from 'http'
+import { arch, platform } from 'os'
+import * as path from 'path'
+import { consolePrint, genResolvers, normalisePort } from 'scotts_utilities'
+//Replace it someday
+import * as Stripe from 'stripe'
+import ApiRouter from './apiRoutes'
 import { PORT } from './constants'
+import CustomDirectives from './directives'
 import { Prisma } from './generated/prisma-client'
 import { middleware } from './middleware/express'
-import { logger } from './utils/logger'
-import ApiRouter from './apiRoutes'
-import { setupPassport } from './passport'
 import { ShieldMiddleware } from './middleware/graphql/shield'
+import { setupPassport } from './passport'
+import { redis } from './redis'
+import { logger } from './utils/logger'
 
-import CustomDirectives from './directives'
 // import { graphqlMiddleware } from './middleware/graphql/graphql-middleware';
 // import { Prisma } from './generated/prisma-client';
 

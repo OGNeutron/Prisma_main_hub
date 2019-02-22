@@ -1,21 +1,19 @@
 import * as compression from 'compression'
-import * as helmet from 'helmet'
 import * as express from 'express'
-import * as path from 'path'
-import * as session from 'express-session'
-import * as morgan from 'morgan'
-import * as passport from 'passport'
-
 import { Express } from 'express'
-
-const redisStore = require('connect-redis')(session)
+import * as session from 'express-session'
+import * as helmet from 'helmet'
+import * as morgan from 'morgan'
+import * as path from 'path'
+import { REDIS_PREFIX } from '../../constants'
+import { redis } from '../../redis'
 // import uuid from 'uuid/v4'
-
 // import { REDIS_PREFIX } from '../constants'
 // import { redis } from '../redis'
 import { addUser } from '../../utils/auth/middleware'
-import { redis } from '../../redis'
-import { REDIS_PREFIX } from '../../constants'
+import passport = require('passport')
+
+const redisStore = require('connect-redis')(session)
 
 export const middleware = (app: Express, passport: passport.PassportStatic) => {
 	if (process.env.NODE_ENV !== 'production') {
@@ -55,4 +53,5 @@ export const middleware = (app: Express, passport: passport.PassportStatic) => {
 	)
 	app.use(passport.initialize())
 	app.use(addUser as any)
+	// app.use(passport.session())
 }

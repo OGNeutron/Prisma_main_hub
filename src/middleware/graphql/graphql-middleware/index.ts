@@ -1,6 +1,5 @@
-import { AuthenticationError } from 'apollo-server-express';
-
-import { ALREADY_SIGNED_IN } from '../../../constants';
+import { AuthenticationError } from 'apollo-server-express'
+import { ALREADY_SIGNED_IN } from '../../../constants'
 
 const isAuthenticated = async (
 	resolve: any,
@@ -9,9 +8,8 @@ const isAuthenticated = async (
 	context: any,
 	info: any
 ) => {
-	console.log(context);
-	return resolve(parent, args, context, info);
-};
+	return resolve(parent, args, context, info)
+}
 
 const alreadySignedIn = async (
 	resolve: any,
@@ -21,11 +19,11 @@ const alreadySignedIn = async (
 	info: any
 ) => {
 	if (context.session.userId) {
-		throw new AuthenticationError(ALREADY_SIGNED_IN);
+		throw new AuthenticationError(ALREADY_SIGNED_IN)
 	}
 
-	return resolve(parent, args, context, info);
-};
+	return resolve(parent, args, context, info)
+}
 
 export const graphqlMiddleware = {
 	Query: {
@@ -37,4 +35,4 @@ export const graphqlMiddleware = {
 		register: alreadySignedIn
 		// changePassword: isAuthenticated
 	}
-};
+}
