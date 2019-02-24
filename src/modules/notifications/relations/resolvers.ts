@@ -1,20 +1,29 @@
+import { ApolloError } from 'apollo-server'
 import { Context } from '../../../tstypes'
 import { logger } from '../../../utils/logger'
-import { ApolloError } from 'apollo-server'
 
 export const resolvers = {
 	Notification: {
-        team(parent: any, _: any, { db }: Context) {
+		team(parent: any, _: any, { db }: Context) {
 			try {
 				return db.notification({ id: parent.id }).team()
 			} catch (error) {
 				logger.error({ level: '5', message: error })
 				return new ApolloError(error)
 			}
-        },
-        channel(parent: any, _: any, { db }: Context) {
+		},
+		async channel(parent: any, _: any, { db }: Context) {
 			try {
-				return db.notification({ id: parent.id }).channel()
+				console.log('PARENT_ID', parent)
+				const result = await db
+					.notification({
+						id: parent.id
+					})
+					.channel()
+
+				console.log('CHANNELS', result)
+
+				return result
 			} catch (error) {
 				logger.error({ level: '5', message: error })
 				return new ApolloError(error)

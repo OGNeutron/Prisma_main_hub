@@ -1,6 +1,7 @@
-import * as cloudinary from 'cloudinary'
-import { Response } from 'express'
-import * as uuid from 'uuid/v4'
+// @ts-ignore
+import * as cloudinary from 'cloudinary';
+import { Response } from 'express';
+import * as uuid from 'uuid/v4';
 
 cloudinary.config({
 	cloud_name: process.env.CLOUD_NAME,

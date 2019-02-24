@@ -1,10 +1,9 @@
-import { ForbiddenError, ApolloError } from 'apollo-server-express'
-
-import { logger } from '../../../utils/logger'
-import { Context } from '../../../tstypes'
+import { ApolloError, ForbiddenError } from 'apollo-server-express'
 import { INVALID_CREDENTIALS } from '../../../constants'
 import { MutationResolvers } from '../../../generated/graphqlgen'
 import { User } from '../../../generated/prisma-client'
+import { Context } from '../../../tstypes'
+import { logger } from '../../../utils/logger'
 
 export const resolvers = {
 	Mutation: {
@@ -92,10 +91,14 @@ export const resolvers = {
 				} else if (!session.userId) {
 					return new ForbiddenError(INVALID_CREDENTIALS)
 				}
+				console.log('SESSION', session)
+				console.log('requestedId', requestedId)
 
 				const requested = await db.user({
 					id: requestedId
 				})
+
+				console.log('WORKING')
 
 				const friends = await db
 					.user({
@@ -155,6 +158,7 @@ export const resolvers = {
 				})
 
 				if (requester) {
+					console.log('REQUESTER', requester)
 					await db.createNotification({
 						message: `Friend request from ${requester.username}`,
 						friend_requests: {

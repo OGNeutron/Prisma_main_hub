@@ -23,7 +23,7 @@ services:
         volumes:
             - ./redis.conf:/usr/local/etc/redis/redis.conf
     prisma:
-        image: prismagraphql/prisma:1.26.6
+        image: prismagraphql/prisma:1.27.0
         restart: always
         ports:
             - '4466:4466'

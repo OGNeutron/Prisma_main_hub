@@ -1,8 +1,8 @@
-import { Context } from '../../tstypes'
-import { SubscriptionResolvers } from '../../generated/graphqlgen'
-import { logger } from '../../utils/logger'
 import { ApolloError, AuthenticationError } from 'apollo-server'
 import { INVALID_CREDENTIALS } from '../../constants'
+import { SubscriptionResolvers } from '../../generated/graphqlgen'
+import { Context } from '../../tstypes'
+import { logger } from '../../utils/logger'
 
 export const resolvers = {
 	Subscription: {
@@ -29,15 +29,17 @@ export const resolvers = {
 		}
 	},
 	Query: {
-		fetchNotifications(_: any, __: any, { db, session }: Context) {
+		async fetchNotifications(_: any, __: any, { db, session }: Context) {
 			try {
-				return db.notifications({
+				const notification = await db.notifications({
 					where: {
 						author: {
 							id: session.userId
 						}
 					}
 				})
+
+				return notification
 			} catch (error) {
 				logger.error({ level: '5', message: error.message })
 				return new ApolloError(error)
